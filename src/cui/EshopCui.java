@@ -1,14 +1,15 @@
 package cui;
 
 import Domain.ArtikelVerwaltung;
+import Domain.EshopVerwaltung;
 import Domain.KundenVerwaltung;
 import Utilities.IO;
+import model.Artikel;
 
 import java.io.IOException;
 
 public class EshopCui {
-    private ArtikelVerwaltung artikelVerwaltung = new ArtikelVerwaltung();
-    private KundenVerwaltung kundenVerwaltung = new KundenVerwaltung();
+   EshopVerwaltung eshopVerwaltung=new EshopVerwaltung();
 
     public void erstelleArtikel() {
         System.out.println("Bitte geben Sie den Artikel Nr ein :) ");
@@ -17,7 +18,7 @@ public class EshopCui {
         int artikelbestand = IO.inputInt();
         System.out.println("Bitte geben Sie den Bezeichnung ein :) ");
         String artikelBezeichnung = IO.inputString();
-        this.artikelVerwaltung.artikelAnlegen(artikelNr, artikelbestand, artikelBezeichnung);
+        this.eshopVerwaltung.artikelanLegen(new Artikel());
     }
 
     public void kundenRegistrien(){
