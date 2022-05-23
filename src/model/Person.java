@@ -1,14 +1,17 @@
 package model;
 
+
 public abstract class Person  {
     private int nummer;
     private String vorName;
     private String nachName;
+    private String password;
 
-    public Person(int nummer, String vorName, String nachName) {
+    public Person(int nummer, String vorName, String nachName,String password) {
         this.nummer = nummer;
         this.vorName = vorName;
         this.nachName = nachName;
+        this.password=password;
     }
 
     public int getNummer() {
@@ -33,5 +36,15 @@ public abstract class Person  {
 
     public void setNachName(String nachName) {
         this.nachName = nachName;
+    }
+
+    public String getPassword(){
+        return this.password;
+    }
+
+    public String toString() {
+        String person=nachName+vorName;
+        return
+             person;
     }
 }
