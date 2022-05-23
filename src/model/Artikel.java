@@ -9,6 +9,7 @@ public class Artikel {
     private int artikelNr;
     private String artikelBezeichnung;
     private int artikelBestand;
+    private double preis;
 
     /**
      * Konstruktur
@@ -18,10 +19,11 @@ public class Artikel {
      * @param artikelBezeichnung
      * @param artikelBestand
      */
-    public Artikel(int artikelNr, String artikelBezeichnung, int artikelBestand) {
+    public Artikel(int artikelNr, String artikelBezeichnung, int artikelBestand,double preis) {
         this.artikelNr = artikelNr;
         this.artikelBezeichnung = artikelBezeichnung;
         this.artikelBestand = artikelBestand;
+        this.preis=preis;
     }
 
     /**
@@ -30,6 +32,14 @@ public class Artikel {
      * @return
      */
     public int getArtikelNr() {return artikelNr;
+    }
+
+    public double getPreis() {
+        return preis;
+    }
+
+    public void setPreis(double preis) {
+        this.preis = preis;
     }
 
     public void setArtikelNr(int artikelNr) {
@@ -58,9 +68,10 @@ public class Artikel {
      */
     @Override
     public String toString() {
-        return String.format("\nArtikel Nr.: %d\nArtikel Bezeichnung: %s\nArtikel Bestand: %d\n",
+        return String.format("\nArtikel Nr.: %d\nArtikel Bezeichnung: %s\nArtikel Bestand: %d\nPreis :",
                 artikelNr,
                 artikelBezeichnung,
-                artikelBestand);
+                artikelBestand,
+                preis);
     }
 }
