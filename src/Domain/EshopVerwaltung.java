@@ -1,23 +1,26 @@
 package Domain;
 
+import exception.CustomIoException;
 import exception.ExistenceName;
 import exception.NotFoundEx;
 import model.Artikel;
+import model.Ereigniss;
 import model.Kunden;
+import model.Mitarbeiter;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class EshopVerwaltung {
     private ArtikelVerwaltung artikelVerwaltung;
     private KundenVerwaltung kundenVerwaltung;
-    private WarenKorbVerwaltung warenKorbVerwaltung;
+    private WarenKorpVerw warenKorbVerwaltung;
     private Kunden kunden;
-
+    MitarbeiterVerwaltung mitarbeiterVerwaltung;
     public EshopVerwaltung() {
         artikelVerwaltung = new ArtikelVerwaltung();
         kundenVerwaltung = new KundenVerwaltung();
-        warenKorbVerwaltung=new WarenKorbVerwaltung();
+        warenKorbVerwaltung=new WarenKorpVerw();
+         mitarbeiterVerwaltung=new MitarbeiterVerwaltung();
 
     }
 
@@ -55,10 +58,29 @@ public class EshopVerwaltung {
         warenKorbVerwaltung.kaufen(kunden);
     }
 
-    public void warenlegen(){
-        warenKorbVerwaltung.addArtikel(new Artikel(1,"bana",5,2.5));
-        warenKorbVerwaltung.addArtikel(new Artikel(2,"apfel",5,2.5));
+    public void warenlegen(Artikel artikel){
+        warenKorbVerwaltung.addArtikel(artikel);
+
     }
+
+    public void mitarbeiterRe(Mitarbeiter mitarbeiter) throws CustomIoException {
+        mitarbeiterVerwaltung.mitarbeiterAnlegen(mitarbeiter);
+    }
+
+    public boolean mitarbeiterEilogen(String na, String pa) throws CustomIoException {
+      return  mitarbeiterVerwaltung.mitarbeiterUeberprufen(na,pa);
+    }
+
+    public Ereigniss eilage(Artikel artikel){
+       return mitarbeiterVerwaltung.mitarbeiterEinlagerung(artikel );
+    }
+    public void mitarbeiteranthorReg(Mitarbeiter mitarbeiter) throws CustomIoException {
+        mitarbeiterVerwaltung.mitarbeiterAnlegen(mitarbeiter);
+    }
+    public Ereigniss ergnissKund(Artikel artikel ){
+     return    kundenVerwaltung.artikelAuslagern(artikel);
+    }
+
 
 
 }

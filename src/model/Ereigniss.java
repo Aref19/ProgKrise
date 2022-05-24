@@ -36,4 +36,14 @@ public class Ereigniss {
     public void setDatum(Instant datum) {
         Datum = datum;
     }
+
+    @Override
+    public String toString(){
+        if(object instanceof Mitarbeiter){
+            return artikel.toString()+" Danke Herr "+((Mitarbeiter) object).getNachName()+"fur Eilagerung "+"\n datum :"+Datum;
+        }else {
+            return artikel.toString()+" Danke Herr für Einkauf : "+((Kunden) object).getNachName();
+        }
+
+    }
 }

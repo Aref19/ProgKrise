@@ -36,7 +36,7 @@ public class Rechnung {
         this.artikels = artikels;
     }
     public String toString() {
-        String gelekteWaren = "Kund :"+kunden.toString()+"instanz :"+this.instant;
+        String gelekteWaren = "Kund :"+kunden.toString()+"\tDatum :"+this.instant;
 
         for (Artikel artikel : getArtikels()) {
             System.out.println("hallo");

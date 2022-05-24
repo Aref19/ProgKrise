@@ -27,9 +27,10 @@ public class MitarbeiterVerwaltung{
             if (mitarbeiter.getVorName().equals(listAusgeben.getVorName()) && mitarbeiter.getNummer() == (listAusgeben.getNummer())) {
                 a.getMessage3();
             }
-            System.out.println("Die Liste ist " + listAusgeben.getVorName());
+
         }
         mitarbeiterList.add(mitarbeiter);
+        System.out.println("Die Mitarbeiter " +mitarbeiter.getVorName() +"\tist Registiert" );
     }
 
     /**
@@ -46,6 +47,7 @@ public class MitarbeiterVerwaltung{
             for (Mitarbeiter mitarbeiter : mitarbeiterList) {
                 if (name.equals(mitarbeiter.getVorName()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
                     mitarbeiterIstEingelogt = mitarbeiter;
+                    System.out.println("sie sind Eingelogt Hallo Herr : "+mitarbeiter.getVorName());
                     return true;
                 }
             }

@@ -28,7 +28,18 @@ public class IO {
             return wahl;
         }
     }
-
+    public static double inputdoubel(){
+        Scanner eingabe = new Scanner(System.in);
+        double wahl = -1;
+        try {
+            wahl = eingabe.nextDouble();
+            return wahl;
+        }
+        catch(Exception e){
+            IO.warningHighlighter("Bitte eine Zahl eingeben");
+            return wahl;
+        }
+    }
     public static void menuePrinter(String title, String menuePoints){
         int counter = 0;
         String menue = TextColor.WHITE_BOLD_BRIGHT + title + TextColor.RESET + "\n";

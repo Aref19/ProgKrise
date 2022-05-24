@@ -15,13 +15,12 @@ public class Adresse {
       * @param kundenHausNr
      * @param kundenPlz
      * @param kundenStadt
-     * @param kundenHerkunft
      */
-    public Adresse(int kundenHausNr, int kundenPlz, String kundenStadt, String kundenHerkunft) {
+    public Adresse(int kundenHausNr, int kundenPlz, String kundenStadt) {
         this.hausNr = kundenHausNr;
         this.plz = kundenPlz;
         this.stadt = kundenStadt;
-        this.herkunft = kundenHerkunft;
+
     }
 
     /**

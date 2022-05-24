@@ -1,287 +1,145 @@
 package cui;
-import Domain.ArtikelVerwaltung;
-import Domain.EshopVerwaltung;
-<<<<<<< HEAD
-=======
-import Domain.KundenVerwaltung;
-<<<<<<< HEAD
-import Domain.MitarbeiterVerwaltung;
+import Domain.*;
+
 import Utilities.IO;
 import exception.CustomIoException;
-import model.Artikel;
-import model.Mitarbeiter;
-import ;
-
-import java.io.*;
-import java.util.ArrayList;
+import model.*;
 
 public class EshopCui {
-    private ArtikelVerwaltung artikelVerwaltung = new ArtikelVerwaltung();
-    private KundenVerwaltung kundenVerwaltung = new KundenVerwaltung();
-    private MitarbeiterVerwaltung mitarbeiterList = new MitarbeiterVerwaltung();
-    private WarenkorbVerwaltung artikelKaufen = new WarenkorbVerwaltung();
+    EshopVerwaltung eshopVerwaltung=new EshopVerwaltung();
+
+    public static void main(String[] args) throws CustomIoException {
+        EshopCui eshopCui=new EshopCui();
 
 
-    public void erstelleArtikel() {
-        System.out.println("Bitte geben Sie den neu Artikel Nr ein :) ");
-        int artikelNr = IO.inputInt();
-        System.out.println("Bitte geben Sie den Artikel Bestand ein :) ");
-        int artikelbestand = IO.inputInt();
-        System.out.println("Bitte geben Sie den Artikel Bezeichnung ein :) ");
-        String artikelBezeichnung = IO.inputString();
-        this.artikelVerwaltung.artikelAnlegen(artikelNr, artikelbestand, artikelBezeichnung);
-        this.artikelVerwaltung.artikelAnlegen(1, 50, "Schwarztee");
-        this.artikelVerwaltung.artikelAnlegen(20, 60, "Grüntee");
-        this.artikelVerwaltung.artikelAnlegen(30,10 , "Kaffee");
-        this.artikelVerwaltung.artikelAnlegen(10, 10, "Pappe");
-        System.out.println(artikelVerwaltung.getArtikelList());
+        do {
+            System.out.println("1-> kund Registieren \n 2-> kund Einlogen\n3->mitarbeiter Registieren\n " +
+                    "4-> mitarbeitEilogen \n "
+                     );
+            int s=IO.inputInt();
+            switch (s) {
 
-    }
+                case 1 -> {
+                    eshopCui.kundRegestieren();
+                }
+                case 2 -> {
+                    if (eshopCui.kundEilogen()) {
+                        System.out.println("jetzt legen sie Artikel in WarenKorb");
+                        eshopCui.warenEinlegen();
+                        System.out.println("wollen sie kaufen j/n");
+                        String ein=IO.inputString();
+                        if(ein.equals("j")){
+                            eshopCui.warenkaufen();
+                            System.out.println("das ist Ihre Rechnung : \n");
+                            System.out.println("der Ereignis");
 
-    public void frontPageMenu() {
-        System.out.println("Befehle:\nMitarbeiter Einlogen: 1");
-
-        System.out.println("Kunden Einlogen:      2");
-
-        System.out.println("Als Neue Kunden Registrieren:        3");
-
-        System.out.println("Beenden: 0");
-
-        System.out.println("Bitte von Oben genannten Zahlen eine Zahl eingeben >");
-        //  int eingabeAusKonsolelesen = IO.inputInt();
-        /**
-         * Wie kann ich diese int eingabe Manipulieren in weiterem Methode
-         * ohne den variabeln Global zu initializieren.
-         */
-    }
-    public void loeschenArtikel(){
-        System.out.println("Was wollen Sie Löschen? Bitte bezeichnung eingeben");
-        String eingegebeneBezeichnung = IO.inputString();
-        ArrayList<Artikel> gespeicherteGefundenArtikelList = artikelVerwaltung.artikelSuchen(eingegebeneBezeichnung);
-        if(gespeicherteGefundenArtikelList.size() <= 0){
-            System.out.println("Gibt nichts zum Löschen");
-        } else if (gespeicherteGefundenArtikelList.size() == 1) {
-            artikelVerwaltung.artikelLoeschen(gespeicherteGefundenArtikelList.get(0));
-        } else {
-            System.out.println("Welcher Artikel genauer? Bitte Artikel Nr eingeben");
-            System.out.println(gespeicherteGefundenArtikelList);
-            int artikelNr = IO.inputInt();
-            for (Artikel artikel: gespeicherteGefundenArtikelList) {
-                if(artikel.getArtikelNr() == artikelNr){
-                    artikelVerwaltung.artikelLoeschen(artikel);
+                        }else
+                            System.out.println("shön das sie da war");
+                    }
+                }
+                case 3 -> {
+                    eshopCui.mitarbeiterRegis();
+                }
+                case 4 -> {
+                    if(  eshopCui.mitarbeiterEilogen()){
+                        System.out.println("wollen sie was 1-> Mitarbeiter Reguísteren 2->Eilagerung");
+                        switch (IO.inputInt()){
+                            case 1->{
+                                eshopCui.mitarbeiterRegisanther();
+                            }
+                            case 2->{
+                                eshopCui.eilagerung();
+                            }
+                        }
+                    }
                 }
             }
-        }
-        System.out.println(artikelVerwaltung.getArtikelList().toString());
-    }
-
-    public void artikelerhohenPage(){
-        System.out.println(artikelVerwaltung.getArtikelList());
-        System.out.println("Bitte geben sie den Artikel Nr ein um bestand zu erhöhen");
-        int artikelNr = IO.inputInt();
-        System.out.println("Bitte geben Sie den neuen Bestand ein");
-        int neueErhohteBestand = IO.inputInt();
-        artikelVerwaltung.artikelBestandErhohen(artikelNr, neueErhohteBestand);
-        System.out.println(artikelVerwaltung.getArtikelList());
-    }
-    public void mitarbeiterinDieListe() throws CustomIoException {
-        this.mitarbeiterList.mitarbeiterAnlegen(new Mitarbeiter(1,"AJ", "Khan", "123"));
-    }
-    public void mitarbeiterEinlogen() throws CustomIoException {
-        System.out.println("Bitte geben Sie Name ein");
-        String mitarbeiterName = IO.inputString();
-        System.out.println("Bitte geben Sie Passwort ein");
-        String passwort = IO.inputString();
-
-       if(mitarbeiterList.mitarbeiterUeberprufen(mitarbeiterName, passwort)){
-           System.out.println("Du bist angemeldet");
-           System.out.println("Neue Mitarbeiter Registrieren\t 1 \nArtikel \t 2" );
-           System.out.println("Bitte geben sie von den oben genannten Zahl ein");
-           int zahl = IO.inputInt();
-           zweitenSwitch(zahl);
-        }else{
-           System.out.println("Etwas ist Schief gelaufen");
-           mitarbeiterEinlogen();
-       }
-    }
-    public void mitarbeiterRegistrieren() throws CustomIoException {
-            System.out.println("Bitte geben Sie Neu ID ein");
-            int mitarbeiterId = IO.inputInt();
-            System.out.println("Bitte geben Sie vorname ein");
-            String mitarbeiterVorname = IO.inputString();
-            System.out.println("Bitte geben Sie nachname ein");
-            String nachname = IO.inputString();
-            System.out.println("Bitte geben Sie Passwort ein");
-            String mitarbeiterPasswort = IO.inputString();
-            mitarbeiterList.mitarbeiterAnlegen(new Mitarbeiter(mitarbeiterId, mitarbeiterVorname, nachname, mitarbeiterPasswort));
-            System.out.println( mitarbeiterList.getMitarbeiterList().toString());
-    }
-    public void serialisierung() throws IOException {
-
-        ObjectOutputStream oos = null;
-
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream("Mitarbeiter.ser"));
-            oos.writeObject(new Mitarbeiter(1, "A", "k", "1"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        finally {
-            oos.close();
-        }
-
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Mitarbeiter.ser"));
-           Mitarbeiter mitarbeiter = ( Mitarbeiter) ois.readObject();
-            System.out.println(mitarbeiter.getVorName());
-            System.out.println("komm ");
-            ois.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void mitarbeiterLoeaschen(){
-        System.out.println("Bitte geben Sie Mitarbeiter Vorname");
-        String mitarbeiterVorname = IO.inputString();
-        System.out.println("bitte geben Sie Mitarbeiter Nachname");
-        String mitarbeiterNachname = IO.inputString();
-        mitarbeiterList.mitarbeiterLoeaschen(mitarbeiterVorname, mitarbeiterNachname);
-    }
-
-    public void kundenKaufartikel(){
-        System.out.println("Bitte geben Sie den Artikel Bezeichnung");
-        String artikel = IO.inputString();
-        artikelVerwaltung.artikelSuchen(artikel);
-    }
-    public void gesuchteArtikelkaufen(){
-        System.out.println("Welche Artikel Wollen Sie kaufen bitte geben Sie Artikel NR ein");
-        String artikelNr = IO.inputString();
-
-
-    }
-    public void zweitenSwitch(int zahl) throws CustomIoException {
-        switch (zahl){
-            case 1 ->{
-                mitarbeiterRegistrieren();
-            }
-            case 2 ->{
-                System.out.println("Artikel Anlegen\t 1 \nArtikel Bestand Erhöhen \t 2\nArtikel Löschen\t3");
-                int artikelZahl = IO.inputInt();
-                drittenSwitch(artikelZahl);
-            }
-        }
-    }
-    public void drittenSwitch(int artikelZahl){
-        switch (artikelZahl){
-            case 1 ->{
-                erstelleArtikel();
-            }
-            case 2 ->{
-                artikelerhohenPage();
-            }
-            case 3 ->{
-                loeschenArtikel();
-            }
-        }
-    }
-    public int eingabeAusKonsoleLesen() {
-        return IO.inputInt();
-    }
-
-    public void folgtEingabeVomFrontPage(int consolZahl) throws IOException {
-
-        /*
-            TODO
-             */
-        switch (consolZahl) {
-            case 1 -> {
-                mitarbeiterEinlogen();
-            }
-            case 2 -> {
-                System.out.println("Name eingeben");
-
-                System.out.println("Passwort Eingeben");
-            }
-            case 3 -> {
-                System.out.println("Muss noch gemacht werden");
-                kundenKaufartikel();
-            }
-            default -> throw new IOException("Die Zahl ist außer Menu " + consolZahl);
-        }
+            System.out.println("wollen sie beenden n/j");
+        }while (IO.inputString().equals("n"));
 
     }
 
-    public void run() throws IOException {
-        int eingabeAusKonsoleLesen;
-        frontPageMenu();
-        eingabeAusKonsoleLesen = eingabeAusKonsoleLesen();
-        folgtEingabeVomFrontPage(eingabeAusKonsoleLesen);
+    public  void kundRegestieren(){
+        System.out.println("giben sie name");
+        String name  = IO.inputString();
+        System.out.println("geben nach name");
+        String namchname  = IO.inputString();
+        System.out.println("geben sie hasnummer");
+        int hausnumm  = IO.inputInt();
+        System.out.println("geben sie plz");
+        int plz = IO.inputInt();
+        System.out.println("geben sie Stadt");
+        String stadt = IO.inputString();
+        System.out.println("geben sie pass");
+        String pass = IO.inputString();
+        eshopVerwaltung.kundRegistieren( new Kunden(1,name,namchname,new Adresse(hausnumm,plz,stadt),pass));
     }
-    public static void main(String[] args) {
-        EshopCui cui = new EshopCui();
-        try {
-            cui.mitarbeiterinDieListe();
-            cui.serialisierung();
-            cui.run();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-=======
-import exception.ExistenceName;
->>>>>>> 5b0f45b88911e52cc3d2c68f8a1eb1290bfc4384
-import model.Adresse;
-import model.Kunden;
+    public boolean kundEilogen(){
+        System.out.println("giben sie name");
+        String name  = IO.inputString();
+        System.out.println("giben sie name");
+        String pass  = IO.inputString();
+        return eshopVerwaltung.kundAnlogen(name,pass);
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class EshopCui extends JFrame {
-    private JPanel Kundeneinlogen;
-    private JButton kundenButton;
-    private JButton mitarbeiterButton;
-    private JLabel name;
-
-    public EshopCui() {
-        setTitle("Hallo ");
-        setContentPane(Kundeneinlogen);
-        setSize(450, 350);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setVisible(true);
-        mitarbeiterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                kundAnlogen();
-            }
-        });
     }
 
-    public static void main(String[] args) {
-        EshopCui eshopCui = new EshopCui();
-        EshopVerwaltung eshopVerwaltung = new EshopVerwaltung();
-        eshopVerwaltung.artikelSortieren();
-        Kunden kunden = new Kunden(1, "ajab", "o", new Adresse(12, 2, "", ""), "d");
-        eshopVerwaltung.kundRegistieren(kunden);
-        eshopVerwaltung.kundRegistieren(kunden);
-        if (eshopVerwaltung.kundAnlogen("ab", "d")) {
-            eshopVerwaltung.warenlegen();
-            eshopVerwaltung.kaufen();
-        }
-
->>>>>>> 9d7b6d36315e18e3ea8291b81bae3b2be107e396
+    public void mitarbeiterRegis() throws CustomIoException {
+        System.out.println("giben sie name");
+        String name  = IO.inputString();
+        System.out.println("geben nach name");
+        String namchname  = IO.inputString();
+        System.out.println("geben sie pass");
+        String pass = IO.inputString();
+        eshopVerwaltung.mitarbeiterRe(new Mitarbeiter(2,name,namchname,pass));
     }
-<<<<<<< HEAD
 
-    public void kundAnlogen() {
-        EshopCui eshopCui = new EshopCui();
+    public boolean mitarbeiterEilogen() throws CustomIoException {
+        System.out.println("giben sie name");
+        String name  = IO.inputString();
+        System.out.println("giben sie pass");
+        String pass = IO.inputString();
+      return  eshopVerwaltung.mitarbeiterEilogen(name,pass);
+    }
+
+    public void warenEinlegen(){
+        System.out.println("giben sie name");
+        String name  = IO.inputString();
+        System.out.println("geben sie anzah");
+        int hausnumm  = IO.inputInt();
+        eshopVerwaltung.warenlegen(new Artikel(1,name,hausnumm,2.5));
 
     }
+
+    public  void  warenkaufen(){
+        eshopVerwaltung.kaufen();
+    }
+
+    public void eilagerung(){
+        System.out.println(" name Artikel :");
+        String na=IO.inputString();
+        System.out.println(" bestand Artikel :");
+        int be=IO.inputInt();
+        System.out.println(" preis Artikel :");
+        double pr=IO.inputdoubel();
+       Ereigniss ereigniss= eshopVerwaltung.eilage(new Artikel(2,na,be,pr));
+        System.out.println(ereigniss);
+    }
+
+    public void mitarbeiterRegisanther() throws CustomIoException {
+        System.out.println("giben sie name");
+        String name  = IO.inputString();
+        System.out.println("geben nach name");
+        String namchname  = IO.inputString();
+        System.out.println("geben sie pass");
+        String pass = IO.inputString();
+        eshopVerwaltung.mitarbeiteranthorReg(new Mitarbeiter(1,name,namchname,pass));
+
+    }
+    public void kundEreignis(String na,int be){
+     Ereigniss ereigniss=   eshopVerwaltung.ergnissKund(new Artikel(1,na,be,2.5));
+        System.out.println(ereigniss);
+    }
+
+
+
 }
-=======
-}
->>>>>>> 5b0f45b88911e52cc3d2c68f8a1eb1290bfc4384
