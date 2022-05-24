@@ -1,7 +1,7 @@
 package cui;
-
-import Domain.ArtikelVerwaltung;
+import Domain.EshopVerwaltung;
 import Domain.KundenVerwaltung;
+<<<<<<< HEAD
 import Domain.MitarbeiterVerwaltung;
 import Utilities.IO;
 import exception.CustomIoException;
@@ -227,5 +227,21 @@ public class EshopCui {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+=======
+import exception.ExistenceName;
+import model.Adresse;
+import model.Kunden;
+
+public class EshopCui {
+    public static void main(String[] args) {
+        EshopVerwaltung eshopVerwaltung=new EshopVerwaltung();
+        eshopVerwaltung.artikelSortieren();
+        Kunden kunden=new Kunden(1,"ajab","o",new Adresse(12,2,"",""),"d");
+        eshopVerwaltung.kundRegistieren(kunden);
+        eshopVerwaltung.kundAnlogen("ajab","d");
+        eshopVerwaltung.warenlegen();
+        eshopVerwaltung.kaufen();
+
+>>>>>>> 9d7b6d36315e18e3ea8291b81bae3b2be107e396
     }
 }

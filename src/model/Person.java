@@ -1,5 +1,6 @@
 package model;
 
+<<<<<<< HEAD
 import java.io.Serializable;
 
 public abstract class Person implements Serializable {
@@ -23,6 +24,20 @@ public abstract class Person implements Serializable {
         this.vorName = vorName;
         this.nachName = nachName;
         this.passwort = passwort;
+=======
+
+public abstract class Person  {
+    private int nummer;
+    private String vorName;
+    private String nachName;
+    private String password;
+
+    public Person(int nummer, String vorName, String nachName,String password) {
+        this.nummer = nummer;
+        this.vorName = vorName;
+        this.nachName = nachName;
+        this.password=password;
+>>>>>>> 9d7b6d36315e18e3ea8291b81bae3b2be107e396
     }
 
     /**
@@ -57,9 +72,21 @@ public abstract class Person implements Serializable {
         this.nachName = nachName;
     }
 
+<<<<<<< HEAD
     public void setPasswort(String passwort) {
         this.passwort = passwort;
     }
 
 
+=======
+    public String getPassword(){
+        return this.password;
+    }
+
+    public String toString() {
+        String person=nachName+vorName;
+        return
+             person;
+    }
+>>>>>>> 9d7b6d36315e18e3ea8291b81bae3b2be107e396
 }

@@ -8,6 +8,7 @@ public class Kunden extends Person {
      */
     private Adresse adresse;
 
+<<<<<<< HEAD
     /**
      * Constructor
      * @param kundenNr
@@ -18,7 +19,13 @@ public class Kunden extends Person {
      */
     public Kunden(int kundenNr, String kundenVorname, String nachName, Adresse adresse, String passwort){
         super(kundenNr, kundenVorname, nachName, passwort);
+=======
+
+    public Kunden(int kundenNr, String kundenVorname, String nachName, Adresse adresse,String pass){
+        super(kundenNr, kundenVorname, nachName,pass);
+>>>>>>> 9d7b6d36315e18e3ea8291b81bae3b2be107e396
         this.adresse=adresse;
+
     }
 
     /**
@@ -39,4 +46,7 @@ public class Kunden extends Person {
     public void setKundenPlz(int kundenPlz){
         this.adresse.setPlz(kundenPlz);
     }
+
+
 }
+
