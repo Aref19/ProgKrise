@@ -1,19 +1,35 @@
 package model;
 
 
+
 public abstract class Person  {
+    /**
+     * Variable der Klasse Person
+     */
     private int nummer;
     private String vorName;
     private String nachName;
-    private String password;
+    private String passwort;
 
-    public Person(int nummer, String vorName, String nachName,String password) {
+    /**
+     * Constructor
+     * @param nummer
+     * @param vorName
+     * @param nachName
+     * @param passwort
+     */
+    public Person(int nummer, String vorName, String nachName, String passwort) {
         this.nummer = nummer;
         this.vorName = vorName;
         this.nachName = nachName;
-        this.password=password;
+        this.passwort = passwort;
+
     }
 
+    /**
+     * Getter und Setter
+     * @return
+     */
     public int getNummer() {
         return nummer;
     }
@@ -24,6 +40,10 @@ public abstract class Person  {
 
     public String getNachName() {
         return nachName;
+    }
+
+    public String getPasswort() {
+        return passwort;
     }
 
     public void setNummer(int nummer) {
@@ -38,8 +58,15 @@ public abstract class Person  {
         this.nachName = nachName;
     }
 
+
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
+    }
+
+
+
     public String getPassword(){
-        return this.password;
+        return this.passwort;
     }
 
     public String toString() {
@@ -47,4 +74,5 @@ public abstract class Person  {
         return
              person;
     }
+
 }

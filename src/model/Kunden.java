@@ -2,6 +2,10 @@ package model;
 import model.Adresse;
 
 public class Kunden extends Person {
+
+    /**
+     * Klasse Kunden erweitert Person.
+     */
     private Adresse adresse;
 
 
@@ -11,6 +15,10 @@ public class Kunden extends Person {
 
     }
 
+    /**
+     * Getter und Setter
+     * @return
+     */
     public int getKundenHausNr() {
         return adresse.getHausNr() ;
     }

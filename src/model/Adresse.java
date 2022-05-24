@@ -1,14 +1,22 @@
 package model;
 
 public class Adresse {
-
+    /**
+     * Variable für Klasse Adresse
+     */
 
     private int hausNr;
     private int plz;
     private String stadt;
     private String herkunft;
 
-
+    /**
+     * Construktor
+      * @param kundenHausNr
+     * @param kundenPlz
+     * @param kundenStadt
+     * @param kundenHerkunft
+     */
     public Adresse(int kundenHausNr, int kundenPlz, String kundenStadt, String kundenHerkunft) {
         this.hausNr = kundenHausNr;
         this.plz = kundenPlz;
@@ -16,6 +24,10 @@ public class Adresse {
         this.herkunft = kundenHerkunft;
     }
 
+    /**
+     * Getter und Setter für Klass Adresse
+     * @return
+     */
     public int getHausNr() {
         return hausNr;
     }
