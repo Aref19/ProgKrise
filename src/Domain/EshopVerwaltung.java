@@ -6,6 +6,7 @@ import model.Artikel;
 import model.Kunden;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class EshopVerwaltung {
     private ArtikelVerwaltung artikelVerwaltung;
@@ -32,16 +33,22 @@ public class EshopVerwaltung {
         try {
             kundenVerwaltung.registieren(kunden);
         } catch (ExistenceName e) {
-            e.printStackTrace();
+            e.prinEror();
+
         }
     }
 
-    public void kundAnlogen(String na,String pas)  {
+    public boolean kundAnlogen(String na,String pas) {
         try {
-          kunden=kundenVerwaltung.einlogen(na,pas);
-        } catch (NotFoundEx e) {
-            e.printStackTrace();
+            if(kundenVerwaltung.einlogen(na,pas).gefunden){
+                kunden=kundenVerwaltung.einlogen(na,pas).kunden;
+                return true;
+            }else
+                return false;
+        }catch (NotFoundEx notFoundEx){
+            //ToDo Eror anmelden
         }
+       return false;
     }
 
     public void kaufen(){

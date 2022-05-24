@@ -3,6 +3,7 @@ package Domain;
 import exception.ExistenceName;
 import exception.NotFoundEx;
 import model.Adresse;
+import model.KundEilogen;
 import model.Kunden;
 import model.Person;
 
@@ -13,14 +14,13 @@ public class KundenVerwaltung {
     private ArrayList<Kunden> kundenArrayList = new ArrayList<>();
 
 
-    public Kunden einlogen(String na, String pass)throws NotFoundEx {
+    public KundEilogen einlogen(String na, String pass)throws  NotFoundEx{
         for (Kunden kunden : kundenArrayList) {
             if (kunden.getVorName().equals(na) && kunden.getPassword().equals(pass)) {
-                return kunden;
-            }else
-                throw new NotFoundEx("diese kund nicht");
+                return new KundEilogen(kunden,true);
+            }
         }
-        return null;
+        throw new NotFoundEx("dies ist nicht vorhanden");
     }
 
     public void registieren(Kunden kunden) throws ExistenceName {
@@ -39,4 +39,5 @@ public class KundenVerwaltung {
         }
 
     }
+
 }
