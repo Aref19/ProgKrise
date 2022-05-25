@@ -10,21 +10,24 @@ import model.Artikel;
 import model.Kunden;
 import model.WarenKorp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class WarenKorpVerw {
 
-        WarenKorp warenKorp;
+        WarenKorp waren;
 
         public WarenKorpVerw() {
-            warenKorp = new WarenKorp();
+          this.waren=  new WarenKorp();
         }
 
-        public void addArtikel(Artikel artikel) {
-            warenKorp.addArtikle(artikel);
+        public void addArtikel(Artikel artikel,int anzahl) {
+            waren.addArtikle(artikel,anzahl);
         }
 
         public Boolean removeArtikel(Artikel artikel) {
             try {
-                warenKorp.loschArtikle(artikel);
+                waren.loschArtikle(artikel);
                 return true;
             } catch (NotFoundEx e) {
                 e.printStackTrace();
@@ -33,14 +36,16 @@ public class WarenKorpVerw {
         }
 
         public void leer(){
-            warenKorp.removeAll();
+            waren.removeAll();
         }
 
         public void kaufen(Kunden kunden){
-            System.out.println( warenKorp.kaufen(kunden));
 
         }
+        public HashMap<Artikel,Integer> getArtikelWarenK(Kunden kunden){
+            return kunden.getWarenKorp().get();
 
+    }
 
     }
 

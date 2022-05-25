@@ -9,18 +9,18 @@ public class Adresse {
     private int plz;
     private String stadt;
     private String herkunft;
-
+    private String strasse;
     /**
      * Construktor
       * @param kundenHausNr
      * @param kundenPlz
      * @param kundenStadt
      */
-    public Adresse(int kundenHausNr, int kundenPlz, String kundenStadt) {
+    public Adresse(int kundenHausNr, int kundenPlz, String kundenStadt,String strasse) {
         this.hausNr = kundenHausNr;
         this.plz = kundenPlz;
         this.stadt = kundenStadt;
-
+         this.strasse=strasse;
     }
 
     /**

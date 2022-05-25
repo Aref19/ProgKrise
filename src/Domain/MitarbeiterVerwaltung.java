@@ -12,8 +12,12 @@ public class MitarbeiterVerwaltung{
     /**
      * Eine Arraylist für Mitarbeiter.
      */
-    ArrayList<Mitarbeiter> mitarbeiterList = new ArrayList<>();
+    ArrayList<Mitarbeiter> mitarbeiterList;
     Mitarbeiter mitarbeiterIstEingelogt;
+    public MitarbeiterVerwaltung(){
+        mitarbeiterList=new ArrayList<>();
+        mitarbeiterList.add(new Mitarbeiter(1,"Aj","a","a"));
+    }
     /**
      * Beim Methode Mitarbeiter Anlegen wird Mitarbeiter angelegt und durch
      * For Schleife wird in der Liste gesucht ob der Mitarbeiter Vorname und Nummer bereits vergeben ist dann wird

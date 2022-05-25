@@ -1,5 +1,6 @@
 package Domain;
 
+import exception.NotFoundEx;
 import model.Artikel;
 
 import java.util.ArrayList;
@@ -12,7 +13,14 @@ public class ArtikelVerwaltung  {
     /**
      * Arraylist für Artikel
      */
-    private ArrayList<Artikel> artikelList = new ArrayList<>();
+    private ArrayList<Artikel> artikelList ;
+    public ArtikelVerwaltung(){
+        artikelList=new ArrayList<>();
+        artikelList.add(new Artikel(1,"Banana",4,2.5));
+        artikelList.add(new Artikel(2,"Apfhel",7,2.5));
+        artikelList.add(new Artikel(3,"Zizrone",6,2.5));
+        artikelList.add(new Artikel(4,"Orang",5,2.5));
+    }
 
     /**
      * Methode um eine Artikel an zu legen und in der Arraylist zu speichern.
@@ -55,6 +63,22 @@ public class ArtikelVerwaltung  {
         return gefundenArtikelList;
     }
 
+    public Artikel findArtikel(String name,int anzahl)throws NotFoundEx {
+        for (Artikel artikel:artikelList) {
+            if(artikel.getArtikelBezeichnung().equals(name)){
+                if(mengeReicht(artikel,anzahl)){
+                    return artikel;
+                }else
+                   throw new NotFoundEx("menge Reicht nicht");
+            }
+        }
+        throw new NotFoundEx("Artikel mit einggeben nicht gefunden");
+    }
+
+    private boolean mengeReicht(Artikel artikel, int a) {
+        return artikel.getArtikelBestand() >= a ;
+    }
+
     /**
      * Beim ArtikelBestandErhöhen Methode wird nur den Bestand erhöht durch ausgleich vom Artikel Nr.
      * Diese Methode gibt es keine Werte zurück, erkennt man auch durch Void.
@@ -95,6 +119,4 @@ public class ArtikelVerwaltung  {
         }
          return sortertlist;
     }
-
-
 }

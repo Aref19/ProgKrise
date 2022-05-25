@@ -44,6 +44,5 @@ public class Ereigniss {
         }else {
             return artikel.toString()+" Danke Herr für Einkauf : "+((Kunden) object).getNachName();
         }
-
     }
 }

@@ -70,7 +70,7 @@ public abstract class Person  {
     }
 
     public String toString() {
-        String person=nachName+vorName;
+        String person=vorName;
         return
              person;
     }

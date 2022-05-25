@@ -4,50 +4,36 @@ import exception.NotFoundEx;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class WarenKorp {
-    private ArrayList<Artikel> waren;
-
+public  class WarenKorp {
+    private HashMap<Artikel,Integer> warenList;
+    static WarenKorp waren;
     public WarenKorp() {
-        this.waren = new ArrayList<>();
+        this.warenList = new HashMap<>();
     }
 
-    public void addArtikle(Artikel artikel) {
-        this.waren.add(artikel);
+
+    public void addArtikle(Artikel artikel,int anzahl) {
+        this.warenList.put(artikel,anzahl);
     }
 
     public void loschArtikle(Artikel artikel) throws NotFoundEx {
-        for (Artikel artikel1 : waren) {
-            if (artikel.equals(artikel)) {
-                this.waren.remove(artikel);
-            } else {
-                throw new NotFoundEx("dieser Artikel ist nicht vorhanden");
-            }
-
-        }
-
+        warenList.remove(artikel);
     }
 
-    public ArrayList<Artikel> get() {
-
-        return this.waren;
+    public HashMap<Artikel, Integer> get() {
+        return this.warenList;
     }
 
-    public Rechnung kaufen(Kunden kunden) {
-        Rechnung rechnung = new Rechnung(Instant.now(), kunden, waren);
-        //  removeAll();
-        return rechnung;
-    }
+
 
     public void removeAll() {
-        this.waren.clear();
+        this.warenList.clear();
     }
 
     public String toString() {
-        String gelekteWaren = "";
-        for (Artikel artikel : waren) {
-            gelekteWaren += artikel.getArtikelBezeichnung() + "\n";
-        }
-        return gelekteWaren;
+    return "";
+     //   return gelekteWaren;
     }
 }
