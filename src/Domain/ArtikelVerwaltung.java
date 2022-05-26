@@ -2,11 +2,9 @@ package Domain;
 
 import exception.NotFoundEx;
 import model.Artikel;
+import model.Kunden;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class ArtikelVerwaltung  {
 
@@ -14,11 +12,14 @@ public class ArtikelVerwaltung  {
      * Arraylist für Artikel
      */
     private ArrayList<Artikel> artikelList ;
+    HashMap<String,Integer> buchstaben;
     public ArtikelVerwaltung(){
+        buchstaben=new HashMap<>();
+        setBoc(buchstaben);
         artikelList=new ArrayList<>();
-        artikelList.add(new Artikel(1,"Banana",4,2.5));
         artikelList.add(new Artikel(2,"Apfhel",7,2.5));
         artikelList.add(new Artikel(3,"Zizrone",6,2.5));
+        artikelList.add(new Artikel(1,"Banana",4,2.5));
         artikelList.add(new Artikel(4,"Orang",5,2.5));
     }
 
@@ -102,21 +103,53 @@ public class ArtikelVerwaltung  {
 
     public ArrayList<Artikel> artikelSortieren(Boolean sort){
         ArrayList<Artikel> sortertlist = new ArrayList<>(artikelList);
+        for (Artikel s:sortertlist
+             ) {
+            System.out.println(s);
+        }
         if(sort){
             Collections.sort(sortertlist, new Comparator<Artikel>() {
                 @Override
-                public int compare(Artikel o1, Artikel o2) {
-                    return Integer.valueOf(o1.getArtikelNr()).compareTo(o2.getArtikelNr());
+                public int compare(Artikel artikel1, Artikel artikel2) {
+                    return Integer.valueOf(artikel1.getArtikelNr()).compareTo(artikel2.getArtikelNr());
                 }
             });
         }else {
             Collections.sort(sortertlist, new Comparator<Artikel>() {
                 @Override
                 public int compare(Artikel o1, Artikel o2) {
-                    return Integer.valueOf(o1.getArtikelBezeichnung().length()).compareTo(o2.getArtikelBezeichnung().length());
+                    char[] buc1=o1.getArtikelBezeichnung().toCharArray();
+                    char[] buc2=o2.getArtikelBezeichnung().toCharArray();
+                    String key=String.valueOf(buc1[0]).toUpperCase();
+                    String key2=String.valueOf(buc2[0]).toUpperCase();
+                    return Integer.valueOf(buchstaben.get(key).compareTo(buchstaben.get(key2)));
                 }
             });
         }
          return sortertlist;
+    }
+    private void setBoc(HashMap<String,Integer> boc){
+        boc.put("A",1);
+        boc.put("B",2);
+        boc.put("C",3);
+        boc.put("D",4);
+        boc.put("E",5);
+        boc.put("F",6);
+        boc.put("G",7);
+        boc.put("H",8);
+        boc.put("I",9);
+        boc.put("J",10);
+        boc.put("K",11);
+        boc.put("L",12);
+        boc.put("M",13);
+        boc.put("N",14);
+        boc.put("O",15);
+        boc.put("P",16);
+        boc.put("Q",17);
+        boc.put("R",18);
+        boc.put("S",19);
+        boc.put("T",20);
+        boc.put("Y",21);
+        boc.put("Z",22);
     }
 }

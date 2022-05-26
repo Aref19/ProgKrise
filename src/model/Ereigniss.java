@@ -40,7 +40,8 @@ public class Ereigniss {
     @Override
     public String toString(){
         if(object instanceof Mitarbeiter){
-            return artikel.toString()+" Danke Herr "+((Mitarbeiter) object).getNachName()+"fur Eilagerung "+"\n datum :"+Datum;
+            System.out.println("Erginness :");
+            return " Danke Herr :"+((Mitarbeiter) object).getNachName()+"\nfur Eilagerung :\n"+artikel+"\n datum :"+Datum;
         }else {
             return artikel.toString()+" Danke Herr für Einkauf : "+((Kunden) object).getNachName();
         }

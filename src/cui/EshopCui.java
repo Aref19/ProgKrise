@@ -54,7 +54,7 @@ public class EshopCui {
                 case 4 -> {
                     if(  eshopCui.mitarbeiterEinloggen()){
                         do{
-                            System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung");
+                            System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung\n3-Sortierten");
 
 
                             switch (IO.inputInt()){
@@ -63,6 +63,14 @@ public class EshopCui {
                                 }
                                 case 2->{
                                     eshopCui.einlagerung();
+                                }
+                                case 3->{
+                                    eshopCui.zeigeArtikel();
+                                    System.out.println("wie wollen sie es sortieren");
+                                    int sort =IO.inputInt();
+                                    boolean artsort;
+                                  artsort=  (sort==1)? true : false;
+                                    eshopCui.artikelSortieren(artsort);
                                 }
                             }
                             System.out.println("Wollen Sie als Mitarbeiter benden n/j");
@@ -146,8 +154,6 @@ public class EshopCui {
         } catch (NotFoundEx e) {
             e.prinEror();
         }
-
-
     }
 
     public  void  warenkaufen(){
@@ -165,6 +171,7 @@ public class EshopCui {
         System.out.println("sie haben jetzt");
         zeigeArtikel();
         System.out.println(ereigniss);
+
     }
 
     public void mitarbeiterRegestieren() throws CustomIoException {
@@ -179,19 +186,25 @@ public class EshopCui {
     }
     public void kundenEreignis(String na, int be){
       //  Ereigniss ereigniss=   eshopVerwaltung.kundenEreignis(new Artikel(1,na,be,2.5));
-   //     System.out.println(ereigniss);
+   //   System.out.println(ereigniss);
     }
 
-    public void zeigeArtikel(){
+     public void zeigeArtikel(){
         System.out.println("Hier sind die Verfügbaren Artikeln: ");
         List<Artikel> artikels= eshopVerwaltung.artielzeigen();
         for (Artikel a:artikels) {
             System.out.println(a);
-
         }
     }
    public void rechnung(){
        System.out.println( eshopVerwaltung.getRec((Kunden) person,((Kunden) person).getWarenKorp().get()));
+   }
+
+   public void artikelSortieren(boolean artSort){
+       List<Artikel> artikels =   eshopVerwaltung.artikelSortieren(artSort);
+       for (Artikel a : artikels) {
+           System.out.println(a);
+       }
    }
 
 
