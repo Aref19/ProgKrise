@@ -10,8 +10,8 @@ public class KundenVerwaltung {
 
     private ArrayList <Kunden> kundenArrayList = new ArrayList<>();
 
-    public void kundenRegistrierenAnlegen(int kundenNr, String kundenName, String kundenNachname,  Adresse adresse){
-        Kunden kunden = new Kunden(kundenNr, kundenName, kundenNachname,  adresse);
+    public void kundenRegistrierenAnlegen(int kundenNr, String kundenName, String kundenNachname,  Adresse adresse , String passwort){
+        Kunden kunden = new Kunden(kundenNr, kundenName, kundenNachname,  adresse , passwort);
         kundenArrayList.add(kunden);
     }
 

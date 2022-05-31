@@ -3,7 +3,6 @@ package model;
 public class Artikel {
     /**
      * @author AJ
-     * <p>
      * Klasse zu einzelne Artikel
      */
     private int artikelNr;

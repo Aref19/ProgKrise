@@ -2,13 +2,29 @@ package model;
 import model.Adresse;
 
 public class Kunden extends Person {
+
+    /**
+     * Klasse Kunden erweitert Person.
+     */
     private Adresse adresse;
 
-    public Kunden(int kundenNr, String kundenVorname, String nachName, Adresse adresse){
-        super(kundenNr, kundenVorname, nachName);
+    /**
+     * Constructor
+     * @param kundenNr
+     * @param kundenVorname
+     * @param nachName
+     * @param adresse
+     * @param passwort
+     */
+    public Kunden(int kundenNr, String kundenVorname, String nachName, Adresse adresse, String passwort){
+        super(kundenNr, kundenVorname, nachName, passwort);
         this.adresse=adresse;
     }
 
+    /**
+     * Getter und Setter
+     * @return
+     */
     public int getKundenHausNr() {
         return adresse.getHausNr() ;
     }

@@ -1,16 +1,34 @@
 package model;
 
-public abstract class Person  {
+import java.io.Serializable;
+
+public abstract class Person implements Serializable {
+    /**
+     * Variable der Klasse Person
+     */
     private int nummer;
     private String vorName;
     private String nachName;
+    private String passwort;
 
-    public Person(int nummer, String vorName, String nachName) {
+    /**
+     * Constructor
+     * @param nummer
+     * @param vorName
+     * @param nachName
+     * @param passwort
+     */
+    public Person(int nummer, String vorName, String nachName, String passwort) {
         this.nummer = nummer;
         this.vorName = vorName;
         this.nachName = nachName;
+        this.passwort = passwort;
     }
 
+    /**
+     * Getter und Setter
+     * @return
+     */
     public int getNummer() {
         return nummer;
     }
@@ -21,6 +39,10 @@ public abstract class Person  {
 
     public String getNachName() {
         return nachName;
+    }
+
+    public String getPasswort() {
+        return passwort;
     }
 
     public void setNummer(int nummer) {
@@ -34,4 +56,10 @@ public abstract class Person  {
     public void setNachName(String nachName) {
         this.nachName = nachName;
     }
+
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
+    }
+
+
 }
