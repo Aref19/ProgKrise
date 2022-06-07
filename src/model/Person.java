@@ -68,7 +68,7 @@ public abstract class Person  {
     }
 
     public String toString() {
-        String person= nummer + ";" + vorName + ";" + nachName + ";" + passwort;
+        String person =   "Vorname:\t" + vorName + "\n" + "Nachname:\t" + nachName;
         return
              person;
     }

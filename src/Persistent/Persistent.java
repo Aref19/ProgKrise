@@ -1,5 +1,4 @@
 package Persistent;
-
 import model.Mitarbeiter;
 
 import java.io.File;
@@ -33,7 +32,7 @@ public class Persistent {
         }
         reader.close();
     }
-
+                    //... egal wie viele Parameter
     public void mitarbeiterSpeichern(Mitarbeiter... mitarbeiters) {
         try {
             FileWriter writer = new FileWriter(filename);

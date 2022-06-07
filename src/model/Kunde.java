@@ -43,6 +43,5 @@ public class Kunde extends Person {
         return this.warenKorp;
     }
 
-
 }
 

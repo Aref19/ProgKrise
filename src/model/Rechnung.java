@@ -37,9 +37,9 @@ public class Rechnung {
         this.artikels = artikels;
     }
     public String toString() {
-        String gelekteWaren = "Kund :"+ kunde.toString()+"\tDatum :"+this.instant;
+        String gelekteWaren =  "\n" + "Kunde:\t"+ kunde.toString()+"\n" + "Datum :\t"+this.instant;
         for (Map.Entry<Artikel,Integer>artikelIntegerEntry :artikels.entrySet()) {
-            gelekteWaren+=artikelIntegerEntry.getKey().getArtikelBezeichnung() +" Anzahl : "+artikelIntegerEntry.getValue();
+            gelekteWaren += "\n" + artikelIntegerEntry.getKey().getArtikelBezeichnung()  +"\t Anzahl: \t  "+artikelIntegerEntry.getValue();
         }
         return  gelekteWaren;
     }

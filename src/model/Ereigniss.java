@@ -43,9 +43,10 @@ public class Ereigniss {
     public String toString(){
         if(object instanceof Mitarbeiter){
             System.out.println("Erginness :");
-            return " Danke Herr :"+((Mitarbeiter) object).getNachName()+"\nfur Eilagerung :\n"+artikel+"\n datum :"+Datum;
+            return " Danke Herr :"+((Mitarbeiter) object).getNachName()+"\nfur Eilagerung :\n"+artikel+"\n datum :"+Datum + "\n";
         }else {
-            return artikel.toString()+" Danke Herr für Einkauf : "+((Kunde) object).getNachName();
+            return artikel.toString()+" Danke für den Einkauf Herr : "+((Kunde) object).getNachName() + "\t " + staus.Auslagerung;
+
         }
     }
 }

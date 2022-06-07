@@ -67,12 +67,20 @@ public class ArtikelVerwaltung  {
         for (Artikel artikel:artikelList) {
             if(artikel.getArtikelBezeichnung().equals(name)){
                 if(mengeReicht(artikel,anzahl)){
+                    artikelBestand(artikel, anzahl);
                     return artikel;
                 }else
                    throw new NotFoundEx("menge Reicht nicht");
             }
         }
         throw new NotFoundEx("Artikel mit einggeben nicht gefunden");
+    }
+    public void artikelBestand(Artikel artikel, int anzahl){
+        for (Artikel artikelSuchen: artikelList) {
+            if(artikelSuchen.equals(artikel)){
+                artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
+            }
+        }
     }
 
     private boolean mengeReicht(Artikel artikel, int a) {

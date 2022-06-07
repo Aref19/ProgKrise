@@ -5,70 +5,16 @@ import Utilities.IO;
 import exception.CustomIoException;
 import exception.NotFoundEx;
 import model.*;
+
 import java.util.List;
+
 public class EshopCui {
     EshopVerwaltung eshopVerwaltung = new EshopVerwaltung();
     static Person person;
+
     public static void main(String[] args) throws CustomIoException {
         EshopCui eshopCui = new EshopCui();
-        do {
-            System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Eilogen ");
-            int s = IO.inputInt();
-            switch (s) {
-                case 1 -> {
-                    eshopCui.kundeRegistrieren();
-                }
-                case 2 -> {
-                    KundeEinlogen kundeEinlogen = eshopCui.kundenEinloggen();
-                    if (kundeEinlogen.gefunden) {
-                        person = kundeEinlogen.kunde;
-                        System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb");
-                        do {
-                            eshopCui.warenEinlegen();
-                            System.out.println("Mochten Sie weitere Artikeln hinzufugen? n/j ");
-                        } while (IO.inputString().equals("j"));
-                        System.out.println("Weiter zu Kasse ==> j/n");
-                        String ein = IO.inputString();
-                        if (ein.equals("j")) {
-                            eshopCui.warenkaufen();
-                            System.out.println("Hier können Sie Ihre Rechnung sehen : \n");
-                            eshopCui.rechnung();
-                            System.out.println("Der Ereignis ist jetzt: ");
-                            System.out.println("Vielen Dank für Ihren Einkauf");
-
-                        } else
-                            System.out.println("Vielen Dank Ihre Warenkorb ist leer");
-                    }
-                }
-                case 3 -> {
-                    if (eshopCui.mitarbeiterEinloggen()) {
-                        do {
-                            System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung\n3-Sortierten");
-                            switch (IO.inputInt()) {
-                                case 1 -> {
-                                    eshopCui.mitarbeiterRegestieren();
-                                }
-                                case 2 -> {
-                                    eshopCui.einlagerung();
-                                }
-                                case 3 -> {
-                                    eshopCui.zeigeArtikel();
-                                    System.out.println("wie wollen sie es sortieren");
-                                    int sort = IO.inputInt();
-                                    boolean artsort;
-                                    artsort = sort == 1 ? true : false;
-                                    eshopCui.artikelSortieren(artsort);
-                                }
-                            }
-                            System.out.println("Wollen Sie als Mitarbeiter benden n/j");
-                        } while (IO.inputString().equals("n"));
-                    } else
-                        System.out.println("Sie haben noch kein Account");
-                }
-            }
-            System.out.println("Wollen Sie System beenden n/j");
-        } while (IO.inputString().equals("n"));
-
+        eshopCui.run();
     }
 
     /**
@@ -108,7 +54,7 @@ public class EshopCui {
         } catch (NotFoundEx notFoundEx) {
             notFoundEx.prinEror();
         }
-        return null;
+        return new KundeEinlogen(null, false);
     }
 
     public void mitarbeiterRegistieren() throws CustomIoException {
@@ -137,7 +83,7 @@ public class EshopCui {
 
     public void warenEinlegen() {
         zeigeArtikel();
-        System.out.println("Geben Sie  Name ein:");
+        System.out.println("Geben Sie Artikel Bezeichnung ein:");
         String name = IO.inputString();
         System.out.println("Geben Sie Anzahl der Artikel:");
         int anzahlArtikel = IO.inputInt();
@@ -149,7 +95,10 @@ public class EshopCui {
     }
 
     public void warenkaufen() {
-        eshopVerwaltung.kaufen();
+        List<Ereigniss> ereignisses = eshopVerwaltung.kaufen((Kunde) person, ((Kunde) person).getWarenKorp().get());
+        for (Ereigniss gefundeneEreignisse : ereignisses) {
+            System.out.println(gefundeneEreignisse);
+        }
     }
 
     public void einlagerung() {
@@ -177,11 +126,6 @@ public class EshopCui {
 
     }
 
-    public void kundenEreignis(String na, int be) {
-        //  Ereigniss ereigniss=   eshopVerwaltung.kundenEreignis(new Artikel(1,na,be,2.5));
-        //   System.out.println(ereigniss);
-    }
-
     public void zeigeArtikel() {
         System.out.println("Hier sind die Verfügbaren Artikeln: ");
         List<Artikel> artikels = eshopVerwaltung.artielzeigen();
@@ -201,5 +145,71 @@ public class EshopCui {
         }
     }
 
+        public void run() throws CustomIoException {
+            do {
+                System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Einlogen ");
+                int s = IO.inputInt();
+                switch (s) {
+                    case 1 -> {
+                        kundeRegistrieren();
+                    }
+                    case 2 -> {
+                        KundeEinlogen kundeEinlogen = kundenEinloggen();
+                        if (kundeEinlogen.gefunden) {
+                            person = kundeEinlogen.kunde;
+                            System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb: 1 oder Abmelden: 2");
+                            if(IO.inputInt() == 2){
+                                run();
+                            }
+                            do {
+                                warenEinlegen();
+                                System.out.println("Mochten Sie weitere Artikeln hinzufugen? n/j ");
+                            } while (IO.inputString().equals("j"));
+                            System.out.println("Weiter zu Kasse ==> j/n");
+                            String ein = IO.inputString();
+                            if (ein.equals("j")) {
+                                System.out.println("Hier können Sie Ihre Rechnung sehen : \n");
+                                rechnung();
 
-}
+                                System.out.println("Der Ereignis ist jetzt: ");
+                                warenkaufen();
+                                System.out.println("Vielen Dank für Ihren Einkauf");
+
+                            } else
+                                System.out.println("Vielen Dank Ihre Warenkorb ist leer");
+                        }
+                    }
+                    case 3 -> {
+                        if (mitarbeiterEinloggen()) {
+                            do {
+                                System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung\n3-Sortierten \n 4 - abmelden");
+                                    if(IO.inputInt() == 4){
+                                        run();
+                                    }
+                                switch (IO.inputInt()) {
+                                    case 1 -> {
+                                        mitarbeiterRegestieren();
+                                    }
+                                    case 2 -> {
+                                        einlagerung();
+                                    }
+                                    case 3 -> {
+                                        zeigeArtikel();
+                                        System.out.println("wie wollen sie es sortieren");
+                                        int sort = IO.inputInt();
+                                        boolean artsort;
+                                        artsort = sort == 1 ? true : false;
+                                        artikelSortieren(artsort);
+                                    }
+                                }
+                                System.out.println("Wollen Sie als Mitarbeiter benden n/j");
+                            } while (IO.inputString().equals("n"));
+                        } else
+                            System.out.println("Sie haben noch kein Account");
+                    }
+                }
+                System.out.println("Wollen Sie System beenden n/j");
+            } while (IO.inputString().equals("n"));
+        }
+    }
+

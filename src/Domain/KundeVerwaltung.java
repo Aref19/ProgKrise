@@ -55,4 +55,5 @@ public class KundeVerwaltung {
         return new Ereigniss(kunde,artikel, Instant.now(), Ereigniss.staus.Auslagerung);
     }
 
+
 }

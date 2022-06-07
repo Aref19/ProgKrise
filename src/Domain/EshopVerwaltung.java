@@ -6,8 +6,11 @@ import exception.ExceptionsName;
 import exception.NotFoundEx;
 import model.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EshopVerwaltung {
     private ArtikelVerwaltung artikelVerwaltung;
@@ -50,12 +53,18 @@ public class EshopVerwaltung {
             throw new NotFoundEx("Kunden nicht gefunden");
     }
 
-    public void kaufen() {
-        //  warenKorbVerwaltung.kaufen(kunden);
+    public List <Ereigniss>  kaufen(Kunde kunde, HashMap<Artikel, Integer> artikel) {
+        List <Ereigniss> gefundenEreigniss = new ArrayList<>();
+        for (Map.Entry<Artikel, Integer> gefundeneArtikel : artikel.entrySet()) {
+         gefundenEreigniss.add( new Ereigniss(kunde, gefundeneArtikel.getKey(), Instant.now(), Ereigniss.staus.Auslagerung));
+        }
+        return gefundenEreigniss;
     }
 
     public void warenlegen(String name, int anzahl, Kunde kunde) throws NotFoundEx {
+
         Artikel artikel = artikelVerwaltung.findArtikel(name, anzahl);
+
         kunde.getWarenKorp().addArtikle(artikel, anzahl);
     }
 
@@ -93,4 +102,6 @@ public class EshopVerwaltung {
     public void atikelLegen(int artikelNr, int artikelBestand, String artikelBezeichnung) {
         artikelVerwaltung.artikelAnlegen(artikelNr, artikelBestand, artikelBezeichnung);
     }
+
+
 }
