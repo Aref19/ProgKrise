@@ -1,11 +1,9 @@
 package model;
 
-import java.io.Serializable;
 
-public abstract class Person implements Serializable {
-    /**
-     * Variable der Klasse Person
-     */
+
+public abstract class Person  {
+
     private int nummer;
     private String vorName;
     private String nachName;
@@ -23,6 +21,7 @@ public abstract class Person implements Serializable {
         this.vorName = vorName;
         this.nachName = nachName;
         this.passwort = passwort;
+
     }
 
     /**
@@ -57,9 +56,21 @@ public abstract class Person implements Serializable {
         this.nachName = nachName;
     }
 
+
     public void setPasswort(String passwort) {
         this.passwort = passwort;
     }
 
+
+
+    public String getPassword(){
+        return this.passwort;
+    }
+
+    public String toString() {
+        String person= nummer + ";" + vorName + ";" + nachName + ";" + passwort;
+        return
+             person;
+    }
 
 }

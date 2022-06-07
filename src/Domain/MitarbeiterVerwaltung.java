@@ -4,7 +4,6 @@ import exception.CustomIoException;
 import model.Artikel;
 import model.Ereigniss;
 import model.Mitarbeiter;
-
 import java.time.Instant;
 import java.util.ArrayList;
 
@@ -12,8 +11,12 @@ public class MitarbeiterVerwaltung{
     /**
      * Eine Arraylist für Mitarbeiter.
      */
-    ArrayList<Mitarbeiter> mitarbeiterList = new ArrayList<>();
+    ArrayList<Mitarbeiter> mitarbeiterList;
     Mitarbeiter mitarbeiterIstEingelogt;
+    public MitarbeiterVerwaltung(){
+        mitarbeiterList=new ArrayList<>();
+        mitarbeiterList.add(new Mitarbeiter(1,"Aj","a","a"));
+    }
     /**
      * Beim Methode Mitarbeiter Anlegen wird Mitarbeiter angelegt und durch
      * For Schleife wird in der Liste gesucht ob der Mitarbeiter Vorname und Nummer bereits vergeben ist dann wird
@@ -27,9 +30,10 @@ public class MitarbeiterVerwaltung{
             if (mitarbeiter.getVorName().equals(listAusgeben.getVorName()) && mitarbeiter.getNummer() == (listAusgeben.getNummer())) {
                 a.getMessage3();
             }
-            System.out.println("Die Liste ist " + listAusgeben.getVorName());
+
         }
         mitarbeiterList.add(mitarbeiter);
+        System.out.println("Die Mitarbeiter " +mitarbeiter.getVorName() +"\tist Registiert" );
     }
 
     /**
@@ -46,6 +50,7 @@ public class MitarbeiterVerwaltung{
             for (Mitarbeiter mitarbeiter : mitarbeiterList) {
                 if (name.equals(mitarbeiter.getVorName()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
                     mitarbeiterIstEingelogt = mitarbeiter;
+                    System.out.println("sie sind Eingelogt Hallo Herr : "+mitarbeiter.getVorName());
                     return true;
                 }
             }
@@ -64,12 +69,11 @@ public class MitarbeiterVerwaltung{
     }
 
     public Ereigniss mitarbeiterEinlagerung(Artikel artikel ){
-        
-        return new Ereigniss(mitarbeiterIstEingelogt, artikel, Instant.now());
+        return new Ereigniss(mitarbeiterIstEingelogt, artikel, Instant.now(), Ereigniss.staus.Einlagerung);
     }
+
     public ArrayList<Mitarbeiter> getMitarbeiterList() {
         return mitarbeiterList;
-
     }
 
 }

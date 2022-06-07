@@ -1,24 +1,19 @@
 package model;
-import model.Adresse;
 
-public class Kunden extends Person {
+public class Kunde extends Person {
 
     /**
      * Klasse Kunden erweitert Person.
      */
     private Adresse adresse;
+    private WarenKorp warenKorp;
 
-    /**
-     * Constructor
-     * @param kundenNr
-     * @param kundenVorname
-     * @param nachName
-     * @param adresse
-     * @param passwort
-     */
-    public Kunden(int kundenNr, String kundenVorname, String nachName, Adresse adresse, String passwort){
-        super(kundenNr, kundenVorname, nachName, passwort);
+
+    public Kunde(int kundenNr, String kundenVorname, String nachName, Adresse adresse, String pass){
+        super(kundenNr, kundenVorname, nachName,pass);
         this.adresse=adresse;
+        this.warenKorp=new WarenKorp();
+
     }
 
     /**
@@ -39,4 +34,15 @@ public class Kunden extends Person {
     public void setKundenPlz(int kundenPlz){
         this.adresse.setPlz(kundenPlz);
     }
+
+    public void setWarenKorp(WarenKorp warenKorp){
+        this.warenKorp=warenKorp;
+    }
+
+    public WarenKorp getWarenKorp(){
+        return this.warenKorp;
+    }
+
+
 }
+
