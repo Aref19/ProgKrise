@@ -47,7 +47,7 @@ public class EshopVerwaltung {
     }
 
     public void kaufen() {
-        //  warenKorbVerwaltung.kaufen(kunden);
+        warenKorbVerwaltung.kaufen(kunden);
     }
 
     public void warenlegen(String name, int anzahl, Kunden kunden) throws NotFoundEx {
