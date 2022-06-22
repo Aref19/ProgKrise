@@ -1,27 +1,31 @@
 package Domain;
 
+import Persistent.Persistent;
 import exception.CustomIoException;
-import exception.ExistenceName;
+import exception.ExceptionsName;
 import exception.NotFoundEx;
 import model.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EshopVerwaltung {
     private ArtikelVerwaltung artikelVerwaltung;
-    private KundenVerwaltung kundenVerwaltung;
+    private KundeVerwaltung kundeVerwaltung;
     private WarenKorpVerw warenKorbVerwaltung;
     private MitarbeiterVerwaltung mitarbeiterVerwaltung;
     private RechnungWerVar rechnungWerVar;
-
+    private Persistent persistent;
     public EshopVerwaltung() {
         artikelVerwaltung = new ArtikelVerwaltung();
-        kundenVerwaltung = new KundenVerwaltung();
+        kundeVerwaltung = new KundeVerwaltung();
         warenKorbVerwaltung = new WarenKorpVerw();
         mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
         rechnungWerVar = new RechnungWerVar();
-
+        persistent = new Persistent();
     }
 
     public ArrayList<Artikel> artikelSortieren(boolean artsort) {
@@ -29,32 +33,41 @@ public class EshopVerwaltung {
 
     }
 
-    public void kundenRegistieren(Kunden kunden) {
+    /**
+     * Die übertragene Daten von Methode KundeRegistrieren werden hier im KundenRegistrieren über Parameter kunde weiter gegeben.
+     * Die daten werden im Methode registrieren verarbeitet.
+     * @param kunde
+     */
+    public void kundenRegistrieren(Kunde kunde) {
         try {
-            kundenVerwaltung.registieren(kunden);
-        } catch (ExistenceName e) {
+            kundeVerwaltung.registrieren(kunde);
+        } catch (ExceptionsName e) {
             e.prinEror();
-
         }
     }
 
-    public KundEilogen kundenEinloggen(String na, String pas) throws NotFoundEx {
-
-        if (kundenVerwaltung.einlogen(na, pas).gefunden) {
-            return kundenVerwaltung.einlogen(na, pas);
+    public KundeEinlogen kundenEinloggen(String na, String pas) throws NotFoundEx {
+        if (kundeVerwaltung.einlogen(na, pas).gefunden) {
+            return kundeVerwaltung.einlogen(na, pas);
         } else
             throw new NotFoundEx("Kunden nicht gefunden");
     }
 
-    public void kaufen() {
-        warenKorbVerwaltung.kaufen(kunden);
+
+    public List <Ereigniss>  kaufen(Kunde kunde, HashMap<Artikel, Integer> artikel) {
+        List <Ereigniss> gefundenEreigniss = new ArrayList<>();
+        for (Map.Entry<Artikel, Integer> gefundeneArtikel : artikel.entrySet()) {
+         gefundenEreigniss.add( new Ereigniss(kunde, gefundeneArtikel.getKey(), Instant.now(), Ereigniss.staus.Auslagerung));
+        }
+        return gefundenEreigniss;
+
     }
 
-    public void warenlegen(String name, int anzahl, Kunden kunden) throws NotFoundEx {
-        Artikel artikel = artikelVerwaltung.findArtikel(name, anzahl);
-        kunden.getWarenKorp().addArtikle(artikel, anzahl);
-        // warenKorbVerwaltung.addArtikel(artikel,anzahl);
+    public void warenlegen(String name, int anzahl, Kunde kunde) throws NotFoundEx {
 
+        Artikel artikel = artikelVerwaltung.findArtikel(name, anzahl);
+
+        kunde.getWarenKorp().addArtikle(artikel, anzahl);
     }
 
     public void mitarbeiterRegistieren(Mitarbeiter mitarbeiter) throws CustomIoException {
@@ -72,10 +85,11 @@ public class EshopVerwaltung {
 
     public void mitarbeiteranthorReg(Mitarbeiter mitarbeiter) throws CustomIoException {
         mitarbeiterVerwaltung.mitarbeiterAnlegen(mitarbeiter);
+        persistent.mitarbeiterSpeichern(mitarbeiter); //varargs
     }
 
     public Ereigniss ergnissKund(Artikel artikel) {
-        return kundenVerwaltung.artikelAuslagern(artikel);
+        return kundeVerwaltung.artikelAuslagern(artikel);
     }
 
 
@@ -83,11 +97,13 @@ public class EshopVerwaltung {
         return artikelVerwaltung.getArtikelList();
     }
 
-    public Rechnung getRec(Kunden kunden, HashMap<Artikel, Integer> artikels) {
-        return rechnungWerVar.creatRec(kunden, artikels);
+    public Rechnung getRec(Kunde kunde, HashMap<Artikel, Integer> artikels) {
+        return rechnungWerVar.creatRec(kunde, artikels);
     }
 
     public void atikelLegen(int artikelNr, int artikelBestand, String artikelBezeichnung) {
         artikelVerwaltung.artikelAnlegen(artikelNr, artikelBestand, artikelBezeichnung);
     }
+
+
 }

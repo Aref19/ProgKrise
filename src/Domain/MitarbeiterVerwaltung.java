@@ -4,7 +4,6 @@ import exception.CustomIoException;
 import model.Artikel;
 import model.Ereigniss;
 import model.Mitarbeiter;
-
 import java.time.Instant;
 import java.util.ArrayList;
 
@@ -70,12 +69,11 @@ public class MitarbeiterVerwaltung{
     }
 
     public Ereigniss mitarbeiterEinlagerung(Artikel artikel ){
-
-        return new Ereigniss(mitarbeiterIstEingelogt, artikel, Instant.now());
+        return new Ereigniss(mitarbeiterIstEingelogt, artikel, Instant.now(), Ereigniss.staus.Einlagerung);
     }
+
     public ArrayList<Mitarbeiter> getMitarbeiterList() {
         return mitarbeiterList;
-
     }
 
 }

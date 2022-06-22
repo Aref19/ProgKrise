@@ -20,7 +20,7 @@ public class Adresse {
         this.hausNr = kundenHausNr;
         this.plz = kundenPlz;
         this.stadt = kundenStadt;
-         this.strasse=strasse;
+         this.strasse = strasse;
     }
 
     /**

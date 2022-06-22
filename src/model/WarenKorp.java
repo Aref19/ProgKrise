@@ -1,7 +1,6 @@
 package model;
 
 import exception.NotFoundEx;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +11,6 @@ public  class WarenKorp {
     public WarenKorp() {
         this.warenList = new HashMap<>();
     }
-
-
     public void addArtikle(Artikel artikel,int anzahl) {
         this.warenList.put(artikel,anzahl);
     }

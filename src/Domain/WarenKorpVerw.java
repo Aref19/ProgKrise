@@ -2,15 +2,9 @@ package Domain;
 
 import exception.NotFoundEx;
 import model.Artikel;
-import model.Kunden;
+import model.Kunde;
 import model.WarenKorp;
 
-import exception.NotFoundEx;
-import model.Artikel;
-import model.Kunden;
-import model.WarenKorp;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WarenKorpVerw {
@@ -39,11 +33,11 @@ public class WarenKorpVerw {
             waren.removeAll();
         }
 
-        public void kaufen(Kunden kunden){
+        public void kaufen(Kunde kunde){
 
         }
-        public HashMap<Artikel,Integer> getArtikelWarenK(Kunden kunden){
-            return kunden.getWarenKorp().get();
+        public HashMap<Artikel,Integer> getArtikelWarenK(Kunde kunde){
+            return kunde.getWarenKorp().get();
 
     }
 

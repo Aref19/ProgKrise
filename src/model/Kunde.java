@@ -1,9 +1,6 @@
 package model;
-import model.Adresse;
 
-import java.util.HashMap;
-
-public class Kunden extends Person {
+public class Kunde extends Person {
 
     /**
      * Klasse Kunden erweitert Person.
@@ -12,7 +9,7 @@ public class Kunden extends Person {
     private WarenKorp warenKorp;
 
 
-    public Kunden(int kundenNr, String kundenVorname, String nachName, Adresse adresse,String pass){
+    public Kunde(int kundenNr, String kundenVorname, String nachName, Adresse adresse, String pass){
         super(kundenNr, kundenVorname, nachName,pass);
         this.adresse=adresse;
         this.warenKorp=new WarenKorp();
@@ -45,7 +42,6 @@ public class Kunden extends Person {
     public WarenKorp getWarenKorp(){
         return this.warenKorp;
     }
-
 
 }
 

@@ -2,7 +2,6 @@ package Domain;
 
 import exception.NotFoundEx;
 import model.Artikel;
-import model.Kunden;
 
 import java.util.*;
 
@@ -68,12 +67,20 @@ public class ArtikelVerwaltung  {
         for (Artikel artikel:artikelList) {
             if(artikel.getArtikelBezeichnung().equals(name)){
                 if(mengeReicht(artikel,anzahl)){
+                    artikelBestand(artikel, anzahl);
                     return artikel;
                 }else
                    throw new NotFoundEx("menge Reicht nicht");
             }
         }
         throw new NotFoundEx("Artikel mit einggeben nicht gefunden");
+    }
+    public void artikelBestand(Artikel artikel, int anzahl){
+        for (Artikel artikelSuchen: artikelList) {
+            if(artikelSuchen.equals(artikel)){
+                artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
+            }
+        }
     }
 
     private boolean mengeReicht(Artikel artikel, int a) {
@@ -101,12 +108,8 @@ public class ArtikelVerwaltung  {
         return artikelList;
     }
 
-    public ArrayList<Artikel> artikelSortieren(Boolean sort){
+    public ArrayList<Artikel> artikelSortieren(boolean sort){
         ArrayList<Artikel> sortertlist = new ArrayList<>(artikelList);
-        for (Artikel s:sortertlist
-             ) {
-            System.out.println(s);
-        }
         if(sort){
             Collections.sort(sortertlist, new Comparator<Artikel>() {
                 @Override

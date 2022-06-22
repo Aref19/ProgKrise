@@ -3,9 +3,7 @@ package model;
 
 
 public abstract class Person  {
-    /**
-     * Variable der Klasse Person
-     */
+
     private int nummer;
     private String vorName;
     private String nachName;
@@ -70,7 +68,7 @@ public abstract class Person  {
     }
 
     public String toString() {
-        String person=vorName;
+        String person =   "Vorname:\t" + vorName + "\n" + "Nachname:\t" + nachName;
         return
              person;
     }
