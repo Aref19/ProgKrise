@@ -2,11 +2,13 @@ package Domain;
 
 import Persistent.PersistentMitarbeiter;
 import exception.CustomIoException;
+import exception.INcorrectEmailException;
 import exception.LoginFailedException;
 import exception.RegisitierungException;
 import model.Artikel;
 import model.Ereignis;
 import model.Mitarbeiter;
+import model.Person;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -29,21 +31,19 @@ public class MitarbeiterVerwaltung{
      * @param name, nachname, passwort
      * @throws CustomIoException
      */
-    public void mitarbeiterAnlegen(String name, String nachname, String passwort) throws RegisitierungException {
-        try {
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort,String email) throws RegisitierungException{
+
 
             for (Mitarbeiter listAusgeben : mitarbeiterList) {
-                if (name.equals(listAusgeben.getVorName())
-                        && nachname.equals(listAusgeben.getNachName())) {
+                if (name.equals(listAusgeben.getVorName()) && nachname.equals(listAusgeben.getNachName())) {
+                    throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
                 }
             }
 
-        Mitarbeiter mitarbeiter = new Mitarbeiter(1, name, nachname, passwort);
+        Mitarbeiter mitarbeiter = new Mitarbeiter( name, nachname, passwort,email);
         mitarbeiterList.add(mitarbeiter);
         persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiter);
-        } finally {
-            throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
-        }
+
     }
 
 

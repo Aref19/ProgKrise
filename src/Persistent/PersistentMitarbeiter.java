@@ -23,10 +23,11 @@ public class PersistentMitarbeiter {
             String[] data = line.split(";");
             try {
                 Mitarbeiter m = new Mitarbeiter(
-                        Integer.parseInt(data[0].trim()),
                         String.valueOf(data[1]),
                         String.valueOf(data[2]),
-                        String.valueOf(data[3]));
+                        String.valueOf(data[3]),
+                        String.valueOf(data[4])
+                      ) ;
                 mitarbeiterList.add(m);
             } catch (Exception e) {
                 e.printStackTrace();

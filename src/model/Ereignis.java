@@ -7,15 +7,18 @@ public class Ereignis {
     Person person;      // Person
 
 
-    private List<Artikel> artikelList;
+    Artikel artikel;
+
+    private int  anzahl;
 
     Instant Datum;
    public enum STATUS {
         Neu, Auslagerung, Einlagerung, Kauf
     }
-    public Ereignis(Person person, Instant datum, STATUS lagerung, List<Artikel> artikelList) {
+    public Ereignis(Person person, Instant datum, STATUS lagerung, Artikel artikel, int anzahl) {
         this.person = person;
-        this.artikelList = artikelList;
+        this.anzahl = anzahl;
+        this.artikel = artikel;
         Datum = datum;
     }
 
@@ -37,12 +40,12 @@ public class Ereignis {
         Datum = datum;
     }
 
-    public List<Artikel> getArtikelList() {
-        return artikelList;
+    public Artikel getArtikelList() {
+        return artikel;
     }
 
-    public void setArtikelList(List<Artikel> artikelList) {
-        this.artikelList = artikelList;
+    public void setArtikelList(Artikel artikel) {
+        this.artikel = artikel;
     }
 
     @Override

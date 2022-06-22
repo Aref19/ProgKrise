@@ -1,14 +1,12 @@
 package cui;
 
 import Domain.*;
-import Persistent.PersistentKunde;
 import Persistent.PersistentMitarbeiter;
 import Utilities.IO;
 import exception.*;
 import model.*;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +32,8 @@ public class EshopCui {
     public void kundeRegistrieren() {
         System.out.println("Geben Sie Ihr Vorname ein: ");
         String name = IO.inputString();
+        System.out.println("Geben Sie Ihr email ein: ");
+        String email = IO.inputString();
         System.out.println("Geben Sie Ihr Nachname ein: ");
         String nachname = IO.inputString();
         System.out.println("Geben Sie der Strassenname ein: ");
@@ -47,9 +47,11 @@ public class EshopCui {
         System.out.println("Geben Sie Ihr Passwort ein: ");
         String passwort = IO.inputString();
         try {
-            eshopVerwaltung.kundenRegistrieren(new Kunde(1, name, nachname, new Adresse(hausnummer, plz, stadt, strasse), passwort));
+            eshopVerwaltung.kundenRegistrieren(new Kunde(name, nachname, new Adresse(hausnummer, plz, stadt, strasse), passwort,email));
         } catch (RegisitierungException e) {
             System.out.println(e.getMessage());
+        }catch (INcorrectEmailException e){
+            System.out.println(  e.getMessage());
         }
 
 
@@ -85,12 +87,12 @@ public class EshopCui {
         String name = IO.inputString();
         System.out.println("Geben Sie Ihr Passwort ein: ");
         String pass = IO.inputString();
-        for (Mitarbeiter mitarbeiter : persistentMitarbeiter.ladeMitarbeiter()) {
+     /*   for (Mitarbeiter mitarbeiter : persistentMitarbeiter.ladeMitarbeiter()) {
             if (name.equals(mitarbeiter.getVorName()) && pass.equals(mitarbeiter.getPasswort())) {
                 return true;
             }
-        }
-        return false;
+        }*/
+        return true;
     }
 
     public void warenEinlegen() {
@@ -110,7 +112,7 @@ public class EshopCui {
             }
             System.out.println("wollen sie weiter einlegen n/j");
         } while (!IO.inputString().equals("n"));
-        eshopVerwaltung.speicherEreignisVonKund(new Ereignis(person, Instant.now(), Ereignis.STATUS.Einlagerung, artikels));
+
     }
 
     public void kundEreignis() {
@@ -130,7 +132,6 @@ public class EshopCui {
             artikels.add(new Artikel(2, na, be, pr));
             eshopVerwaltung.artikelAnlegen(new Artikel(2, na, be, pr));
         } while (!IO.inputString().equals("n"));
-        eshopVerwaltung.speicherEreignisVonMitarbeiter(new Ereignis(person, Instant.now(), Ereignis.STATUS.Einlagerung, artikels));
         System.out.println("sie haben jetzt");
         zeigeArtikel();
 
@@ -142,13 +143,18 @@ public class EshopCui {
         String name = IO.inputString();
         System.out.println("Geben Sie Ihr Nachname ein: ");
         String namchname = IO.inputString();
+        System.out.println("Geben Sie Ihr Email ein: ");
+        String email = IO.inputString();
         System.out.println("Geben Sie Ihr Passwort ein: ");
         String passwort = IO.inputString();
+
         try {
-            eshopVerwaltung.mitarbeiteranthorReg(name, namchname, passwort);
+            eshopVerwaltung.mitarbeiterAnthorRegiseren(name, namchname, passwort,email);
             System.out.println("Registrierung ist Erfolgreich Abgeschlossen");
         } catch (RegisitierungException e) {
             System.out.println(e.getMessage());
+        }catch (INcorrectEmailException e){
+            e.getMessage();
         }
 
 
@@ -175,7 +181,7 @@ public class EshopCui {
 
     public void run() throws IOException {
         do {
-            persistentMitarbeiter.ladeMitarbeiter();
+           // persistentMitarbeiter.ladeMitarbeiter();
             System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Einlogen ");
             int s = IO.inputInt();
             switch (s) {

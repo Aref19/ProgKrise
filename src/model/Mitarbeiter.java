@@ -9,13 +9,12 @@ public class Mitarbeiter extends Person implements Serializable {
      * <p>
      * Constructor
      *
-     * @param mitarbeiterNr
      * @param mitarbeiterVorname
      * @param mitarbeiterNachName
      */
 
-    public Mitarbeiter(int mitarbeiterNr, String mitarbeiterVorname, String mitarbeiterNachName, String pass) {
-        super(mitarbeiterNr, mitarbeiterVorname, mitarbeiterNachName, pass);
+    public Mitarbeiter( String mitarbeiterVorname, String mitarbeiterNachName, String pass,String email) {
+        super( mitarbeiterVorname, mitarbeiterNachName, pass,email);
 
 
         /**

@@ -39,10 +39,13 @@ public class EshopVerwaltung {
      * Die daten werden im Methode registrieren verarbeitet.
      * @param kunde
      */
-    public void kundenRegistrieren(Kunde kunde) throws RegisitierungException {
+    public void kundenRegistrieren(Kunde kunde) throws RegisitierungException, INcorrectEmailException {
         try {
+            Person.checkEmail(kunde.getEmail());
             kundeVerwaltung.registrieren(kunde);
         } catch (RegisitierungException e) {
+            throw e;
+        }catch (INcorrectEmailException e){
             throw e;
         }
     }
@@ -81,11 +84,14 @@ public class EshopVerwaltung {
 
     }
 
-    public void mitarbeiteranthorReg(String name, String nachname, String passwort) throws RegisitierungException {
+    public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email) throws RegisitierungException, INcorrectEmailException {
         try {
-            mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort);
-        }catch (RegisitierungException e){
+            Person.checkEmail(email);
+            mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort,email);
+        }catch (RegisitierungException  e){
          throw e;
+        }catch (INcorrectEmailException e){
+            throw e;
         }
     }
     public ArrayList<Artikel> artielzeigen() {

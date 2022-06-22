@@ -13,10 +13,12 @@ public class Kunde extends Person {
     private WarenKorp warenKorp;
 
 
-    public Kunde(int kundenNr, String kundenVorname, String nachName, Adresse adresse, String pass){
-        super(kundenNr, kundenVorname, nachName,pass);
+
+    public Kunde( String kundenVorname, String nachName, Adresse adresse, String pass,String email){
+        super(kundenVorname, nachName,pass,email);
         this.adresse=adresse;
         this.warenKorp=new WarenKorp();
+
 
     }
 

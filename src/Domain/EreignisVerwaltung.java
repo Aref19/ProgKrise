@@ -30,7 +30,6 @@ public class EreignisVerwaltung {
     }
 
     public List<Ereignis> kundenEreigniss() {
-
         return kundenEreigniss;
     }
 
