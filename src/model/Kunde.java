@@ -1,5 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Kunde extends Person {
 
     /**
@@ -15,6 +19,7 @@ public class Kunde extends Person {
         this.warenKorp=new WarenKorp();
 
     }
+
 
     /**
      * Getter und Setter
@@ -42,6 +47,7 @@ public class Kunde extends Person {
     public WarenKorp getWarenKorp(){
         return this.warenKorp;
     }
+
 
 }
 

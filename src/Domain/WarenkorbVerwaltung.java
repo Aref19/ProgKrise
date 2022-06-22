@@ -12,7 +12,5 @@ public class WarenkorbVerwaltung {
 
         this.kaufartikel.artikelSuchen(artikel);
 
-
-
     }
 }

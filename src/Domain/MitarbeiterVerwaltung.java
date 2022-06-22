@@ -1,40 +1,51 @@
 package Domain;
 
+import Persistent.PersistentMitarbeiter;
 import exception.CustomIoException;
+import exception.LoginFailedException;
+import exception.RegisitierungException;
 import model.Artikel;
-import model.Ereigniss;
+import model.Ereignis;
 import model.Mitarbeiter;
+
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MitarbeiterVerwaltung{
     /**
      * Eine Arraylist für Mitarbeiter.
      */
     ArrayList<Mitarbeiter> mitarbeiterList;
-    Mitarbeiter mitarbeiterIstEingelogt;
+    PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
     public MitarbeiterVerwaltung(){
         mitarbeiterList=new ArrayList<>();
-        mitarbeiterList.add(new Mitarbeiter(1,"Aj","a","a"));
     }
     /**
      * Beim Methode Mitarbeiter Anlegen wird Mitarbeiter angelegt und durch
      * For Schleife wird in der Liste gesucht ob der Mitarbeiter Vorname und Nummer bereits vergeben ist dann wird
      * Exception geworfen sonst wird der Mitarbeiter in der Liste hinzugefügt.
-     * @param mitarbeiter
+     * @param name, nachname, passwort
      * @throws CustomIoException
      */
-    public void mitarbeiterAnlegen(Mitarbeiter mitarbeiter) throws CustomIoException {
-        CustomIoException a = new CustomIoException();
-        for (Mitarbeiter listAusgeben : mitarbeiterList) {
-            if (mitarbeiter.getVorName().equals(listAusgeben.getVorName()) && mitarbeiter.getNummer() == (listAusgeben.getNummer())) {
-                a.getMessage3();
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort) throws RegisitierungException {
+        try {
+
+            for (Mitarbeiter listAusgeben : mitarbeiterList) {
+                if (name.equals(listAusgeben.getVorName())
+                        && nachname.equals(listAusgeben.getNachName())) {
+                }
             }
 
-        }
+        Mitarbeiter mitarbeiter = new Mitarbeiter(1, name, nachname, passwort);
         mitarbeiterList.add(mitarbeiter);
-        System.out.println("Die Mitarbeiter " +mitarbeiter.getVorName() +"\tist Registiert" );
+        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiter);
+        } finally {
+            throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
+        }
     }
+
 
     /**
      * Beim Mitarbeiter Überprüfen Methode wird mit arbeiter überprüft Ob der Mitarbeiter Name und Sein Passwort
@@ -44,20 +55,13 @@ public class MitarbeiterVerwaltung{
      * @return
      * @throws CustomIoException
      */
-    public boolean mitarbeiterUeberprufen(String name, String mitarbeiterPasswort) throws CustomIoException {
-        CustomIoException a = new CustomIoException();
-        try {
-            for (Mitarbeiter mitarbeiter : mitarbeiterList) {
-                if (name.equals(mitarbeiter.getVorName()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
-                    mitarbeiterIstEingelogt = mitarbeiter;
-                    System.out.println("sie sind Eingelogt Hallo Herr : "+mitarbeiter.getVorName());
-                    return true;
-                }
+    public boolean mitarbeiterUeberprufen(String name, String mitarbeiterPasswort) throws LoginFailedException {
+        for (Mitarbeiter mitarbeiter : mitarbeiterList) {
+            if (name.equals(mitarbeiter.getVorName()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
+                return true;
             }
-        } catch (Exception e) {
-            System.out.println(a.getMessage2());
         }
-        return false;
+       throw new LoginFailedException();
     }
 
     public void mitarbeiterLoeaschen(String vorname, String nachname) {
@@ -67,14 +71,12 @@ public class MitarbeiterVerwaltung{
             }
         }
     }
-
-    public Ereigniss mitarbeiterEinlagerung(Artikel artikel ){
-        return new Ereigniss(mitarbeiterIstEingelogt, artikel, Instant.now(), Ereigniss.staus.Einlagerung);
-    }
-
     public ArrayList<Mitarbeiter> getMitarbeiterList() {
         return mitarbeiterList;
     }
 
+    public void liesDaten(){
+
+    }
 }
 

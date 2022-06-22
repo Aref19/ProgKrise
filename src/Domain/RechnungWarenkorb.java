@@ -6,9 +6,9 @@ import model.Rechnung;
 
 import java.util.HashMap;
 
-public class RechnungWerVar {
+public class RechnungWarenkorb {
     Rechnung rechnung;
-    public RechnungWerVar() {
+    public RechnungWarenkorb() {
 
     }
 

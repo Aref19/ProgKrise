@@ -1,6 +1,6 @@
 package Domain;
 
-import exception.NotFoundEx;
+import exception.NotFoundException;
 import model.Artikel;
 import model.Kunde;
 import model.WarenKorp;
@@ -23,7 +23,7 @@ public class WarenKorpVerw {
             try {
                 waren.loschArtikle(artikel);
                 return true;
-            } catch (NotFoundEx e) {
+            } catch (NotFoundException e) {
                 e.printStackTrace();
                 return false;
             }

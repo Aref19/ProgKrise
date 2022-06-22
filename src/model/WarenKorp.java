@@ -1,21 +1,29 @@
 package model;
 
-import exception.NotFoundEx;
-import java.time.Instant;
+import exception.NotFoundException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public  class WarenKorp {
     private HashMap<Artikel,Integer> warenList;
-    static WarenKorp waren;
     public WarenKorp() {
         this.warenList = new HashMap<>();
     }
     public void addArtikle(Artikel artikel,int anzahl) {
-        this.warenList.put(artikel,anzahl);
+        // TODO: Wenn Artikel schon im WK, dann Anzahl erhöhen
+        if(this.warenList.containsKey(artikel)){
+         int erhohteWert =    this.warenList.get(artikel) + anzahl;
+         this.warenList.put(artikel, erhohteWert);
+        }else{
+            this.warenList.put(artikel,anzahl);
+        }
+
     }
 
-    public void loschArtikle(Artikel artikel) throws NotFoundEx {
+    public void loschArtikle(Artikel artikel) throws NotFoundException {
         warenList.remove(artikel);
     }
 
@@ -32,5 +40,12 @@ public  class WarenKorp {
     public String toString() {
     return "";
      //   return gelekteWaren;
+    }
+    public List<Artikel> HashtoList() {
+        List<Artikel> ereignisList = new ArrayList<>();
+        for (Map.Entry<Artikel, Integer> artikelIntegerEntry : warenList.entrySet()) {
+            ereignisList.add(artikelIntegerEntry.getKey());
+        }
+        return ereignisList;
     }
 }

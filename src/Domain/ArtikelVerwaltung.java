@@ -1,6 +1,7 @@
 package Domain;
 
-import exception.NotFoundEx;
+import exception.BestandNichtAusreichendException;
+import exception.NotFoundException;
 import model.Artikel;
 
 import java.util.*;
@@ -63,17 +64,13 @@ public class ArtikelVerwaltung  {
         return gefundenArtikelList;
     }
 
-    public Artikel findArtikel(String name,int anzahl)throws NotFoundEx {
+    public Artikel findArtikel(String name) throws NotFoundException {
         for (Artikel artikel:artikelList) {
-            if(artikel.getArtikelBezeichnung().equals(name)){
-                if(mengeReicht(artikel,anzahl)){
-                    artikelBestand(artikel, anzahl);
-                    return artikel;
-                }else
-                   throw new NotFoundEx("menge Reicht nicht");
+            if (artikel.getArtikelBezeichnung().equals(name)) {
+                return artikel;
             }
         }
-        throw new NotFoundEx("Artikel mit einggeben nicht gefunden");
+        throw new NotFoundException("Eingegeben Artikel Existiert leider nicht");
     }
     public void artikelBestand(Artikel artikel, int anzahl){
         for (Artikel artikelSuchen: artikelList) {
@@ -120,13 +117,10 @@ public class ArtikelVerwaltung  {
         }else {
             Collections.sort(sortertlist, new Comparator<Artikel>() {
                 @Override
-                public int compare(Artikel o1, Artikel o2) {
-                    char[] buc1=o1.getArtikelBezeichnung().toCharArray();
-                    char[] buc2=o2.getArtikelBezeichnung().toCharArray();
-                    String key=String.valueOf(buc1[0]).toUpperCase();
-                    String key2=String.valueOf(buc2[0]).toUpperCase();
-                    return Integer.valueOf(buchstaben.get(key).compareTo(buchstaben.get(key2)));
+                public int compare(Artikel o1, Artikel o2){
+                    return o1.getArtikelBezeichnung().compareTo(o2.getArtikelBezeichnung());
                 }
+
             });
         }
          return sortertlist;
@@ -154,5 +148,16 @@ public class ArtikelVerwaltung  {
         boc.put("T",20);
         boc.put("Y",21);
         boc.put("Z",22);
+    }
+
+    public void artikelBestandReduzieren(Artikel artikel, int anzahl) throws BestandNichtAusreichendException {
+        // TODO Bestand prüfen und - wenn genug - reduzieren (sonst Exception werfen)
+        for (Artikel artikelSuchen: artikelList) {
+            if(artikelSuchen.equals(artikel)){
+                artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
+                return;
+            }
+        }
+        throw new BestandNichtAusreichendException(artikel);
     }
 }
