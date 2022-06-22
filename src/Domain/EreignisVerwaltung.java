@@ -1,49 +1,40 @@
 package Domain;
 
-import model.Artikel;
 import model.Ereignis;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EreignisVerwaltung {
 
-  private   List<Ereignis> kundenEreigniss;
-   private List<Ereignis> mitarbeiterEreigniss;
+  private   List<Ereignis> ereignis;
+
 
 
     public EreignisVerwaltung() {
-        this.kundenEreigniss = new ArrayList<>();
-        this.mitarbeiterEreigniss = new ArrayList<>();
+        this.ereignis = new ArrayList<>();
+
     }
 
     public void KundenAuslagereungEreignissSpeicher(Ereignis ereignis) {
 
-        kundenEreigniss.add(ereignis);
+        this.ereignis.add(ereignis);
 
     }
 
-    public void mitarbeiterAuslagereungEreignissSpeicher(Ereignis ereignis) {
-        mitarbeiterEreigniss.add(ereignis);
+    public void fuegeEreignisHinzu(Ereignis ereignis) {
+       this.ereignis.add(ereignis);
+
     }
 
     public List<Ereignis> kundenEreigniss() {
-        return kundenEreigniss;
+        return ereignis;
     }
 
 
 
-    public List<Ereignis> mitarbeiterEreignis() {
-        return mitarbeiterEreigniss;
-    }
-
-    public List<Ereignis> mitarbeiterValueEreignis(){
-        return mitarbeiterEreigniss;
-    }
 
     public List<Ereignis> kundenValueEreignis(){
-        return kundenEreigniss;
+        return ereignis;
     }
 }

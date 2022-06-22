@@ -12,15 +12,12 @@ public class ArtikelVerwaltung  {
      * Arraylist für Artikel
      */
     private ArrayList<Artikel> artikelList ;
-    HashMap<String,Integer> buchstaben;
     public ArtikelVerwaltung(){
-        buchstaben=new HashMap<>();
-        setBoc(buchstaben);
         artikelList=new ArrayList<>();
-        artikelList.add(new Artikel(2,"Apfhel",7,2.5));
-        artikelList.add(new Artikel(3,"Zizrone",6,2.5));
-        artikelList.add(new Artikel(1,"Banana",4,2.5));
-        artikelList.add(new Artikel(4,"Orang",5,2.5));
+        artikelList.add(new Artikel("Apfhel",7,2.5));
+        artikelList.add(new Artikel("Zizrone",6,2.5));
+        artikelList.add(new Artikel("Banana",4,2.5));
+        artikelList.add(new Artikel("Orang",5,2.5));
     }
 
     /**
@@ -30,8 +27,8 @@ public class ArtikelVerwaltung  {
      * @param artikelBezeichnung
      */
 
-    public void artikelAnlegen(int artikelNr, int artikelBestand, String artikelBezeichnung) { //Artikelerschaffen
-        Artikel artikel = new Artikel(artikelNr, artikelBezeichnung, artikelBestand,2.4);
+    public void artikelAnlegen( int artikelBestand, String artikelBezeichnung) { //Artikelerschaffen
+        Artikel artikel = new Artikel(artikelBezeichnung, artikelBestand,2.4);
         artikelList.add(artikel);
 
 
@@ -90,12 +87,12 @@ public class ArtikelVerwaltung  {
      * @param artikelNr
      * @param artikelBestand
      */
-    public void artikelBestandErhohen(int artikelNr, int artikelBestand) {
+ /*   public void artikelBestandErhohen(int artikelNr, int artikelBestand) {
         for (Artikel artikel : artikelList) {
             if (artikel.getArtikelNr() == artikelNr)
                 artikel.setArtikelBestand(artikelBestand);
         }
-    }
+    }*/
 
     /**
      * Die ArrayList wird wieder zurückgegeben.
@@ -125,30 +122,7 @@ public class ArtikelVerwaltung  {
         }
          return sortertlist;
     }
-    private void setBoc(HashMap<String,Integer> boc){
-        boc.put("A",1);
-        boc.put("B",2);
-        boc.put("C",3);
-        boc.put("D",4);
-        boc.put("E",5);
-        boc.put("F",6);
-        boc.put("G",7);
-        boc.put("H",8);
-        boc.put("I",9);
-        boc.put("J",10);
-        boc.put("K",11);
-        boc.put("L",12);
-        boc.put("M",13);
-        boc.put("N",14);
-        boc.put("O",15);
-        boc.put("P",16);
-        boc.put("Q",17);
-        boc.put("R",18);
-        boc.put("S",19);
-        boc.put("T",20);
-        boc.put("Y",21);
-        boc.put("Z",22);
-    }
+
 
     public void artikelBestandReduzieren(Artikel artikel, int anzahl) throws BestandNichtAusreichendException {
         // TODO Bestand prüfen und - wenn genug - reduzieren (sonst Exception werfen)

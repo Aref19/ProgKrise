@@ -9,6 +9,7 @@ import model.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EshopCui {
     EshopVerwaltung eshopVerwaltung = new EshopVerwaltung();
@@ -83,16 +84,16 @@ public class EshopCui {
      * @throws CustomIoException
      */
     public boolean mitarbeiterEinloggen() throws IOException {
-        System.out.println("Geben Sie Ihr Name ein: ");
-        String name = IO.inputString();
+        System.out.println("Geben Sie Ihr email ein: ");
+        String email = IO.inputString();
         System.out.println("Geben Sie Ihr Passwort ein: ");
         String pass = IO.inputString();
-     /*   for (Mitarbeiter mitarbeiter : persistentMitarbeiter.ladeMitarbeiter()) {
-            if (name.equals(mitarbeiter.getVorName()) && pass.equals(mitarbeiter.getPasswort())) {
-                return true;
-            }
-        }*/
-        return true;
+        try {
+            return eshopVerwaltung.mitarbeiterEinloggen(email,pass);
+        } catch (LoginFailedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void warenEinlegen() {
@@ -120,17 +121,17 @@ public class EshopCui {
     }
 
     public void einlagerung() {// Mitarbeiter einlagarung
-        List<Artikel> artikels = new ArrayList<>();
+//        List<Artikel> artikels = new ArrayList<>();
         do {
             System.out.println("Name des Artikels :");
-            String na = IO.inputString();
+            String name = IO.inputString();
             System.out.println("Bestand des Artikels :");
-            int be = IO.inputInt();
+            int bestand = IO.inputInt();
             System.out.println("Der Preis ist: ");
-            double pr = IO.inputdoubel();
+            double preis = IO.inputdoubel();
+//            artikels.add(new Artikel(2, na, be, pr));
+            eshopVerwaltung.artikelAnlegen((Mitarbeiter) person, new Artikel( name, bestand, preis));
             System.out.println("wollen sie weiter einlegen n/j");
-            artikels.add(new Artikel(2, na, be, pr));
-            eshopVerwaltung.artikelAnlegen(new Artikel(2, na, be, pr));
         } while (!IO.inputString().equals("n"));
         System.out.println("sie haben jetzt");
         zeigeArtikel();
@@ -196,7 +197,6 @@ public class EshopCui {
                         if (IO.inputInt() == 2) {
                             run();
                         }
-
                         warenEinlegen();
 
                         System.out.println("Weiter zu Kasse ==> j/n");
@@ -238,21 +238,7 @@ public class EshopCui {
                                     artsort = sort == 1 ? true : false;
                                     artikelSortieren(artsort);
                                 }
-                                case 5 -> {
-                                    System.out.println("Wollen Sie die Ereignisse Mitarbeiter angucken oder Kund? 1/2");
-                                    if (IO.inputString().equals("1")) {
-                                        System.out.println("Kkkk");
-                                        List<Ereignis> ereignis = eshopVerwaltung.mitarbeiterEreignisAusgeben();
-                                        for (Ereignis e : ereignis) {
-                                            System.out.println(e);
-                                        }
-                                    } else {
-                                        List<Ereignis> ereignis = eshopVerwaltung.kundenEreignisAusgeben();
-                                        for (Ereignis e : ereignis) {
-                                            System.out.println(e);
-                                        }
-                                    }
-                                }
+
                             }
                             System.out.println("Wollen Sie als Mitarbeiter benden n/j");
                         } while (IO.inputString().equals("n"));

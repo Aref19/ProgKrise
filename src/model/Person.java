@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public abstract class Person {
 
-    private UUID id= UUID.randomUUID();
+    private UUID id;
     private String vorName;
     private String nachName;
     private String passwort;
@@ -25,6 +25,7 @@ public abstract class Person {
      * @param passwort
      */
     public Person( String vorName, String nachName, String passwort,String email) {
+        this.id=UUID.randomUUID();
         this.vorName = vorName;
         this.nachName = nachName;
         this.passwort = passwort;
@@ -90,7 +91,7 @@ public abstract class Person {
     }
 
     public String toString() {
-        String person = id + ";" +  vorName + ";" + nachName + ";" + passwort;
+        String person = id + ";" +  vorName + ";" + nachName + ";" + passwort+";"+email;
         return person;
     }
 

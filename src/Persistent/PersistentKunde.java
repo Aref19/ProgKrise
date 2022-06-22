@@ -12,26 +12,33 @@ import java.util.Scanner;
 
 public class PersistentKunde {
     private String kundefile = "kunde.csv";
+    private File file = null;
 
-    //... egal wie viele Parameter
-    public void kundeSpeichern(Kunde... kunde){
-        try {
-            FileWriter writer = new FileWriter(kundefile);
-            String data = "";
-            for (Kunde kund: kunde){
-                data = data + kund.toString();
-                writer.write(data);
-                writer.close();
+    public void openForWriting(String datei) {
+        file = new File(kundefile);
+    }
+
+    public void kundeSpeichern(Kunde... kunde) {
+        openForWriting("");
+        if (file.exists()) {
+            try {
+                FileWriter writer = new FileWriter(file, true);
+                String data = "";
+                for (Kunde kund : kunde) {
+                    data = data + kund.toString();
+                    writer.write(data);
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }catch (IOException e){
-            e.printStackTrace();
         }
     }
 
     public List<Kunde> ladeKunden() throws FileNotFoundException {
         File file = new File(kundefile);
         Scanner reader = new Scanner(file);
-        while (reader.hasNextLine()){
+        while (reader.hasNextLine()) {
             String line = reader.nextLine();
             String[] data = line.split(";");
             /*

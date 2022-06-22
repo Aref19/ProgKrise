@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Kunde extends Person {
 
@@ -14,12 +15,10 @@ public class Kunde extends Person {
 
 
 
-    public Kunde( String kundenVorname, String nachName, Adresse adresse, String pass,String email){
+    public Kunde(String kundenVorname, String nachName, Adresse adresse, String pass, String email){
         super(kundenVorname, nachName,pass,email);
         this.adresse=adresse;
         this.warenKorp=new WarenKorp();
-
-
     }
 
 

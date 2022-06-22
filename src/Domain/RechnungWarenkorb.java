@@ -11,7 +11,6 @@ public class RechnungWarenkorb {
     public RechnungWarenkorb() {
 
     }
-
     public Rechnung creatRec(Kunde kunde, HashMap<Artikel,Integer> artikels){
         return new Rechnung(kunde,artikels);
     }

@@ -10,20 +10,30 @@ import model.Ereignis;
 import model.Mitarbeiter;
 import model.Person;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MitarbeiterVerwaltung{
     /**
      * Eine Arraylist für Mitarbeiter.
      */
-    ArrayList<Mitarbeiter> mitarbeiterList;
-    PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
-    public MitarbeiterVerwaltung(){
+    private List<Mitarbeiter> mitarbeiterList;
+    private PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
+
+
+    public MitarbeiterVerwaltung() {
         mitarbeiterList=new ArrayList<>();
+        try {
+            mitarbeiterList = persistentMitarbeiter.mitarbeiterList();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
+
     /**
      * Beim Methode Mitarbeiter Anlegen wird Mitarbeiter angelegt und durch
      * For Schleife wird in der Liste gesucht ob der Mitarbeiter Vorname und Nummer bereits vergeben ist dann wird
@@ -31,37 +41,38 @@ public class MitarbeiterVerwaltung{
      * @param name, nachname, passwort
      * @throws CustomIoException
      */
-    public void mitarbeiterAnlegen(String name, String nachname, String passwort,String email) throws RegisitierungException{
 
-
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort,String email) throws RegisitierungException {
             for (Mitarbeiter listAusgeben : mitarbeiterList) {
-                if (name.equals(listAusgeben.getVorName()) && nachname.equals(listAusgeben.getNachName())) {
+                if (name.equals(listAusgeben.getVorName())
+                        && nachname.equals(listAusgeben.getNachName())) {
+
                     throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
                 }
             }
 
         Mitarbeiter mitarbeiter = new Mitarbeiter( name, nachname, passwort,email);
         mitarbeiterList.add(mitarbeiter);
-        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiter);
+
+        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiterList);
 
     }
-
 
     /**
      * Beim Mitarbeiter Überprüfen Methode wird mit arbeiter überprüft Ob der Mitarbeiter Name und Sein Passwort
      * mit der Liste zustimmt dann wird er ein gelogt
-     * @param name
+     * @param email
      * @param mitarbeiterPasswort
      * @return
      * @throws CustomIoException
      */
-    public boolean mitarbeiterUeberprufen(String name, String mitarbeiterPasswort) throws LoginFailedException {
+    public boolean mitarbeiterUeberprufen(String email, String mitarbeiterPasswort) throws LoginFailedException{
         for (Mitarbeiter mitarbeiter : mitarbeiterList) {
-            if (name.equals(mitarbeiter.getVorName()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
+            if (email.equals(mitarbeiter.getEmail()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
                 return true;
             }
         }
-       throw new LoginFailedException();
+        throw new LoginFailedException();
     }
 
     public void mitarbeiterLoeaschen(String vorname, String nachname) {
@@ -70,13 +81,13 @@ public class MitarbeiterVerwaltung{
                 mitarbeiterList.remove(mitarbeiterLoeschen);
             }
         }
+
+        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiterList);
     }
-    public ArrayList<Mitarbeiter> getMitarbeiterList() {
+    public List<Mitarbeiter> getMitarbeiterList() {
         return mitarbeiterList;
     }
 
-    public void liesDaten(){
 
-    }
 }
 

@@ -1,5 +1,8 @@
 package model;
 
+import java.util.Random;
+import java.util.UUID;;
+import  java.util.concurrent.atomic.*;
 public class Artikel {
     /**
      * @author AJ
@@ -14,12 +17,12 @@ public class Artikel {
      * Konstruktur
      * Um Artikel zu überzeugen
      *
-     * @param artikelNr
+
      * @param artikelBezeichnung
      * @param artikelBestand
      */
-    public Artikel(int artikelNr, String artikelBezeichnung, int artikelBestand,double preis) {
-        this.artikelNr = artikelNr;
+    public Artikel( String artikelBezeichnung, int artikelBestand,double preis) {
+        this.artikelNr = creatId();
         this.artikelBezeichnung = artikelBezeichnung;
         this.artikelBestand = artikelBestand;
         this.preis=preis;
@@ -61,16 +64,21 @@ public class Artikel {
         this.artikelBestand = artikelBestand;
     }
 
+    private int creatId(){
+        int zahl=new Random().nextInt();
+        if(zahl<0){
+            zahl=zahl*-1;
+        }
+        return zahl;
+    }
+
     /**
      * Default String zu überschreiben. danit es keine hash Code vom id gibt.
      * @return
      */
     @Override
     public String toString() {
-        return String.format("\nArtikel Nr.: %d\nArtikel Bezeichnung: %s\nArtikel Bestand: %d\nPreis :",
-                artikelNr,
-                artikelBezeichnung,
-                artikelBestand,
-                preis);
+        return "Artikel bezeichnung : \t"+artikelBezeichnung+"\n Artikelbestand :\t"+artikelBestand+"\npreis\t"+preis;
+
     }
 }
