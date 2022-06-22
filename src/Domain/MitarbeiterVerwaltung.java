@@ -8,6 +8,7 @@ import model.Artikel;
 import model.Ereignis;
 import model.Mitarbeiter;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -17,11 +18,17 @@ public class MitarbeiterVerwaltung{
     /**
      * Eine Arraylist für Mitarbeiter.
      */
-    ArrayList<Mitarbeiter> mitarbeiterList;
-    PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
-    public MitarbeiterVerwaltung(){
+    private List<Mitarbeiter> mitarbeiterList;
+    private PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
+    public MitarbeiterVerwaltung() {
         mitarbeiterList=new ArrayList<>();
+        try {
+            mitarbeiterList = persistentMitarbeiter.mitarbeiterList();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
+
     /**
      * Beim Methode Mitarbeiter Anlegen wird Mitarbeiter angelegt und durch
      * For Schleife wird in der Liste gesucht ob der Mitarbeiter Vorname und Nummer bereits vergeben ist dann wird
@@ -30,20 +37,16 @@ public class MitarbeiterVerwaltung{
      * @throws CustomIoException
      */
     public void mitarbeiterAnlegen(String name, String nachname, String passwort) throws RegisitierungException {
-        try {
-
             for (Mitarbeiter listAusgeben : mitarbeiterList) {
                 if (name.equals(listAusgeben.getVorName())
                         && nachname.equals(listAusgeben.getNachName())) {
+                    throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
                 }
             }
 
         Mitarbeiter mitarbeiter = new Mitarbeiter(1, name, nachname, passwort);
         mitarbeiterList.add(mitarbeiter);
-        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiter);
-        } finally {
-            throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
-        }
+        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiterList);
     }
 
 
@@ -70,8 +73,10 @@ public class MitarbeiterVerwaltung{
                 mitarbeiterList.remove(mitarbeiterLoeschen);
             }
         }
+
+        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiterList);
     }
-    public ArrayList<Mitarbeiter> getMitarbeiterList() {
+    public List<Mitarbeiter> getMitarbeiterList() {
         return mitarbeiterList;
     }
 

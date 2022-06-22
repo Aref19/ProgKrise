@@ -51,6 +51,7 @@ public class KundeVerwaltung {
             }
         } else {
             kundeArrayList.add(kunde);
+            persistentKunde.kundeSpeichern(kunde);
         }
     }
 

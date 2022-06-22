@@ -5,6 +5,7 @@ import Persistent.PersistentMitarbeiter;
 import exception.*;
 import model.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,10 @@ public class EshopVerwaltung {
              Artikel artikel = artikelVerwaltung.findArtikel(name);
             artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
             kunde.getWarenKorp().addArtikle(artikel, anzahl);
-         return    artikelVerwaltung.findArtikel(name);
+            // TODO Frage: schon beim Hinzufuegen zum Warenkorb ein Ereignis erzeugen? Oder besser erst beim Kauf??
+            ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(kunde, Instant.now(), Ereignis.STATUS.Kauf, artikel));
+
+            return    artikelVerwaltung.findArtikel(name);
         }catch (NotFoundException e){
             throw e;
 
@@ -75,10 +79,10 @@ public class EshopVerwaltung {
         }
     }
 
-    public void artikelAnlegen(Artikel artikel) {
+    public void artikelAnlegen(Mitarbeiter mitarbeiter, Artikel artikel) {
         artikelVerwaltung.artikelAnlegen(artikel.getArtikelNr(), artikel.getArtikelBestand(), artikel.getArtikelBezeichnung());
 //        ereignisVerwaltung.ereignisAnlegen(artikel,mitarbeiter, Ereignis.STATUS.Neu);
-
+        ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(mitarbeiter, Instant.now(), Ereignis.STATUS.Neu, artikel));
     }
 
     public void mitarbeiteranthorReg(String name, String nachname, String passwort) throws RegisitierungException {
@@ -100,9 +104,9 @@ public class EshopVerwaltung {
         ereignisVerwaltung.KundenAuslagereungEreignissSpeicher(ereignis);
     }
 
-    public void speicherEreignisVonMitarbeiter(Ereignis ereignis){
-        ereignisVerwaltung.mitarbeiterAuslagereungEreignissSpeicher(ereignis);
-    }
+//    private void speicherEreignisVonMitarbeiter(Ereignis ereignis){
+//        ereignisVerwaltung.fuegeEreignisHinzu(ereignis);
+//    }
 
     public List<Ereignis> kundenEreignisAusgeben(){
        return  ereignisVerwaltung.kundenEreigniss();

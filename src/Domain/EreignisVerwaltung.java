@@ -1,12 +1,9 @@
 package Domain;
 
-import model.Artikel;
 import model.Ereignis;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EreignisVerwaltung {
 
@@ -25,7 +22,7 @@ public class EreignisVerwaltung {
 
     }
 
-    public void mitarbeiterAuslagereungEreignissSpeicher(Ereignis ereignis) {
+    public void fuegeEreignisHinzu(Ereignis ereignis) {
         mitarbeiterEreigniss.add(ereignis);
     }
 

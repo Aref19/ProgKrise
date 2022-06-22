@@ -39,14 +39,62 @@ public class PersistentMitarbeiter {
         file = new File(filename);
     }
 
-    public void mitarbeiterSpeichern(Mitarbeiter... mitarbeiters) {
+    public List<Mitarbeiter> mitarbeiterList() throws FileNotFoundException {
+        List<Mitarbeiter> mitarbeiterList = new ArrayList<>();
+        BufferedReader lesen = new BufferedReader(new FileReader(filename));
+        try {
+            String line =lesen.readLine();
+            while (line !=null){
+                String [] content= line.split(";");
+                mitarbeiterList.add(new Mitarbeiter(1,content[0],content[1],content[2]));
+                line =lesen.readLine();
+            }
+
+        }catch (IOException e){
+            // TODO Fehlermeldung ausgeben
+        }
+
+        return mitarbeiterList;
+    }
+//    private void mitarbeiterSpeichern(Mitarbeiter... mitarbeiters) {
+//        openForWriting("");
+//        if(file.exists()) {
+//            String data = "";
+//            try {
+//                FileWriter writer = new FileWriter(file, false);
+//                for (Mitarbeiter mitarbeiter : mitarbeiters) {
+//                    data = data + mitarbeiter.toString() + "\n";
+//                }
+//
+//                writer.append(data);
+//                writer.close();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        }else {
+//            try {
+//                FileWriter writer = new FileWriter(filename);
+//                String data = "";
+//                for (Mitarbeiter mitarbeiter : mitarbeiters) {
+//                    data = data + mitarbeiter.toString() + "\n";
+//                    writer.write(data);
+//                    writer.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//    }
+    public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList) {
         openForWriting("");
         if(file.exists()) {
             String data = "";
             try {
-                FileWriter writer = new FileWriter(file, true);
-                for (Mitarbeiter mitarbeiter : mitarbeiters) {
-                    data = data + mitarbeiter.toString() + "\n";
+                FileWriter writer = new FileWriter(file, false);
+                for (Mitarbeiter mitarbeiter : mitarbeiterList) {
+                    data = data + mitarbeiter.toString() + System.lineSeparator();
                 }
 
                 writer.append(data);
@@ -55,19 +103,12 @@ public class PersistentMitarbeiter {
                 throw new RuntimeException(e);
             }
 
-        }else {
-            try {
-                FileWriter writer = new FileWriter(filename);
-                String data = "";
-                for (Mitarbeiter mitarbeiter : mitarbeiters) {
-                    data = data + mitarbeiter.toString() + "\n";
-                    writer.write(data);
-                    writer.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         }
     }
+
+//    public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList) {
+//        for (Mitarbeiter mitarbeiter: mitarbeiterList) {
+//            mitarbeiterSpeichern(mitarbeiter);
+//        }
+//    }
 }

@@ -110,7 +110,6 @@ public class EshopCui {
             }
             System.out.println("wollen sie weiter einlegen n/j");
         } while (!IO.inputString().equals("n"));
-        eshopVerwaltung.speicherEreignisVonKund(new Ereignis(person, Instant.now(), Ereignis.STATUS.Einlagerung, artikels));
     }
 
     public void kundEreignis() {
@@ -118,7 +117,7 @@ public class EshopCui {
     }
 
     public void einlagerung() {// Mitarbeiter einlagarung
-        List<Artikel> artikels = new ArrayList<>();
+//        List<Artikel> artikels = new ArrayList<>();
         do {
             System.out.println("Name des Artikels :");
             String na = IO.inputString();
@@ -126,11 +125,10 @@ public class EshopCui {
             int be = IO.inputInt();
             System.out.println("Der Preis ist: ");
             double pr = IO.inputdoubel();
+//            artikels.add(new Artikel(2, na, be, pr));
+            eshopVerwaltung.artikelAnlegen((Mitarbeiter) person, new Artikel(2, na, be, pr));
             System.out.println("wollen sie weiter einlegen n/j");
-            artikels.add(new Artikel(2, na, be, pr));
-            eshopVerwaltung.artikelAnlegen(new Artikel(2, na, be, pr));
         } while (!IO.inputString().equals("n"));
-        eshopVerwaltung.speicherEreignisVonMitarbeiter(new Ereignis(person, Instant.now(), Ereignis.STATUS.Einlagerung, artikels));
         System.out.println("sie haben jetzt");
         zeigeArtikel();
 
@@ -190,7 +188,6 @@ public class EshopCui {
                         if (IO.inputInt() == 2) {
                             run();
                         }
-
                         warenEinlegen();
 
                         System.out.println("Weiter zu Kasse ==> j/n");
