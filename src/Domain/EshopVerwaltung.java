@@ -6,6 +6,7 @@ import exception.*;
 import model.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,9 +82,13 @@ public class EshopVerwaltung {
         }
     }
 
-    public void artikelAnlegen(Mitarbeiter mitarbeiter, Artikel artikel) {
+    public void artikelAnlegen(Mitarbeiter mitarbeiter, Artikel artikel) throws IOException {
         System.out.println(artikel);
-        artikelVerwaltung.artikelAnlegen( artikel.getArtikelBestand(), artikel.getArtikelBezeichnung());
+        try {
+            artikelVerwaltung.artikelAnlegen( artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(),artikel.getPreis());
+        }catch (IOException e){
+            throw e;
+        }
         ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(mitarbeiter, Instant.now(), Ereignis.STATUS.Neu, artikel));
     }
 
@@ -94,11 +99,12 @@ public class EshopVerwaltung {
         } catch (RegisitierungException e) {
             throw e;
         } catch (INcorrectEmailException e) {
+
             throw e;
         }
     }
 
-    public ArrayList<Artikel> artielzeigen() {
+    public List<Artikel> artielzeigen() {
         return artikelVerwaltung.getArtikelList();
     }
 

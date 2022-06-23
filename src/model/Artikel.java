@@ -27,6 +27,12 @@ public class Artikel {
         this.artikelBestand = artikelBestand;
         this.preis=preis;
     }
+    public Artikel( int artikelNr,String artikelBezeichnung, int artikelBestand,double preis) {
+        this.artikelNr = artikelNr;
+        this.artikelBezeichnung = artikelBezeichnung;
+        this.artikelBestand = artikelBestand;
+        this.preis=preis;
+    }
 
     /**
      * Getter und Setter um den Artikel zurückzugeben und es zu überschreiben, wenn es neue Artikel kommt oder rausgeht.
@@ -78,7 +84,12 @@ public class Artikel {
      */
     @Override
     public String toString() {
-        return "Artikel bezeichnung : \t"+artikelBezeichnung+"\n Artikelbestand :\t"+artikelBestand+"\npreis\t"+preis;
+        return "id :\t"+artikelNr+"\tartikelName :\t"+artikelBezeichnung+"\tartikelBestand :\t"+artikelBestand+"\tpreis :\t"+preis;
+
+    }
+
+    public String toSaveInFile() {
+        return artikelNr+";"+artikelBezeichnung+";"+artikelBestand+";"+preis;
 
     }
 }

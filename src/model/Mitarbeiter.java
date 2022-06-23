@@ -17,14 +17,9 @@ public class Mitarbeiter extends Person implements Serializable {
     public Mitarbeiter(String mitarbeiterVorname, String mitarbeiterNachName, String pass, String email) {
         super(mitarbeiterVorname, mitarbeiterNachName, pass,email);
 
-
-        /**
-         * Überschreiben, vom hash Code damit vom Mitarbeiter Vorname gegeben wird.
-         * @return
-         */
-
-
     }
+
+
     public Mitarbeiter( UUID id,String mitarbeiterVorname, String mitarbeiterNachName, String pass, String email) {
         super( mitarbeiterVorname, mitarbeiterNachName, pass,email);
 

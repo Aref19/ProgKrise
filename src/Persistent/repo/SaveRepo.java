@@ -1,5 +1,6 @@
 package Persistent.repo;
 
+import exception.NotFoundException;
 import model.Artikel;
 import model.Ereignis;
 
@@ -8,7 +9,9 @@ import java.io.IOException;
 import java.util.List;
 
 public interface SaveRepo {
-    void openForRead(String file) throws FileNotFoundException;
+    void closeWrite() throws IOException;
+
+    void openForRead(String file) ;
 
     void openForWrite(String file) throws IOException;
 
@@ -22,11 +25,22 @@ public interface SaveRepo {
 
     void creatFile(String fileName);
 
-    void saveArtikel(Artikel artikel);
+    void saveArtikel(Artikel artikel) throws IOException;
 
-    void saveListArtikels(List<Artikel> artikelList);
+    void saveListArtikels(List<Artikel> artikelList) throws IOException;
 
     List<Artikel> loadListloadArtikels();
 
-    Artikel Artikel();
+    Artikel loadArtikel(String name) throws NotFoundException;
+
+    void openForSerializer();
+
+    void openForReadSerializer();
+
+    void saveArtikelSerializer(Artikel artikel);
+
+    Artikel readArilkelSerialzer ();
+
+    void closRead();
+
 }

@@ -28,7 +28,6 @@ public class PersistentMitarbeiter {
             String line =lesen.readLine();
             while (line !=null){
                 String [] content= line.split(";");
-
                 mitarbeiterList.add(new Mitarbeiter(UUID.fromString( content[0]),content[1],content[2],content[3],content[4]));
                 line =lesen.readLine();
             }

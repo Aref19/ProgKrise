@@ -91,7 +91,7 @@ public class EshopCui {
         try {
             return eshopVerwaltung.mitarbeiterEinloggen(email,pass);
         } catch (LoginFailedException e) {
-            e.printStackTrace();
+            System.out.println( e.getMessage());
         }
         return false;
     }
@@ -130,7 +130,12 @@ public class EshopCui {
             System.out.println("Der Preis ist: ");
             double preis = IO.inputdoubel();
 //            artikels.add(new Artikel(2, na, be, pr));
-            eshopVerwaltung.artikelAnlegen((Mitarbeiter) person, new Artikel( name, bestand, preis));
+            try {
+                eshopVerwaltung.artikelAnlegen((Mitarbeiter) person, new Artikel( name, bestand, preis));
+            }catch (IOException e){
+                System.out.println(e.getMessage());
+            }
+
             System.out.println("wollen sie weiter einlegen n/j");
         } while (!IO.inputString().equals("n"));
         System.out.println("sie haben jetzt");
@@ -155,7 +160,7 @@ public class EshopCui {
         } catch (RegisitierungException e) {
             System.out.println(e.getMessage());
         }catch (INcorrectEmailException e){
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
 
 

@@ -1,9 +1,13 @@
 package Domain;
 
+import Persistent.db.SaveFile;
+import Persistent.repo.SaveRepo;
 import exception.BestandNichtAusreichendException;
 import exception.NotFoundException;
 import model.Artikel;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class ArtikelVerwaltung  {
@@ -11,26 +15,34 @@ public class ArtikelVerwaltung  {
     /**
      * Arraylist für Artikel
      */
-    private ArrayList<Artikel> artikelList ;
-    public ArtikelVerwaltung(){
-        artikelList=new ArrayList<>();
-        artikelList.add(new Artikel("Apfhel",7,2.5));
-        artikelList.add(new Artikel("Zizrone",6,2.5));
-        artikelList.add(new Artikel("Banana",4,2.5));
-        artikelList.add(new Artikel("Orang",5,2.5));
+    private List<Artikel> artikelList ;
+    SaveRepo saveRepo=new SaveFile();
+    final String filename="Artikel.txt";
+    public ArtikelVerwaltung()  {
+        saveRepo.creatFile(filename);
+        saveRepo.openForRead(filename);
+        artikelList=saveRepo.loadListloadArtikels();
+        saveRepo.closRead();
+
     }
 
     /**
      * Methode um eine Artikel an zu legen und in der Arraylist zu speichern.
-     * @param artikelNr
      * @param artikelBestand
      * @param artikelBezeichnung
      */
 
-    public void artikelAnlegen( int artikelBestand, String artikelBezeichnung) { //Artikelerschaffen
-        Artikel artikel = new Artikel(artikelBezeichnung, artikelBestand,2.4);
-        artikelList.add(artikel);
-
+    public void artikelAnlegen( int artikelBestand, String artikelBezeichnung,double preis) throws IOException { //Artikelerschaffen
+        Artikel artikel = new Artikel(artikelBezeichnung, artikelBestand,preis);
+        try {
+            saveRepo.openForWrite(filename);
+            saveRepo.saveArtikel(artikel);
+            saveRepo.closeWrite();
+        }catch (FileNotFoundException e){
+            throw e;
+        } catch (IOException e) {
+            throw e;
+        }
 
     }
 
@@ -98,7 +110,7 @@ public class ArtikelVerwaltung  {
      * Die ArrayList wird wieder zurückgegeben.
      * @return
      */
-    public ArrayList<Artikel> getArtikelList() {
+    public List<Artikel> getArtikelList() {
         return artikelList;
     }
 

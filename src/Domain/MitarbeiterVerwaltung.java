@@ -42,7 +42,7 @@ public class MitarbeiterVerwaltung{
      * @throws CustomIoException
      */
 
-    public void mitarbeiterAnlegen(String name, String nachname, String passwort,String email) throws RegisitierungException {
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort,String email) throws RegisitierungException{
             for (Mitarbeiter listAusgeben : mitarbeiterList) {
                 if (name.equals(listAusgeben.getVorName())
                         && nachname.equals(listAusgeben.getNachName())) {
