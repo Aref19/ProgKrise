@@ -1,4 +1,4 @@
-package cui;
+package ui;
 
 import Domain.*;
 import Persistent.PersistentMitarbeiter;
@@ -9,7 +9,6 @@ import model.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class EshopCui {
     EshopVerwaltung eshopVerwaltung = new EshopVerwaltung();
@@ -63,13 +62,9 @@ public class EshopCui {
      *
      * @return
      */
-    public KundeEinlogen kundenEinloggen() {
-        System.out.println("Geben Sie Ihr Vorname ein: ");
-        String name = IO.inputString();
-        System.out.println("Geben Sie Ihr Passwort: ");
-        String passwort = IO.inputString();
+    public KundeEinlogen kundenEinloggen(String email,String pass) {
         try {
-            return eshopVerwaltung.kundenEinloggen(name, passwort);
+            return eshopVerwaltung.kundenEinloggen(email, pass);
         } catch (LoginFailedException ex) {
             System.out.println(ex.getMessage());
         }
@@ -83,17 +78,16 @@ public class EshopCui {
      * @return
      * @throws CustomIoException
      */
-    public boolean mitarbeiterEinloggen() throws IOException {
-        System.out.println("Geben Sie Ihr email ein: ");
-        String email = IO.inputString();
-        System.out.println("Geben Sie Ihr Passwort ein: ");
-        String pass = IO.inputString();
+    public boolean mitarbeiterEinloggen(String email,String pass) throws IOException {
+        MItarbeiterEilogen mItarbeiterEilogen=new MItarbeiterEilogen(null,false);
         try {
-            return eshopVerwaltung.mitarbeiterEinloggen(email,pass);
+            mItarbeiterEilogen=eshopVerwaltung.mitarbeiterEinloggen(email,pass);
+            person=mItarbeiterEilogen.mitarbeiter;
+            return mItarbeiterEilogen.gefunden;
         } catch (LoginFailedException e) {
             System.out.println( e.getMessage());
         }
-        return false;
+        return mItarbeiterEilogen.gefunden;
     }
 
     public void warenEinlegen() {
@@ -175,7 +169,12 @@ public class EshopCui {
     }
 
     public void rechnung() {
-        System.out.println(eshopVerwaltung.getRec((Kunde) person, ((Kunde) person).getWarenKorp().get()));
+        try {
+            System.out.println(eshopVerwaltung.getRec((Kunde) person, ((Kunde) person).getWarenKorp().get()));
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void artikelSortieren(boolean artSort) {
@@ -195,7 +194,7 @@ public class EshopCui {
                     kundeRegistrieren();
                 }
                 case 2 -> {
-                    KundeEinlogen kundeEinlogen = kundenEinloggen();
+                    KundeEinlogen kundeEinlogen = kundenEinloggen("Aj@gmail.com","w");
                     if (kundeEinlogen.gefunden) {
                         person = kundeEinlogen.kunde;
                         System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb: 1 oder Abmelden: 2");
@@ -219,7 +218,8 @@ public class EshopCui {
                     }
                 }
                 case 3 -> {
-                    if (mitarbeiterEinloggen()) {
+                    if (mitarbeiterEinloggen("","")) {
+
                         do {
                             System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung\n3-Sortierten \n 4 - abmelden" + "\t" + "\n5-Einlagerung");
                             int input = IO.inputInt();

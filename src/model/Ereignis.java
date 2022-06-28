@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
-public class Ereignis {
+public class Ereignis  implements Serializable {
     Person person;      // Person
 
 
@@ -14,6 +15,9 @@ public class Ereignis {
     private Instant Datum;
 
     private STATUS status;
+
+
+
 
     public enum STATUS {
         Neu, Auslagerung, Einlagerung, Kauf
@@ -26,11 +30,12 @@ public class Ereignis {
 //        this.status = lagerung;
 //    }
     public Ereignis(Person person, Instant datum, STATUS status, Artikel artikel) {
+        System.out.println(person);
         this.person = person;
-
         this.artikel = artikel;
         Datum = datum;
         this.status = status;
+
     }
 
     public Person getPerson() {
@@ -45,8 +50,31 @@ public class Ereignis {
         return Datum;
     }
 
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
-//    public List<Artikel> getArtikelList() {
+    public Artikel getArtikel() {
+        return artikel;
+    }
+
+    public void setArtikel(Artikel artikel) {
+        this.artikel = artikel;
+    }
+
+    public void setDatum(Instant datum) {
+        Datum = datum;
+    }
+
+    public void setStatus(STATUS status) {
+        this.status = status;
+    }
+
+
+
+
+
+    //    public List<Artikel> getArtikelList() {
 //        return artikelList;
 //    }
 //

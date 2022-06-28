@@ -3,11 +3,12 @@ package model;
 
 import exception.INcorrectEmailException;
 
+import java.io.Serializable;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Person {
+public abstract class Person implements Serializable {
 
     private UUID id;
     private String vorName;

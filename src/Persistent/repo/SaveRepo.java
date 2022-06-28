@@ -1,8 +1,10 @@
 package Persistent.repo;
 
+import Persistent.db.SaveFile;
 import exception.NotFoundException;
 import model.Artikel;
 import model.Ereignis;
+import model.ErignisToSave;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,15 +19,15 @@ public interface SaveRepo {
 
     Ereignis loadEreignis();
 
-    void saveEreignis(Ereignis ereignis);
+    void saveEreignis(Ereignis ereignis) throws IOException;
 
-    List<Ereignis> loadListEreignis();
+    List<ErignisToSave> loadListEreignis();
 
     void saveListEreignises(List<Ereignis> ereignisList);
 
     void creatFile(String fileName);
 
-    void saveArtikel(Artikel artikel) throws IOException;
+    void saveArtikel(List<Artikel> artikel) throws IOException;
 
     void saveListArtikels(List<Artikel> artikelList) throws IOException;
 
@@ -35,12 +37,14 @@ public interface SaveRepo {
 
     void openForSerializer();
 
-    void openForReadSerializer();
 
-    void saveArtikelSerializer(Artikel artikel);
 
-    Artikel readArilkelSerialzer ();
+    void saveEreignisSerializer(Ereignis ereignis);
+
+    Artikel readErignisSerialzer ();
 
     void closRead();
+
+    void closSerial();
 
 }

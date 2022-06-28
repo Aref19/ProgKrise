@@ -5,10 +5,7 @@ import exception.CustomIoException;
 import exception.INcorrectEmailException;
 import exception.LoginFailedException;
 import exception.RegisitierungException;
-import model.Artikel;
-import model.Ereignis;
-import model.Mitarbeiter;
-import model.Person;
+import model.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -66,10 +63,10 @@ public class MitarbeiterVerwaltung{
      * @return
      * @throws CustomIoException
      */
-    public boolean mitarbeiterUeberprufen(String email, String mitarbeiterPasswort) throws LoginFailedException{
+    public MItarbeiterEilogen mitarbeiterUeberprufen(String email, String mitarbeiterPasswort) throws LoginFailedException{
         for (Mitarbeiter mitarbeiter : mitarbeiterList) {
             if (email.equals(mitarbeiter.getEmail()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
-                return true;
+                return new MItarbeiterEilogen(mitarbeiter,true);
             }
         }
         throw new LoginFailedException();

@@ -74,7 +74,7 @@ public class EshopVerwaltung {
         }
     }
 
-    public boolean mitarbeiterEinloggen(String email, String password) throws LoginFailedException {
+    public MItarbeiterEilogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {
         try {
             return mitarbeiterVerwaltung.mitarbeiterUeberprufen(email, password);
         } catch (LoginFailedException e) {
@@ -90,6 +90,10 @@ public class EshopVerwaltung {
             throw e;
         }
         ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(mitarbeiter, Instant.now(), Ereignis.STATUS.Neu, artikel));
+       List< ErignisToSave> erignisToSave=ereignisVerwaltung.savedEreignises();
+        for (ErignisToSave erignisToSave1:erignisToSave) {
+            System.out.println(erignisToSave1);
+        }
     }
 
     public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email) throws RegisitierungException, INcorrectEmailException {
@@ -108,7 +112,7 @@ public class EshopVerwaltung {
         return artikelVerwaltung.getArtikelList();
     }
 
-    public Rechnung getRec(Kunde kunde, HashMap<Artikel, Integer> artikels) {
+    public Rechnung getRec(Kunde kunde, HashMap<Artikel, Integer> artikels) throws IOException {
         for (Map.Entry<Artikel, Integer> artikelIntegerEntry : artikels.entrySet()) {
             ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(kunde, Instant.now(), Ereignis.STATUS.Kauf, artikelIntegerEntry.getKey()));
         }

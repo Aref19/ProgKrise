@@ -34,16 +34,21 @@ public class ArtikelVerwaltung  {
 
     public void artikelAnlegen( int artikelBestand, String artikelBezeichnung,double preis) throws IOException { //Artikelerschaffen
         Artikel artikel = new Artikel(artikelBezeichnung, artikelBestand,preis);
+
+           checkArikel(artikelBezeichnung,artikelBestand);
+
+          saveAtrikel( artikelList);
+
+    }
+
+    private void saveAtrikel(List<Artikel> artikelList) {
         try {
             saveRepo.openForWrite(filename);
-            saveRepo.saveArtikel(artikel);
+            saveRepo.saveArtikel(artikelList);
             saveRepo.closeWrite();
-        }catch (FileNotFoundException e){
-            throw e;
         } catch (IOException e) {
-            throw e;
+            e.printStackTrace();
         }
-
     }
 
     /**
@@ -145,5 +150,22 @@ public class ArtikelVerwaltung  {
             }
         }
         throw new BestandNichtAusreichendException(artikel);
+    }
+    private void checkArikel(String name,int anzahl){
+        Artikel artikel = null;
+        for (Artikel a:artikelList) {
+            if (a.getArtikelBezeichnung().equals(name)){
+                 artikel=a;
+
+            }
+        }
+        if(artikel!=null){
+            artikelList.remove(artikel);
+            artikel.setArtikelBestand(artikel.getArtikelBestand()+anzahl);
+            artikelList.add(artikel);
+            System.out.println("add");
+        }
+
+
     }
 }
