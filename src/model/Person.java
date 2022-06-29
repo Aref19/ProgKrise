@@ -1,8 +1,7 @@
 package model;
 
 
-
-public abstract class Person  {
+public abstract class Person {
 
     private int nummer;
     private String vorName;
@@ -11,6 +10,7 @@ public abstract class Person  {
 
     /**
      * Constructor
+     *
      * @param nummer
      * @param vorName
      * @param nachName
@@ -26,6 +26,7 @@ public abstract class Person  {
 
     /**
      * Getter und Setter
+     *
      * @return
      */
     public int getNummer() {
@@ -62,15 +63,13 @@ public abstract class Person  {
     }
 
 
-
-    public String getPassword(){
+    public String getPassword() {
         return this.passwort;
     }
 
     public String toString() {
-        String person =   "Vorname:\t" + vorName + "\n" + "Nachname:\t" + nachName;
-        return
-             person;
+        String person = nummer + ";" +  vorName + ";" + nachName + ";" + passwort;
+        return person;
     }
 
 }
