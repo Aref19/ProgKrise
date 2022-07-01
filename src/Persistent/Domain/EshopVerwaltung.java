@@ -1,4 +1,4 @@
-package Domain;
+package Persistent.Domain;
 
 import exception.ExistenceName;
 import exception.NotFoundEx;
