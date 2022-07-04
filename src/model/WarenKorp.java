@@ -1,53 +1,51 @@
 package model;
 
-import exception.NotFoundEx;
+import exception.NotFoundException;
 
-import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class WarenKorp {
-    private ArrayList<Artikel> waren;
-
+public  class WarenKorp {
+    private HashMap<Artikel,Integer> warenList;
     public WarenKorp() {
-        this.waren = new ArrayList<>();
+        this.warenList = new HashMap<>();
     }
-
-    public void addArtikle(Artikel artikel) {
-        this.waren.add(artikel);
-    }
-
-    public void loschArtikle(Artikel artikel) throws NotFoundEx {
-        for (Artikel artikel1 : waren) {
-            if (artikel.equals(artikel)) {
-                this.waren.remove(artikel);
-            } else {
-                throw new NotFoundEx("dieser Artikel ist nicht vorhanden");
-            }
-
+    public void addArtikle(Artikel artikel,int anzahl) {
+        // TODO: Wenn Artikel schon im WK, dann Anzahl erhöhen
+        if(this.warenList.containsKey(artikel)){
+         int erhohteWert =    this.warenList.get(artikel) + anzahl;
+         this.warenList.put(artikel, erhohteWert);
+        }else{
+            this.warenList.put(artikel,anzahl);
         }
 
     }
 
-    public ArrayList<Artikel> get() {
-
-        return this.waren;
+    public void loschArtikle(Artikel artikel) throws NotFoundException {
+        warenList.remove(artikel);
     }
 
-    public Rechnung kaufen(Kunden kunden) {
-        Rechnung rechnung = new Rechnung(Instant.now(), kunden, waren);
-        //  removeAll();
-        return rechnung;
+    public HashMap<Artikel, Integer> get() {
+        return this.warenList;
     }
+
+
 
     public void removeAll() {
-        this.waren.clear();
+        this.warenList.clear();
     }
 
     public String toString() {
-        String gelekteWaren = "";
-        for (Artikel artikel : waren) {
-            gelekteWaren += artikel.getArtikelBezeichnung() + "\n";
+    return "";
+     //   return gelekteWaren;
+    }
+    public List<Artikel> HashtoList() {
+        List<Artikel> ereignisList = new ArrayList<>();
+        for (Map.Entry<Artikel, Integer> artikelIntegerEntry : warenList.entrySet()) {
+            ereignisList.add(artikelIntegerEntry.getKey());
         }
-        return gelekteWaren;
+        return ereignisList;
     }
 }

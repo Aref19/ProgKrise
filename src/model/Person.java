@@ -1,21 +1,46 @@
 package model;
 
 
-public abstract class Person  {
-    private int nummer;
+import exception.INcorrectEmailException;
+
+import java.io.Serializable;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public abstract class Person implements Serializable {
+
+    private UUID id;
     private String vorName;
     private String nachName;
-    private String password;
+    private String passwort;
+    private String email;
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    public Person(int nummer, String vorName, String nachName,String password) {
-        this.nummer = nummer;
+    /**
+     * Constructor
+     *
+     * @param vorName
+     * @param nachName
+     * @param passwort
+     */
+    public Person( String vorName, String nachName, String passwort,String email) {
+        this.id=UUID.randomUUID();
         this.vorName = vorName;
         this.nachName = nachName;
-        this.password=password;
+        this.passwort = passwort;
+        this.email=email;
+
     }
 
-    public int getNummer() {
-        return nummer;
+    /**
+     * Getter und Setter
+     *
+     * @return
+     */
+    public UUID getId() {
+        return id;
     }
 
     public String getVorName() {
@@ -26,8 +51,16 @@ public abstract class Person  {
         return nachName;
     }
 
-    public void setNummer(int nummer) {
-        this.nummer = nummer;
+    public String getPasswort() {
+        return passwort;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setVorName(String vorName) {
@@ -38,13 +71,29 @@ public abstract class Person  {
         this.nachName = nachName;
     }
 
-    public String getPassword(){
-        return this.password;
+
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
+    }
+
+
+    public String getPassword() {
+        return this.passwort;
+    }
+
+
+
+    public static boolean checkEmail(String emailStr)throws INcorrectEmailException {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        if(!matcher.find()){
+            throw new INcorrectEmailException();
+        }
+        return matcher.find();
     }
 
     public String toString() {
-        String person=nachName+vorName;
-        return
-             person;
+        String person = id + ";" +  vorName + ";" + nachName + ";" + passwort+";"+email;
+        return person;
     }
+
 }

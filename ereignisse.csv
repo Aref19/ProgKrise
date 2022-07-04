@@ -1,0 +1,10 @@
+
+Beispiel:
+
+Datum;Person(Name? Nummer?);Artikel(Nummer?);Aktion (Status);Anzahl
+
+datum1;AJ;12345;Neu;10
+datum2;Omar;12345;Einlagerung;3
+datum3;Tom;4567;Kauf;20
+
+
