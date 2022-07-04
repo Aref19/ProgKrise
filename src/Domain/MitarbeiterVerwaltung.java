@@ -2,17 +2,17 @@ package Domain;
 
 import Persistent.PersistentMitarbeiter;
 import exception.CustomIoException;
+import exception.INcorrectEmailException;
 import exception.LoginFailedException;
 import exception.RegisitierungException;
-import model.Artikel;
-import model.Ereignis;
-import model.Mitarbeiter;
+import model.*;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MitarbeiterVerwaltung{
     /**
@@ -20,6 +20,8 @@ public class MitarbeiterVerwaltung{
      */
     private List<Mitarbeiter> mitarbeiterList;
     private PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
+
+
     public MitarbeiterVerwaltung() {
         mitarbeiterList=new ArrayList<>();
         try {
@@ -36,35 +38,38 @@ public class MitarbeiterVerwaltung{
      * @param name, nachname, passwort
      * @throws CustomIoException
      */
-    public void mitarbeiterAnlegen(String name, String nachname, String passwort) throws RegisitierungException {
+
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort,String email) throws RegisitierungException{
             for (Mitarbeiter listAusgeben : mitarbeiterList) {
                 if (name.equals(listAusgeben.getVorName())
                         && nachname.equals(listAusgeben.getNachName())) {
+
                     throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
                 }
             }
 
-        Mitarbeiter mitarbeiter = new Mitarbeiter(1, name, nachname, passwort);
+        Mitarbeiter mitarbeiter = new Mitarbeiter( name, nachname, passwort,email);
         mitarbeiterList.add(mitarbeiter);
-        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiterList);
-    }
 
+        persistentMitarbeiter.mitarbeiterSpeichern(mitarbeiterList);
+
+    }
 
     /**
      * Beim Mitarbeiter Überprüfen Methode wird mit arbeiter überprüft Ob der Mitarbeiter Name und Sein Passwort
      * mit der Liste zustimmt dann wird er ein gelogt
-     * @param name
+     * @param email
      * @param mitarbeiterPasswort
      * @return
      * @throws CustomIoException
      */
-    public boolean mitarbeiterUeberprufen(String name, String mitarbeiterPasswort) throws LoginFailedException {
+    public MItarbeiterEilogen mitarbeiterUeberprufen(String email, String mitarbeiterPasswort) throws LoginFailedException{
         for (Mitarbeiter mitarbeiter : mitarbeiterList) {
-            if (name.equals(mitarbeiter.getVorName()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
-                return true;
+            if (email.equals(mitarbeiter.getEmail()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
+                return new MItarbeiterEilogen(mitarbeiter,true);
             }
         }
-       throw new LoginFailedException();
+        throw new LoginFailedException();
     }
 
     public void mitarbeiterLoeaschen(String vorname, String nachname) {
@@ -80,8 +85,6 @@ public class MitarbeiterVerwaltung{
         return mitarbeiterList;
     }
 
-    public void liesDaten(){
 
-    }
 }
 

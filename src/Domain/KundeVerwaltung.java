@@ -19,14 +19,16 @@ public class KundeVerwaltung {
     private ArrayList<Kunde> kundeArrayList;
     private PersistentKunde persistentKunde = new PersistentKunde();
     Kunde kunde;
-    public KundeVerwaltung(){
+
+    public KundeVerwaltung() {
         kundeArrayList = new ArrayList<>();
     }
+
     public KundeEinlogen einlogen(String na, String pass) throws LoginFailedException {
         for (Kunde kunde : kundeArrayList) {
             if (kunde.getVorName().equals(na) && kunde.getPassword().equals(pass)) {
                 this.kunde = kunde;
-                return new KundeEinlogen(kunde,true);
+                return new KundeEinlogen(kunde, true);
             }
         }
         throw new LoginFailedException();
@@ -35,6 +37,7 @@ public class KundeVerwaltung {
     /**
      * Die übertragene daten von methode KundenRegistrieren von EshopVerwaltung werden im methode registrieren verarbeitet.
      * Wird ein Kunde Registriert
+     *
      * @param kunde
      * @throws RegisitierungException
      */

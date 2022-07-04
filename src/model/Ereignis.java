@@ -1,32 +1,41 @@
 package model;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
-public class Ereignis {
+public class Ereignis  implements Serializable {
     Person person;      // Person
 
 
-  //  private List<Artikel> artikelList;  // TODO Rausnehmen, nur ein Artikel pro Ereignis
+    //  private List<Artikel> artikelList;  // TODO Rausnehmen, nur ein Artikel pro Ereignis
     private Artikel artikel;
 
-    Instant Datum;
 
-    STATUS status;
-   public enum STATUS {
+    private Instant Datum;
+
+    private STATUS status;
+
+
+
+
+    public enum STATUS {
         Neu, Auslagerung, Einlagerung, Kauf
     }
-//    public Ereignis(Person person, Instant datum, STATUS lagerung, List<Artikel> artikelList) {
+
+    //    public Ereignis(Person person, Instant datum, STATUS lagerung, List<Artikel> artikelList) {
 //        this.person = person;
 //        this.artikelList = artikelList;
 //        Datum = datum;
 //        this.status = lagerung;
 //    }
     public Ereignis(Person person, Instant datum, STATUS status, Artikel artikel) {
+        System.out.println(person);
         this.person = person;
         this.artikel = artikel;
         Datum = datum;
         this.status = status;
+
     }
 
     public Person getPerson() {
@@ -41,7 +50,31 @@ public class Ereignis {
         return Datum;
     }
 
-//    public List<Artikel> getArtikelList() {
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Artikel getArtikel() {
+        return artikel;
+    }
+
+    public void setArtikel(Artikel artikel) {
+        this.artikel = artikel;
+    }
+
+    public void setDatum(Instant datum) {
+        Datum = datum;
+    }
+
+    public void setStatus(STATUS status) {
+        this.status = status;
+    }
+
+
+
+
+
+    //    public List<Artikel> getArtikelList() {
 //        return artikelList;
 //    }
 //
@@ -49,11 +82,12 @@ public class Ereignis {
 //        this.artikelList = artikelList;
 //    }
 
+
     @Override
-    public String toString(){
-       return "\tDatum\t" + getDatum()
-               + (person instanceof Kunde ? "\t Der Kunde:\t" : "\t Der Mitarbeiter:\t") + getPerson().getVorName()
-               + "\tStatus" + status;
+    public String toString() {
+        return "\tDatum\t" + getDatum()
+                + (person instanceof Kunde ? "\t Der Kunde:\t" : "\t Der Mitarbeiter:\t") + getPerson().getVorName()
+                + "\tStatus" + status;
     }
 
 }

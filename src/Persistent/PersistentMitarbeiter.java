@@ -5,6 +5,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
+
 /**
  * .csv damit es direkt in dem Projekt die Liste kommt
  * Scanner weil, IO klasse kann nicht datei Scannen
@@ -14,27 +16,7 @@ public class PersistentMitarbeiter {
     private File  file = null;
     private BufferedReader reader = null;
 
-    public List<Mitarbeiter> ladeMitarbeiter() throws IOException {
-        File file = new File(filename);
-        Scanner reader = new Scanner(file);
-        List<Mitarbeiter> mitarbeiterList = new ArrayList<>();
-        while (reader.hasNextLine()) {
-            String line = reader.nextLine();
-            String[] data = line.split(";");
-            try {
-                Mitarbeiter m = new Mitarbeiter(
-                        Integer.parseInt(data[0].trim()),
-                        String.valueOf(data[1]),
-                        String.valueOf(data[2]),
-                        String.valueOf(data[3]));
-                mitarbeiterList.add(m);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        reader.close();
-        return mitarbeiterList;
-    }
+
     public void openForWriting(String datei) {
         file = new File(filename);
     }
@@ -46,7 +28,7 @@ public class PersistentMitarbeiter {
             String line =lesen.readLine();
             while (line !=null){
                 String [] content= line.split(";");
-                mitarbeiterList.add(new Mitarbeiter(1,content[0],content[1],content[2]));
+                mitarbeiterList.add(new Mitarbeiter(UUID.fromString( content[0]),content[1],content[2],content[3],content[4]));
                 line =lesen.readLine();
             }
 
