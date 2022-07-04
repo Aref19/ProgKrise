@@ -1,8 +1,11 @@
 package GUI;
 
-import javax.swing.*;
+import GUI.services.KundenService;
 
-public class ArtikelLegen {
+import javax.swing.*;
+import java.awt.*;
+
+public class ArtikelLegen extends JFrame {
     private JLabel artikelLegenLabel;
     private JTextPane textPane1;
     private JTextPane textPane2;
@@ -13,4 +16,15 @@ public class ArtikelLegen {
     private JButton weiterZuWarenkorbButton;
     private JButton einfügenButton;
     private JButton abbrechenButton;
+    private JPanel rootPanel;
+
+    public ArtikelLegen(String title){
+        super(title);
+        this.setContentPane(rootPanel);
+        this.setLocation(600,400);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pack();// damit die geöffnet wird
+        this.setVisible(true);
+
+    }
 }

@@ -45,7 +45,7 @@ public interface SaveRepo {
 
     void saveKunde(List<Kunde> kundeList);
 
-    List<Kunde> loadKund();
+    List<Kunde> loadKunde();
 
 
 }

@@ -155,11 +155,11 @@ public class SaveFile implements SaveRepo {
     }
 
     @Override
-    public List<Kunde> loadKund() {
+    public List<Kunde> loadKunde() {
         List<Kunde> kundeList=new ArrayList<>();
         try {
             String data= bufferedReader.readLine();
-            while (!data.isEmpty()){
+            while ( data!=null){
                 String [] content=data.split(";");
                 kundeList.add(new Kunde(content[0],content[1],new Adresse(
                       Integer.parseInt(content[2])

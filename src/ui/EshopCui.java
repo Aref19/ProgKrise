@@ -64,6 +64,7 @@ public class EshopCui {
      */
     public KundeEinlogen kundenEinloggen(String email,String pass) {
         try {
+
             return eshopVerwaltung.kundenEinloggen(email, pass);
         } catch (LoginFailedException ex) {
             System.out.println(ex.getMessage());
@@ -194,7 +195,7 @@ public class EshopCui {
                     kundeRegistrieren();
                 }
                 case 2 -> {
-                    KundeEinlogen kundeEinlogen = kundenEinloggen("Aj@gmail.com","w");
+                   KundeEinlogen kundeEinlogen = kundenEinloggen("","");
                     if (kundeEinlogen.gefunden) {
                         person = kundeEinlogen.kunde;
                         System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb: 1 oder Abmelden: 2");
