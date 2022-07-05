@@ -63,10 +63,10 @@ public class MitarbeiterVerwaltung{
      * @return
      * @throws CustomIoException
      */
-    public MItarbeiterEilogen mitarbeiterUeberprufen(String email, String mitarbeiterPasswort) throws LoginFailedException{
+    public Einlogen mitarbeiterUeberprufen(String email, String mitarbeiterPasswort) throws LoginFailedException{
         for (Mitarbeiter mitarbeiter : mitarbeiterList) {
             if (email.equals(mitarbeiter.getEmail()) && mitarbeiterPasswort.equals(mitarbeiter.getPasswort())) {
-                return new MItarbeiterEilogen(mitarbeiter,true);
+                return new Einlogen(mitarbeiter,true);
             }
         }
         throw new LoginFailedException();

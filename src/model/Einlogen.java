@@ -1,10 +1,10 @@
 package model;
 
-public class KundeEinlogen {
- public Kunde kunde;
+public class Einlogen {
+ public Person person;
  public boolean gefunden;
-    public KundeEinlogen(Kunde kunde, boolean gefunden) {
-        this.kunde = kunde;
+    public Einlogen(Person person, boolean gefunden) {
+        this.person = person;
         this.gefunden = gefunden;
     }
 

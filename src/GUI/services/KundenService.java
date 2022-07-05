@@ -4,7 +4,7 @@ import GUI.ArtikelLegen;
 import GUI.KundeRegistrieren;
 import GUI.Wilkommen;
 import GUI.alert.RegisterungAlert;
-import model.KundeEinlogen;
+import model.Einlogen;
 import ui.EshopCui;
 
 import javax.swing.*;
@@ -25,7 +25,7 @@ public class KundenService implements ActionListener {
         this.passwordField = passwordField;
     }
 
-    public KundeEinlogen kundeUeberpruefen(){
+    public Einlogen kundeUeberpruefen(){
         System.out.println(passwordField.getText());
       return  eshopCui.kundenEinloggen(emailText.getText(),passwordField.getText());
     }

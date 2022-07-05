@@ -8,11 +8,10 @@ import Persistent.repo.SaveRepo;
 import exception.LoginFailedException;
 
 import exception.RegisitierungException;
-import model.KundeEinlogen;
+import model.Einlogen;
 import model.Kunde;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class KundeVerwaltung {
@@ -30,11 +29,11 @@ public class KundeVerwaltung {
         saveRepo.closRead();
     }
 
-    public KundeEinlogen einlogen(String na, String pass) throws LoginFailedException {
+    public Einlogen einlogen(String na, String pass) throws LoginFailedException {
         for (Kunde kunde : kundeArrayList) {
             if (kunde.getEmail().equals(na) && kunde.getPassword().equals(pass)) {
                 this.kunde = kunde;
-                return new KundeEinlogen(kunde, true);
+                return new Einlogen(kunde, true);
             }
         }
         throw new LoginFailedException();

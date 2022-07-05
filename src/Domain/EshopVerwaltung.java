@@ -1,6 +1,5 @@
 package Domain;
 
-import Domain.*;
 import Persistent.PersistentKunde;
 import Persistent.PersistentMitarbeiter;
 import exception.*;
@@ -54,7 +53,7 @@ public class EshopVerwaltung {
         }
     }
 
-    public KundeEinlogen kundenEinloggen(String na, String pas) throws LoginFailedException {
+    public Einlogen kundenEinloggen(String na, String pas) throws LoginFailedException {
         return kundeVerwaltung.einlogen(na, pas);
     }
 
@@ -74,7 +73,7 @@ public class EshopVerwaltung {
         }
     }
 
-    public MItarbeiterEilogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {
+    public Einlogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {
         try {
             return mitarbeiterVerwaltung.mitarbeiterUeberprufen(email, password);
         } catch (LoginFailedException e) {
