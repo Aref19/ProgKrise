@@ -41,9 +41,7 @@ public class PersistentKunde {
         while (reader.hasNextLine()) {
             String line = reader.nextLine();
             String[] data = line.split(";");
-            /*
-                        try {
-
+            /* try {
                 Kunde k = new Kunde(
                         Integer.parseInt(data[0].trim()),
                         String.valueOf(data[1]),
@@ -54,11 +52,8 @@ public class PersistentKunde {
                 System.out.println(k.getVorName());
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-                        */
+            } */
         }
-
-
         reader.close();
         return null;
     }

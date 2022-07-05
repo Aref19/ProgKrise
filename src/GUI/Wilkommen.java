@@ -38,7 +38,6 @@ public class Wilkommen extends  JFrame{
 
     public static void main(String[] args) {
         Wilkommen Wilkommen=new Wilkommen("Wilkommen");
-
     }
 
 }

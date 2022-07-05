@@ -175,7 +175,6 @@ public class SaveFile implements SaveRepo {
         return kundeList;
     }
 
-
     @Override
     public Ereignis loadEreignis() {
         return null;
@@ -219,8 +218,6 @@ public class SaveFile implements SaveRepo {
     public void saveListEreignises(List<Ereignis> ereignisList) {
 
     }
-
-
-    }
+}
 
 
