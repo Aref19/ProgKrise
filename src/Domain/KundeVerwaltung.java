@@ -26,7 +26,8 @@ public class KundeVerwaltung {
 
     public KundeEinlogen einlogen(String na, String pass) throws LoginFailedException {
         for (Kunde kunde : kundeArrayList) {
-            if (kunde.getVorName().equals(na) && kunde.getPassword().equals(pass)) {
+            System.out.println(kunde);
+            if (kunde.getEmail().equals(na) && kunde.getPassword().equals(pass)) {
                 this.kunde = kunde;
                 return new KundeEinlogen(kunde, true);
             }

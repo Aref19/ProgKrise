@@ -15,6 +15,7 @@ public class PersistentKunde {
     private File file = null;
 
     public void openForWriting(String datei) {
+
         file = new File(kundefile);
     }
 

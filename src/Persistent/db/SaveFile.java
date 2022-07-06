@@ -2,27 +2,25 @@ package Persistent.db;
 
 import Persistent.repo.SaveRepo;
 import exception.NotFoundException;
-import model.Artikel;
-import model.Ereignis;
-import model.ErignisToSave;
+import model.*;
 
 import java.io.*;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class SaveFile implements SaveRepo {
     BufferedReader bufferedReader=null;
     BufferedWriter bufferedWriter=null;
     ObjectOutputStream objectOutputStream=null;
+    String kundefile = "kunde.csv";
     File file=null;
 
+    public void openForWriting(String datei) {
+        file = new File(kundefile);
+    }
     @Override
     public void creatFile(String fileName) {
         file = new File(fileName);
@@ -114,6 +112,7 @@ public class SaveFile implements SaveRepo {
     }
 
     @Override
+
     public void openForSerializer() {
         try {
             objectOutputStream=new ObjectOutputStream(new FileOutputStream(file));
@@ -200,8 +199,69 @@ public class SaveFile implements SaveRepo {
     public void saveListEreignises(List<Ereignis> ereignisList) {
 
     }
-
-
+    @Override
+    public void kundeSpeichern(Kunde... kunde) {
+        openForWriting("");
+        if (file.exists()) {
+            try {
+                FileWriter writer = new FileWriter(file, true);
+                String data = "";
+                for (Kunde kund : kunde) {
+                    data = data + kund.toString();
+                    writer.write(data);
+                    writer.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
+    @Override
+    public List<Kunde> ladeKunden() throws FileNotFoundException {
+        File file = new File(kundefile);
+        Scanner reader = new Scanner(file);
+        while (reader.hasNextLine()) {
+            String line = reader.nextLine();
+            String[] data = line.split(";");
+            /*
+                        try {
+
+                Kunde k = new Kunde(
+                        Integer.parseInt(data[0].trim()),
+                        String.valueOf(data[1]),
+                        String.valueOf(data[2]),
+                        String.valueOf(data[3]));
+                        String.valueOf(data[4]);
+                        String.valueOf(data[5]);
+                System.out.println(k.getVorName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+                        */
+        }
+
+
+        reader.close();
+        return null;
+    }
+    public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList) {
+        openForWriting("");
+        if(file.exists()) {
+            String data = "";
+            try {
+                FileWriter writer = new FileWriter(file, false);
+                for (Mitarbeiter mitarbeiter : mitarbeiterList) {
+                    data = data + mitarbeiter.toString() + System.lineSeparator();
+                }
+
+                writer.append(data);
+                writer.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+    }
+}
 
 

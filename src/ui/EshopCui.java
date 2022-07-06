@@ -1,6 +1,7 @@
 package ui;
 
 import Domain.*;
+import Persistent.PersistentKunde;
 import Persistent.PersistentMitarbeiter;
 import Utilities.IO;
 import exception.*;
@@ -13,7 +14,7 @@ import java.util.List;
 public class EshopCui {
     EshopVerwaltung eshopVerwaltung = new EshopVerwaltung();
     PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
-
+    PersistentKunde persistentKunde = new PersistentKunde();
     static Person person;
 
     public static void main(String[] args) throws CustomIoException {
@@ -185,8 +186,10 @@ public class EshopCui {
     }
 
     public void run() throws IOException {
+        persistentKunde.ladeKunden();
+        persistentKunde.kundeSpeichern();
         do {
-           // persistentMitarbeiter.ladeMitarbeiter();
+
             System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Einlogen ");
             int s = IO.inputInt();
             switch (s) {

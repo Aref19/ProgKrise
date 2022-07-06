@@ -15,13 +15,6 @@ public class LoginPanel extends JPanel {
 
     private void setupUI() {
         setLayout(new GridLayout());
-        // Abstandhalter ("Filler") zwischen Rand und erstem Element
-        /*Dimension borderMinSize = new Dimension(5, 10);
-        Dimension borderPrefSize = new Dimension(5, 10);
-        Dimension borderMaxSize = new Dimension(5, 10);
-        add(new Box.Filler(borderMinSize, borderPrefSize, borderMaxSize));*/
-
-
         add(input());
         setBorder(BorderFactory.createEmptyBorder(200,20,100,20));
         setSize(new Dimension(200,200));

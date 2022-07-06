@@ -1,6 +1,5 @@
 package Persistent;
 import model.Mitarbeiter;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,6 @@ public class PersistentMitarbeiter {
                 mitarbeiterList.add(new Mitarbeiter(UUID.fromString( content[0]),content[1],content[2],content[3],content[4]));
                 line =lesen.readLine();
             }
-
         }catch (IOException e){
             // TODO Fehlermeldung ausgeben
         }

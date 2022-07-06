@@ -5,6 +5,7 @@ import exception.NotFoundException;
 import model.Artikel;
 import model.Ereignis;
 import model.ErignisToSave;
+import model.Kunde;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -47,4 +48,7 @@ public interface SaveRepo {
 
     void closSerial();
 
+    void kundeSpeichern(Kunde... kunde);
+
+    List<Kunde> ladeKunden() throws FileNotFoundException;
 }

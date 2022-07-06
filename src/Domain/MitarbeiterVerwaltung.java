@@ -84,7 +84,5 @@ public class MitarbeiterVerwaltung{
     public List<Mitarbeiter> getMitarbeiterList() {
         return mitarbeiterList;
     }
-
-
 }
 
