@@ -6,7 +6,6 @@ import exception.BestandNichtAusreichendException;
 import exception.NotFoundException;
 import model.Artikel;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -21,7 +20,7 @@ public class ArtikelVerwaltung  {
     public ArtikelVerwaltung()  {
         saveRepo.creatFile(filename);
         saveRepo.openForRead(filename);
-        artikelList=saveRepo.loadListloadArtikels();
+        artikelList=saveRepo.loadListArtikels();
         saveRepo.closRead();
 
     }

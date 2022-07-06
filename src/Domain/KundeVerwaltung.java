@@ -2,34 +2,38 @@ package Domain;
 
 
 import Persistent.PersistentKunde;
+
+import Persistent.db.SaveFile;
+import Persistent.repo.SaveRepo;
 import exception.LoginFailedException;
 
 import exception.RegisitierungException;
-import model.Artikel;
-import model.Ereignis;
-import model.KundeEinlogen;
+import model.Einlogen;
 import model.Kunde;
 
 
-import java.time.Instant;
-import java.util.ArrayList;
+import java.util.List;
 
 public class KundeVerwaltung {
 
-    private ArrayList<Kunde> kundeArrayList;
+    private List<Kunde> kundeArrayList;
     private PersistentKunde persistentKunde = new PersistentKunde();
     Kunde kunde;
-
+    private SaveRepo saveRepo;
+    final String fileName ="kundsave.txt";
     public KundeVerwaltung() {
-        kundeArrayList = new ArrayList<>();
+        saveRepo=new SaveFile();
+        saveRepo.creatFile(fileName);
+        saveRepo.openForRead(fileName);
+        kundeArrayList = saveRepo.loadKunde();
+        saveRepo.closRead();
     }
 
-    public KundeEinlogen einlogen(String na, String pass) throws LoginFailedException {
+    public Einlogen einlogen(String na, String pass) throws LoginFailedException {
         for (Kunde kunde : kundeArrayList) {
-            System.out.println(kunde);
             if (kunde.getEmail().equals(na) && kunde.getPassword().equals(pass)) {
                 this.kunde = kunde;
-                return new KundeEinlogen(kunde, true);
+                return new Einlogen(kunde, true);
             }
         }
         throw new LoginFailedException();

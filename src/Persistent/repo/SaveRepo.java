@@ -1,13 +1,8 @@
 package Persistent.repo;
 
-import Persistent.db.SaveFile;
 import exception.NotFoundException;
-import model.Artikel;
-import model.Ereignis;
-import model.ErignisToSave;
-import model.Kunde;
+import model.*;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,7 +27,7 @@ public interface SaveRepo {
 
     void saveListArtikels(List<Artikel> artikelList) throws IOException;
 
-    List<Artikel> loadListloadArtikels();
+    List<Artikel> loadListArtikels();
 
     Artikel loadArtikel(String name) throws NotFoundException;
 
@@ -48,7 +43,9 @@ public interface SaveRepo {
 
     void closSerial();
 
-    void kundeSpeichern(Kunde... kunde);
+    void saveKunde(List<Kunde> kundeList);
 
-    List<Kunde> ladeKunden() throws FileNotFoundException;
+    List<Kunde> loadKunde();
+
+
 }

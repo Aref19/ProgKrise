@@ -1,7 +1,6 @@
 package ui;
 
-import Domain.*;
-import Persistent.PersistentKunde;
+import Domain.EshopVerwaltung;
 import Persistent.PersistentMitarbeiter;
 import Utilities.IO;
 import exception.*;
@@ -14,7 +13,7 @@ import java.util.List;
 public class EshopCui {
     EshopVerwaltung eshopVerwaltung = new EshopVerwaltung();
     PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
-    PersistentKunde persistentKunde = new PersistentKunde();
+
     static Person person;
 
     public static void main(String[] args) throws CustomIoException {
@@ -63,13 +62,14 @@ public class EshopCui {
      *
      * @return
      */
-    public KundeEinlogen kundenEinloggen(String email,String pass) {
+    public Einlogen kundenEinloggen(String email, String pass) {
         try {
+
             return eshopVerwaltung.kundenEinloggen(email, pass);
         } catch (LoginFailedException ex) {
             System.out.println(ex.getMessage());
         }
-        return new KundeEinlogen(null, false);
+        return new Einlogen(null, false);
     }
 
 
@@ -80,10 +80,10 @@ public class EshopCui {
      * @throws CustomIoException
      */
     public boolean mitarbeiterEinloggen(String email,String pass) throws IOException {
-        MItarbeiterEilogen mItarbeiterEilogen=new MItarbeiterEilogen(null,false);
+        Einlogen mItarbeiterEilogen=new Einlogen(null,false);
         try {
             mItarbeiterEilogen=eshopVerwaltung.mitarbeiterEinloggen(email,pass);
-            person=mItarbeiterEilogen.mitarbeiter;
+            person=mItarbeiterEilogen.person;
             return mItarbeiterEilogen.gefunden;
         } catch (LoginFailedException e) {
             System.out.println( e.getMessage());
@@ -186,10 +186,8 @@ public class EshopCui {
     }
 
     public void run() throws IOException {
-        persistentKunde.ladeKunden();
-        persistentKunde.kundeSpeichern();
         do {
-
+           // persistentMitarbeiter.ladeMitarbeiter();
             System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Einlogen ");
             int s = IO.inputInt();
             switch (s) {
@@ -197,9 +195,9 @@ public class EshopCui {
                     kundeRegistrieren();
                 }
                 case 2 -> {
-                    KundeEinlogen kundeEinlogen = kundenEinloggen("Aj@gmail.com","w");
-                    if (kundeEinlogen.gefunden) {
-                        person = kundeEinlogen.kunde;
+                   Einlogen einlogen = kundenEinloggen("","");
+                    if (einlogen.gefunden) {
+                        person = einlogen.person;
                         System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb: 1 oder Abmelden: 2");
                         if (IO.inputInt() == 2) {
                             run();

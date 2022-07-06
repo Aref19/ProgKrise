@@ -36,37 +36,7 @@ public class PersistentMitarbeiter {
 
         return mitarbeiterList;
     }
-//    private void mitarbeiterSpeichern(Mitarbeiter... mitarbeiters) {
-//        openForWriting("");
-//        if(file.exists()) {
-//            String data = "";
-//            try {
-//                FileWriter writer = new FileWriter(file, false);
-//                for (Mitarbeiter mitarbeiter : mitarbeiters) {
-//                    data = data + mitarbeiter.toString() + "\n";
-//                }
-//
-//                writer.append(data);
-//                writer.close();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        }else {
-//            try {
-//                FileWriter writer = new FileWriter(filename);
-//                String data = "";
-//                for (Mitarbeiter mitarbeiter : mitarbeiters) {
-//                    data = data + mitarbeiter.toString() + "\n";
-//                    writer.write(data);
-//                    writer.close();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//    }
+
     public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList) {
         openForWriting("");
         if(file.exists()) {
@@ -86,9 +56,4 @@ public class PersistentMitarbeiter {
         }
     }
 
-//    public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList) {
-//        for (Mitarbeiter mitarbeiter: mitarbeiterList) {
-//            mitarbeiterSpeichern(mitarbeiter);
-//        }
-//    }
 }
