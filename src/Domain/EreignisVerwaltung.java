@@ -22,14 +22,8 @@ public class EreignisVerwaltung {
         saveRepo=new SaveFile();
         saveRepo.creatFile(fileName);
         saveRepo.openForRead(fileName);
-      erignisToSave= saveRepo.loadListEreignis();
+        erignisToSave= saveRepo.loadListEreignis();
       //  saveRepo.openForSerializer();
-
-    }
-
-    public void KundenAuslagereungEreignissSpeicher(Ereignis ereignis) {
-
-        this.ereignis.add(ereignis);
 
     }
 
@@ -41,10 +35,7 @@ public class EreignisVerwaltung {
 
     }
 
-    public List<ErignisToSave> savedEreignises() {
-        System.out.println(erignisToSave.size());
-        return erignisToSave;
-    }
+
 
 
 

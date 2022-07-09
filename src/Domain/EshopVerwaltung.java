@@ -1,7 +1,8 @@
 package Domain;
 
-import Persistent.PersistentKunde;
-import Persistent.PersistentMitarbeiter;
+
+
+
 import exception.*;
 import model.*;
 
@@ -17,8 +18,7 @@ public class EshopVerwaltung {
     private KundeVerwaltung kundeVerwaltung;
     private MitarbeiterVerwaltung mitarbeiterVerwaltung;
     private RechnungWarenkorb rechnungWarenkorb;
-    private PersistentMitarbeiter persistentMitarbeiter;
-    private PersistentKunde persistentKunde;
+
     private EreignisVerwaltung ereignisVerwaltung;
 
     public EshopVerwaltung() {
@@ -26,14 +26,13 @@ public class EshopVerwaltung {
         kundeVerwaltung = new KundeVerwaltung();
         mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
         rechnungWarenkorb = new RechnungWarenkorb();
-        persistentMitarbeiter = new PersistentMitarbeiter();
+
         ereignisVerwaltung = new EreignisVerwaltung();
-        persistentKunde = new PersistentKunde();
+
     }
 
     public ArrayList<Artikel> artikelSortieren(boolean artsort) {
         return artikelVerwaltung.artikelSortieren(artsort);
-
     }
 
     /**
@@ -42,15 +41,9 @@ public class EshopVerwaltung {
      *
      * @param kunde
      */
-    public void kundenRegistrieren(Kunde kunde) throws RegisitierungException, INcorrectEmailException {
-        try {
-            Person.checkEmail(kunde.getEmail());
-            kundeVerwaltung.registrieren(kunde);
-        } catch (RegisitierungException e) {
-            throw e;
-        } catch (INcorrectEmailException e) {
-            throw e;
-        }
+    public void kundenRegistrieren(Kunde kunde) throws INcorrectEmailException,RegisitierungException {
+        Person.checkEmail(kunde.getEmail());
+        kundeVerwaltung.registrieren(kunde);
     }
 
     public Einlogen kundenEinloggen(String na, String pas) throws LoginFailedException {
@@ -62,8 +55,6 @@ public class EshopVerwaltung {
             Artikel artikel = artikelVerwaltung.findArtikel(name);
             artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
             kunde.getWarenKorp().addArtikle(artikel, anzahl);
-
-
             return artikelVerwaltung.findArtikel(name);
         } catch (NotFoundException e) {
             throw e;
@@ -74,37 +65,27 @@ public class EshopVerwaltung {
     }
 
     public Einlogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {
-        try {
+
             return mitarbeiterVerwaltung.mitarbeiterUeberprufen(email, password);
-        } catch (LoginFailedException e) {
-            throw e;
-        }
+
     }
 
     public void artikelAnlegen(Mitarbeiter mitarbeiter, Artikel artikel) throws IOException {
-        System.out.println(artikel);
         try {
-            artikelVerwaltung.artikelAnlegen( artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(),artikel.getPreis());
-        }catch (IOException e){
+            artikelVerwaltung.artikelAnlegen(artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis());
+        } catch (IOException e) {
             throw e;
         }
         ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(mitarbeiter, Instant.now(), Ereignis.STATUS.Neu, artikel));
-       List< ErignisToSave> erignisToSave=ereignisVerwaltung.savedEreignises();
-        for (ErignisToSave erignisToSave1:erignisToSave) {
-            System.out.println(erignisToSave1);
-        }
+
     }
 
-    public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email) throws RegisitierungException, INcorrectEmailException {
-        try {
-            Person.checkEmail(email);
-            mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort, email);
-        } catch (RegisitierungException e) {
-            throw e;
-        } catch (INcorrectEmailException e) {
+    public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email)
+            throws RegisitierungException, INcorrectEmailException, IOException {
 
-            throw e;
-        }
+        Person.checkEmail(email);
+        mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort, email);
+
     }
 
     public List<Artikel> artielzeigen() {
@@ -115,7 +96,6 @@ public class EshopVerwaltung {
         for (Map.Entry<Artikel, Integer> artikelIntegerEntry : artikels.entrySet()) {
             ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(kunde, Instant.now(), Ereignis.STATUS.Kauf, artikelIntegerEntry.getKey()));
         }
-
         return rechnungWarenkorb.creatRec(kunde, artikels);
     }
 

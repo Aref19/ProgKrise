@@ -43,9 +43,11 @@ public interface SaveRepo {
 
     void closSerial();
 
-    void saveKunde(List<Kunde> kundeList);
+    void saveKunde(List<Kunde> kundeList) throws IOException;
 
     List<Kunde> loadKunde();
 
+    public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList);
 
+    public List<Mitarbeiter> loadMitarbeiter() throws IOException;
 }

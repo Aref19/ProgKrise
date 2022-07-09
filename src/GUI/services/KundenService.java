@@ -1,10 +1,11 @@
 package GUI.services;
 
-import GUI.ArtikelLegen;
-import GUI.KundeRegistrieren;
-import GUI.Wilkommen;
-import GUI.alert.RegisterungAlert;
-import model.Einlogen;
+
+import GUI.Wilcomen;
+import GUI.alert.Alert;
+import GUI.kunde.JFRegistieren;
+import exception.LoginFailedException;
+import model.Person;
 import ui.EshopCui;
 
 import javax.swing.*;
@@ -13,36 +14,54 @@ import java.awt.event.ActionListener;
 
 public class KundenService implements ActionListener {
     private JTextField emailText;
-    private JPasswordField passwordField;
+    private JPasswordField passText;
     private EshopCui eshopCui;
-    Wilkommen willkommenPanel;
+    private JFrame parent;
+    private JRadioButton mitarbeiterRadio;
+    private JRadioButton kundeRadio;
 
-
-    public KundenService(Wilkommen willkommenPanel, JTextField emailText, JPasswordField passwordField) {
-        this.willkommenPanel=willkommenPanel;
-        eshopCui = new EshopCui();
+    public KundenService(Wilcomen wilcomen, JTextField emailText, JPasswordField passText, JRadioButton mitarbeiterRadio, JRadioButton kundeRadio) {
+        this.mitarbeiterRadio = mitarbeiterRadio;
+        this.kundeRadio = kundeRadio;
+        this.parent = wilcomen;
         this.emailText = emailText;
-        this.passwordField = passwordField;
-    }
-
-    public Einlogen kundeUeberpruefen(){
-        System.out.println(passwordField.getText());
-      return  eshopCui.kundenEinloggen(emailText.getText(),passwordField.getText());
+        this.passText = passText;
+        eshopCui = new EshopCui();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(kundeUeberpruefen().gefunden){
-            willkommenPanel.setVisible(false);
-           willkommenPanel.dispose();
-            ArtikelLegen artikelLegen=new ArtikelLegen("Artikel");
-
-        }else {
-            RegisterungAlert registerungAlert=new RegisterungAlert("OOH");
-            registerungAlert.show();
-            willkommenPanel.setVisible(false);
-            willkommenPanel.dispose();
-            KundeRegistrieren kundeRegistrieren=new KundeRegistrieren("KundenRegisteren");
+        System.out.println(e.getActionCommand());
+        if (e.getActionCommand().equals("anmelden")) {
+            login();
+        } else {
+            registieren();
         }
     }
+
+    private void registieren() {
+        parent.dispose();
+        new JFRegistieren("Registieren");
+    }
+
+
+    private void login() {
+        Alert alert;
+        Person person = null;
+        try {
+            if (mitarbeiterRadio.isSelected()) {
+                eshopCui.mitarbeiterEinloggen(emailText.getText(), passText.getText());
+            } else
+            person = eshopCui.kundenEinloggen(emailText.getText(), passText.getText()).person;
+            alert = new Alert(parent, "Hallo Herr :" + person.getVorName() + " ^_^","Hallo");
+            alert.showInfoMassage();
+            parent.dispose();
+            //ToDo new JFarme Artikel oder so was
+            return;
+        } catch (LoginFailedException e) {
+            alert = new Alert(parent, e.getMessage(),"Error");
+        }
+        alert.showInfoMassage();
+    }
+
 }
