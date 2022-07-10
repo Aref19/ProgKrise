@@ -82,14 +82,15 @@ public class Artikel {
      * Default String zu überschreiben. danit es keine hash Code vom id gibt.
      * @return
      */
-    @Override
-    public String toString() {
-        return "id :\t"+artikelNr+"\tartikelName :\t"+artikelBezeichnung+"\tartikelBestand :\t"+artikelBestand+"\tpreis :\t"+preis;
 
-    }
 
     public String toSaveInFile() {
         return artikelNr+";"+artikelBezeichnung+";"+artikelBestand+";"+preis;
+
+    }
+    @Override
+    public String toString() {
+        return artikelBezeichnung+"\t"+artikelBestand+"\t"+preis;
 
     }
 }

@@ -66,7 +66,7 @@ public class SaveFile implements SaveRepo {
     public void saveListArtikels(List<Artikel> artikelList) throws IOException {
         try {
             for (Artikel artikel : artikelList) {
-                bufferedWriter.write(artikel.toString());
+                bufferedWriter.write(artikel.toSaveInFile());
             }
 
         } catch (IOException e) {

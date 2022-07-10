@@ -29,8 +29,8 @@ public class EshopCui {
      * Kunde gibt seine Daten ein und diese Daten werden im weiteren Methode KundenRegistrierung übertragen.
      * Die klasse Kunde Constructor und Klasse Adresse Constructor werden die Daten benutzt, um Kunde zu erzeugen.
      */
-    public void kundeRegistrieren(Kunde kunde) throws INcorrectEmailException,RegisitierungException  {
-            eshopVerwaltung.kundenRegistrieren(kunde);
+    public void kundeRegistrieren(Kunde kunde) throws INcorrectEmailException, RegisitierungException {
+        eshopVerwaltung.kundenRegistrieren(kunde);
     }
 
     /**
@@ -41,7 +41,7 @@ public class EshopCui {
     public Einlogen kundenEinloggen(String email, String pass) throws LoginFailedException {
 
 
-            return eshopVerwaltung.kundenEinloggen(email, pass);
+        return eshopVerwaltung.kundenEinloggen(email, pass);
 
     }
 
@@ -52,12 +52,12 @@ public class EshopCui {
      * @return
      * @throws CustomIoException
      */
-    public boolean mitarbeiterEinloggen(String email, String pass) throws  LoginFailedException {
+    public boolean mitarbeiterEinloggen(String email, String pass) throws LoginFailedException {
         Einlogen mItarbeiterEilogen = new Einlogen(null, false);
 
-            mItarbeiterEilogen = eshopVerwaltung.mitarbeiterEinloggen(email, pass);
-            person = mItarbeiterEilogen.person;
-            return mItarbeiterEilogen.gefunden;
+        mItarbeiterEilogen = eshopVerwaltung.mitarbeiterEinloggen(email, pass);
+        person = mItarbeiterEilogen.person;
+        return mItarbeiterEilogen.gefunden;
 
     }
 
@@ -133,12 +133,8 @@ public class EshopCui {
 
     }
 
-    public void zeigeArtikel() {
-        System.out.println("Hier sind die Verfügbaren Artikeln: ");
-        List<Artikel> artikels = eshopVerwaltung.artielzeigen();
-        for (Artikel a : artikels) {
-            System.out.println(a);
-        }
+    public List<Artikel> zeigeArtikel() {
+        return eshopVerwaltung.artielzeigen();
     }
 
     public void rechnung() {
