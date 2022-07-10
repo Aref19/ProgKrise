@@ -8,6 +8,7 @@ import model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EshopCui {
@@ -61,24 +62,8 @@ public class EshopCui {
 
     }
 
-    public void warenEinlegen() {
-        List<Artikel> artikels = new ArrayList<>();
-        do {
-            zeigeArtikel();
-            System.out.println("Geben Sie Artikel Bezeichnung ein:");
-            String name = IO.inputString();
-            System.out.println("Geben Sie Anzahl der Artikel:");
-            int anzahlArtikel = IO.inputInt();
-            try {
-                artikels.add(eshopVerwaltung.warenlegen(name, anzahlArtikel, (Kunde) person));
-            } catch (BestandNichtAusreichendException e) {
-                System.out.println(e.getMessage());
-            } catch (NotFoundException e) {
-                System.out.println(e.getMessage());
-            }
-            System.out.println("wollen sie weiter einlegen n/j");
-        } while (!IO.inputString().equals("n"));
-
+    public void warenEinlegen(String name,int anzahl,Kunde kunde) throws BestandNichtAusreichendException, NotFoundException {
+                eshopVerwaltung.warenlegen(name, anzahl, kunde);
     }
 
     public void kundEreignis() {
@@ -133,6 +118,10 @@ public class EshopCui {
 
     }
 
+    public WarenKorp kundeWaren(Kunde kunde){
+        return kunde.getWarenKorp();
+    }
+
     public List<Artikel> zeigeArtikel() {
         return eshopVerwaltung.artielzeigen();
     }
@@ -175,7 +164,7 @@ public class EshopCui {
                         if (IO.inputInt() == 2) {
                             run();
                         }
-                        warenEinlegen();
+
 
                         System.out.println("Weiter zu Kasse ==> j/n");
                         String ein = IO.inputString();

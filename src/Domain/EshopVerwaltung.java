@@ -50,18 +50,11 @@ public class EshopVerwaltung {
         return kundeVerwaltung.einlogen(na, pas);
     }
 
-    public Artikel warenlegen(String name, int anzahl, Kunde kunde) throws BestandNichtAusreichendException, NotFoundException {
-        try {
+    public void warenlegen(String name, int anzahl, Kunde kunde) throws BestandNichtAusreichendException, NotFoundException {
             Artikel artikel = artikelVerwaltung.findArtikel(name);
             artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
             kunde.getWarenKorp().addArtikle(artikel, anzahl);
-            return artikelVerwaltung.findArtikel(name);
-        } catch (NotFoundException e) {
-            throw e;
 
-        } catch (BestandNichtAusreichendException e) {
-            throw e;
-        }
     }
 
     public Einlogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {

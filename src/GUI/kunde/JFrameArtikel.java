@@ -6,15 +6,14 @@ import model.Artikel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 
 public class JFrameArtikel extends JFrame {
 
     private JPanel contentPane;
-    private JTable verfügbarenArtikelntextPane_1;
+    private JTable artikelsTablle;
     private JLabel verfügbarenArtikelLabel;
-    private JList<Artikel> ArtikelnhinzufügentextPane_1;
+    private JList<String> ArtikelnhinzufügentextPane_1;
     private JLabel ArtikelhinzufügenLabel;
     private JButton plusBtn;
     private JButton minusBtn;
@@ -30,7 +29,10 @@ public class JFrameArtikel extends JFrame {
     public JFrameArtikel() {
         initGUI();
         this.setVisible(true);
-        new KundenService(verfügbarenArtikelntextPane_1, ArtikelnhinzufügentextPane_1,defaultTableModel);
+        KundenService kundenService = new KundenService(this,mengetextField, ArtikelnhinzufügentextPane_1, defaultTableModel, artikelsTablle);
+        minusBtn.addActionListener(kundenService);
+        plusBtn.addActionListener(kundenService);
+        btnEinfgen.addActionListener(kundenService);
 
     }
 
@@ -49,7 +51,7 @@ public class JFrameArtikel extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
         {
-             defaultTableModel = new DefaultTableModel();
+            defaultTableModel = new DefaultTableModel();
             defaultTableModel.addColumn("name");
             defaultTableModel.addColumn("betsand");
             defaultTableModel.addColumn("preis");
@@ -58,9 +60,9 @@ public class JFrameArtikel extends JFrame {
             scrollPane.setBounds(10, 80, 200, 306);
             contentPane.add(scrollPane);
 
-            verfügbarenArtikelntextPane_1 = new JTable();
-            scrollPane.setViewportView(verfügbarenArtikelntextPane_1);
-            verfügbarenArtikelntextPane_1.setModel(defaultTableModel);
+            artikelsTablle = new JTable();
+            scrollPane.setViewportView(artikelsTablle);
+            artikelsTablle.setModel(defaultTableModel);
         }
         {
             verfügbarenArtikelLabel = new JLabel("Hier sind die Verf\u00FCgbaren Artikeln");
@@ -96,12 +98,13 @@ public class JFrameArtikel extends JFrame {
         }
         {
             mengetextField = new JTextField();
+            mengetextField.setText("0");
             mengetextField.setBounds(289, 400, 110, 19);
             contentPane.add(mengetextField);
             mengetextField.setColumns(10);
         }
         {
-            btnEinfgen = new JButton("Einf\u00FCgen");
+            btnEinfgen = new JButton("Einfeugen");
             btnEinfgen.setBackground(Color.lightGray);
             btnEinfgen.setFocusable(false);
             btnEinfgen.setFocusPainted(false);

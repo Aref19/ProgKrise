@@ -8,6 +8,7 @@ import exception.LoginFailedException;
 import exception.RegisitierungException;
 import model.Einlogen;
 import model.Kunde;
+import model.WarenKorp;
 
 
 import java.io.IOException;
@@ -65,8 +66,10 @@ public class KundeVerwaltung {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-
+    public WarenKorp getWarenKorb(Kunde kunde){
+       return kunde.getWarenKorp();
     }
 
 

@@ -90,17 +90,6 @@ public class ArtikelVerwaltung {
         throw new NotFoundException("Eingegeben Artikel Existiert leider nicht");
     }
 
-    public void artikelBestand(Artikel artikel, int anzahl) {
-        for (Artikel artikelSuchen : artikelList) {
-            if (artikelSuchen.equals(artikel)) {
-                artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
-            }
-        }
-    }
-
-    private boolean mengeReicht(Artikel artikel, int a) {
-        return artikel.getArtikelBestand() >= a;
-    }
 
     /**
      * Beim ArtikelBestandErhöhen Methode wird nur den Bestand erhöht durch ausgleich vom Artikel Nr.
@@ -108,12 +97,7 @@ public class ArtikelVerwaltung {
      * @param artikelNr
      * @param artikelBestand
      */
- /*   public void artikelBestandErhohen(int artikelNr, int artikelBestand) {
-        for (Artikel artikel : artikelList) {
-            if (artikel.getArtikelNr() == artikelNr)
-                artikel.setArtikelBestand(artikelBestand);
-        }
-    }*/
+
 
     /**
      * Die ArrayList wird wieder zurückgegeben.
@@ -150,8 +134,11 @@ public class ArtikelVerwaltung {
         // TODO Bestand prüfen und - wenn genug - reduzieren (sonst Exception werfen)
         for (Artikel artikelSuchen : artikelList) {
             if (artikelSuchen.equals(artikel)) {
-                artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
-                return;
+                if(artikelSuchen.getArtikelBestand() - anzahl>0){
+                    artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
+                    return;
+                }
+
             }
         }
         throw new BestandNichtAusreichendException(artikel);
