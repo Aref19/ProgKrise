@@ -7,18 +7,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public  class WarenKorp {
-    private HashMap<Artikel,Integer> warenList;
+public class WarenKorp {
+
+
+    private HashMap<Artikel, Integer> warenList;
+
     public WarenKorp() {
         this.warenList = new HashMap<>();
     }
-    public void addArtikle(Artikel artikel,int anzahl) {
+
+
+    public void addArtikle(Artikel artikel, int anzahl) {
         // TODO: Wenn Artikel schon im WK, dann Anzahl erhöhen
-        if(this.warenList.containsKey(artikel)){
-         int erhohteWert =    this.warenList.get(artikel) + anzahl;
-         this.warenList.put(artikel, erhohteWert);
-        }else{
-            this.warenList.put(artikel,anzahl);
+        if (this.warenList.containsKey(artikel)) {
+            int erhohteWert = this.warenList.get(artikel) + anzahl;
+            this.warenList.put(artikel, erhohteWert);
+        } else {
+            this.warenList.put(artikel, anzahl);
         }
 
     }
@@ -32,16 +37,16 @@ public  class WarenKorp {
     }
 
 
-
     public void removeAll() {
         this.warenList.clear();
     }
 
     public String toString() {
-    return "";
-     //   return gelekteWaren;
+        return "";
+        //   return gelekteWaren;
     }
-    public List<Artikel> HashtoList() {
+
+    public List<Artikel> hashtoList() {
         List<Artikel> ereignisList = new ArrayList<>();
         for (Map.Entry<Artikel, Integer> artikelIntegerEntry : warenList.entrySet()) {
             ereignisList.add(artikelIntegerEntry.getKey());

@@ -90,7 +90,7 @@ public class Artikel {
     }
     @Override
     public String toString() {
-        return artikelBezeichnung+"\t"+artikelBestand+"\t"+preis;
+        return artikelBezeichnung+"  "+artikelBestand+"   "+preis;
 
     }
 }

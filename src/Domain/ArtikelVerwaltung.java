@@ -134,7 +134,7 @@ public class ArtikelVerwaltung {
         // TODO Bestand prüfen und - wenn genug - reduzieren (sonst Exception werfen)
         for (Artikel artikelSuchen : artikelList) {
             if (artikelSuchen.equals(artikel)) {
-                if(artikelSuchen.getArtikelBestand() - anzahl>0){
+                if(artikelSuchen.getArtikelBestand() - anzahl>=0){
                     artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
                     return;
                 }
@@ -161,5 +161,14 @@ public class ArtikelVerwaltung {
         }
 
         return true;
+    }
+    public void returnWare(Artikel artikel,String anzah){
+        for(int i=0;i<artikelList.size();i++){
+            if(artikel.getArtikelBezeichnung().equals(artikelList.get(i).getArtikelBezeichnung())){
+                artikelList.get(i).setArtikelBestand((artikelList.get(i).getArtikelBestand()+Integer.parseInt(anzah)));
+                return;
+            }
+        }
+        artikelList.add(artikel);
     }
 }

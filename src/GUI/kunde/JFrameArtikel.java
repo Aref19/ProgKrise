@@ -1,7 +1,6 @@
 package GUI.kunde;
 
 import GUI.services.KundenService;
-import model.Artikel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,11 +19,12 @@ public class JFrameArtikel extends JFrame {
     private JTextField mengetextField;
     private JButton btnEinfgen;
     private JSeparator separator;
-    private JButton warenkorbBtn;
+    private JButton kasse;
     private JButton abbrechenBtn;
     private JLabel lArtikelLegenlb;
     private KundenService kundenService;
     private DefaultTableModel defaultTableModel;
+    private JButton entfernen;
 
     public JFrameArtikel() {
         initGUI();
@@ -33,6 +33,8 @@ public class JFrameArtikel extends JFrame {
         minusBtn.addActionListener(kundenService);
         plusBtn.addActionListener(kundenService);
         btnEinfgen.addActionListener(kundenService);
+        entfernen.addActionListener(kundenService);
+        kasse.addActionListener(kundenService);
 
     }
 
@@ -51,10 +53,7 @@ public class JFrameArtikel extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
         {
-            defaultTableModel = new DefaultTableModel();
-            defaultTableModel.addColumn("name");
-            defaultTableModel.addColumn("betsand");
-            defaultTableModel.addColumn("preis");
+
 
             JScrollPane scrollPane = new JScrollPane();
             scrollPane.setBounds(10, 80, 200, 306);
@@ -62,7 +61,7 @@ public class JFrameArtikel extends JFrame {
 
             artikelsTablle = new JTable();
             scrollPane.setViewportView(artikelsTablle);
-            artikelsTablle.setModel(defaultTableModel);
+
         }
         {
             verfügbarenArtikelLabel = new JLabel("Hier sind die Verf\u00FCgbaren Artikeln");
@@ -77,7 +76,7 @@ public class JFrameArtikel extends JFrame {
             contentPane.add(ArtikelnhinzufügentextPane_1);
         }
         {
-            ArtikelhinzufügenLabel = new JLabel("F\u00FCgen Sie Ihre Artikeln hinzu");
+            ArtikelhinzufügenLabel = new JLabel("WarenKorb");
             ArtikelhinzufügenLabel.setFont(new Font("Andalus", Font.ITALIC, 12));
             ArtikelhinzufügenLabel.setBounds(289, 60, 218, 13);
             contentPane.add(ArtikelhinzufügenLabel);
@@ -110,8 +109,18 @@ public class JFrameArtikel extends JFrame {
             btnEinfgen.setFocusPainted(false);
             btnEinfgen.setFont(new Font("Andalus", Font.ITALIC, 12));
             btnEinfgen.setBounds(new Rectangle(10, 10, 10, 10));
-            btnEinfgen.setBounds(69, 399, 85, 21);
+            btnEinfgen.setBounds(20, 399, 85, 21);
             contentPane.add(btnEinfgen);
+        }
+        {
+            entfernen = new JButton("entfernen");
+            entfernen.setBackground(Color.lightGray);
+            entfernen.setFocusable(false);
+            entfernen.setFocusPainted(false);
+            entfernen.setFont(new Font("Andalus", Font.ITALIC, 12));
+            entfernen.setBounds(new Rectangle(10, 10, 10, 10));
+            entfernen.setBounds(120, 399, 85, 21);
+            contentPane.add(entfernen);
         }
         {
             separator = new JSeparator();
@@ -119,12 +128,12 @@ public class JFrameArtikel extends JFrame {
             contentPane.add(separator);
         }
         {
-            warenkorbBtn = new JButton("Weiter zu Warenkorb");
-            warenkorbBtn.setFont(new Font("Andalus", Font.ITALIC, 12));
-            warenkorbBtn.setFocusPainted(false);
-            warenkorbBtn.setFocusable(false);
-            warenkorbBtn.setBounds(314, 453, 142, 20);
-            contentPane.add(warenkorbBtn);
+            kasse = new JButton("kasse");
+            kasse.setFont(new Font("Andalus", Font.ITALIC, 12));
+            kasse.setFocusPainted(false);
+            kasse.setFocusable(false);
+            kasse.setBounds(314, 453, 142, 20);
+            contentPane.add(kasse);
         }
         {
             abbrechenBtn = new JButton("Abbrechen");

@@ -49,12 +49,21 @@ public class EshopVerwaltung {
     public Einlogen kundenEinloggen(String na, String pas) throws LoginFailedException {
         return kundeVerwaltung.einlogen(na, pas);
     }
+    public void returnArikel(String artikel,String anzahl,Person person) throws NotFoundException {
+        Artikel artikel1=findArtikel(artikel);
+        artikelVerwaltung.returnWare(artikel1,anzahl);
+         ((Kunde) person).getWarenKorp().loschArtikle(artikel1);
+    }
 
-    public void warenlegen(String name, int anzahl, Kunde kunde) throws BestandNichtAusreichendException, NotFoundException {
-            Artikel artikel = artikelVerwaltung.findArtikel(name);
+    public void warenlegen(String name, int anzahl, Person kunde) throws BestandNichtAusreichendException, NotFoundException {
+            Artikel artikel=findArtikel(name);
             artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
-            kunde.getWarenKorp().addArtikle(artikel, anzahl);
+            ((Kunde )kunde).getWarenKorp().addArtikle(artikel, anzahl);
 
+    }
+
+    public Artikel findArtikel(String name) throws NotFoundException {
+        return artikelVerwaltung.findArtikel(name);
     }
 
     public Einlogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {

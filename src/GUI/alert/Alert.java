@@ -15,6 +15,9 @@ public class Alert extends JOptionPane {
     public  void showInfoMassage(){
         Alert.showMessageDialog(parent,massge,title,1);
     }
+    public  void showWolcamMassge(){
+        Alert.showMessageDialog(parent,massge);
+    }
 
 
 }

@@ -62,14 +62,16 @@ public class EshopCui {
 
     }
 
-    public void warenEinlegen(String name,int anzahl,Kunde kunde) throws BestandNichtAusreichendException, NotFoundException {
-                eshopVerwaltung.warenlegen(name, anzahl, kunde);
+    public void warenEinlegen(String name,int anzahl) throws BestandNichtAusreichendException, NotFoundException {
+                eshopVerwaltung.warenlegen(name, anzahl, person);
     }
 
     public void kundEreignis() {
 
     }
-
+    public void returnWare(String name,String annzahl) throws NotFoundException {
+        eshopVerwaltung.returnArikel(name,annzahl,person);
+    }
     public void einlagerung() {// Mitarbeiter einlagarung
 //        List<Artikel> artikels = new ArrayList<>();
         do {
@@ -117,9 +119,12 @@ public class EshopCui {
 
 
     }
+    public void setPerson(Person person){
+      EshopCui.person=person;
+    }
 
-    public WarenKorp kundeWaren(Kunde kunde){
-        return kunde.getWarenKorp();
+    public WarenKorp kundeWaren(){
+        return ((Kunde)person).getWarenKorp();
     }
 
     public List<Artikel> zeigeArtikel() {
@@ -195,7 +200,7 @@ public class EshopCui {
                                     }
                                     case 2 -> {
 
-                                        einlagerung();
+
 
                                     }
                                     case 3 -> {
