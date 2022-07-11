@@ -1,17 +1,25 @@
 package GUI.alert;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Style;
+import java.awt.*;
 
 public class Dialog extends JDialog implements Runnable {
-    private String massge;
-    private String title;
-    private  JFrame parent;
+    private final  String massge;
+    private final String title;
+    private final JFrame parent;
 
-
+    public Dialog(JFrame owner, String massge, String title, JFrame parent) {
+        super(owner);
+        this.massge = massge;
+        this.parent=owner;
+        this.title = title;
+    }
 
     @Override
     public void run() {
-      Dialog dialog=new Dialog().showWolcame();
+     Dialog  dialog= showWolcame();
         try {
             Thread.sleep(2000);
             dialog.dispose();
@@ -21,12 +29,12 @@ public class Dialog extends JDialog implements Runnable {
         }
     }
 
-    private Dialog showWolcame(){
-        this.massge = "Hallo in ProgKrise";
-        this.title = title;
-        this.parent = parent;
-        this.setSize(200,50);
-        this.add(new JLabel(massge));
+    private  Dialog showWolcame(){
+        JLabel messageLable=new JLabel(massge);
+        messageLable.setFont(new Font(massge, Font.ITALIC,12));
+        this.add(messageLable);
+        setBounds(300, 300, 300, 250);
+        this.pack();
         this.setVisible(true);
      return this;
     }

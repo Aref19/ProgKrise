@@ -11,7 +11,6 @@ import exception.LoginFailedException;
 import exception.NotFoundException;
 import model.Artikel;
 import model.Person;
-import model.WarenKorp;
 import ui.EshopCui;
 
 import javax.swing.*;
@@ -176,11 +175,11 @@ public class KundenService implements ActionListener {
                 person = eshopCui.kundenEinloggen(emailText.getText(), passText.getText()).person;
           /*  alert = new Alert(parent, "Hallo Herr :" + person.getVorName() + " ^_^", "Hallo");
             alert.showInfoMassage();*/
-            Runnable readable=new Dialog();
+            parent.dispose();
+          JFrameArtikel jFrameArtikel=  new JFrameArtikel();
+            Runnable readable=new Dialog(jFrameArtikel,"Hallo Herr/Frau :"+person.getVorName(),"Wolcame", parent);
             Thread thread=new Thread(readable);
             thread.start();
-            parent.dispose();
-            new JFrameArtikel();
             eshopCui.setPerson(person);
             return;
         } catch (LoginFailedException e) {
