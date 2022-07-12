@@ -50,4 +50,8 @@ public interface SaveRepo {
     public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList);
 
     public List<Mitarbeiter> loadMitarbeiter() throws IOException;
+
+    public void saveWarenKorb(WarenKorp warenKorpList,Person person);
+
+    public List<WarenKorp> loadWaren(Person person) throws IOException;
 }

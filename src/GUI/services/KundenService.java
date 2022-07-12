@@ -11,6 +11,7 @@ import exception.LoginFailedException;
 import exception.NotFoundException;
 import model.Artikel;
 import model.Person;
+import model.WarenKorp;
 import ui.EshopCui;
 
 import javax.swing.*;
@@ -24,7 +25,7 @@ public class KundenService implements ActionListener {
     private JTextField emailText;
     private JTextField mengeText;
     private JPasswordField passText;
-    private EshopCui eshopCui;
+    private static  EshopCui eshopCui=new EshopCui();
     private JFrame parent;
     private JRadioButton mitarbeiterRadio;
     private JRadioButton kundeRadio;
@@ -43,19 +44,19 @@ public class KundenService implements ActionListener {
         this.parent = wilcomen;
         this.emailText = emailText;
         this.passText = passText;
-        eshopCui = new EshopCui();
+
     }
 
     public KundenService(JFrame jFrameArtikel, JTextField mengeText, JList<String> gelegteArtikel, DefaultTableModel defaultTableModel, JTable jtable) {
         this.verfügbarenArtikelntextPane_1 = verfügbarenArtikelntextPane_1;
         this.mengeText = mengeText;
         this.gelegteArtikel = gelegteArtikel;
-        eshopCui = new EshopCui();
+
         this.parent = jFrameArtikel;
         this.defaultTableModel = defaultTableModel;
         this.table = jtable;
         this.model = new DefaultListModel<>();
-        model.addElement("name"+"    " +"bestand" +"    "+ "preis");
+        model.addElement("name" + "    " + "bestand" + "    " + "preis");
         putArtikel();
         anzahl = 0;
     }
@@ -64,9 +65,9 @@ public class KundenService implements ActionListener {
         this.gelegteArtikel = contentList;
         this.parent = jFrameKasse;
         this.model = new DefaultListModel<>();
-        model.addElement("name"+"    " +"bestand" +"    "+ "preis");
-        eshopCui=new EshopCui();
-        zahlen();
+        model.addElement("name" + "    " + "bestand" + "    " + "preis");
+
+        kasse();
     }
 
     @Override
@@ -89,23 +90,37 @@ public class KundenService implements ActionListener {
         } else if (e.getActionCommand().equals("kasse")) {
             parent.dispose();
             new JFrameKasse();
-
         } else if (e.getActionCommand().equals("entfernen")) {
             entfernenFromKorp();
+        } else if (e.getActionCommand().equals("Schliessen")) {
+            saveWaren();
         }
     }
 
-    private void zahlen() {
-       HashMap<Artikel,Integer> artikels= eshopCui.kundeWaren().get();
-       List<Artikel> artikelList=eshopCui.kundeWaren().hashtoList();
-       double gesamtpreis=0;
-        for(int i=0;i<artikelList.size();i++){
-            Artikel artikel=artikelList.get(i);
-            model.addElement(artikel.getArtikelBezeichnung()+"     "+artikels.get(artikel)+"    "+(artikel.getPreis()*artikels.get(artikel)));
-            gesamtpreis+=(artikel.getPreis()*artikels.get(artikel));
+    private void saveWaren() {
+        eshopCui.saveWaren();
+        parent.dispose();
+    }
+
+    private void kasse()  {
+        List<Artikel> artikelList = null;
+        HashMap<Artikel, Integer> artikels=null;
+        WarenKorp warenKorp;
+        try {
+            warenKorp = eshopCui.kundeWaren();
+            artikels=warenKorp.get();
+            artikelList = warenKorp.hashtoList();
+        } catch (NotFoundException e) {
+            e.getMessage();
         }
-        model.addElement("----------------------------------");
-        model.addElement("gesamt Preis :  "+gesamtpreis);
+        double gesamtpreis = 0;
+        for (int i = 0; i < artikelList.size(); i++) {
+            Artikel artikel = artikelList.get(i);
+            model.addElement(artikel.getArtikelBezeichnung() + "     " + artikels.get(artikel) + "    " + (artikel.getPreis() * artikels.get(artikel)));
+            gesamtpreis += (artikel.getPreis() * artikels.get(artikel));
+        }
+        model.addElement("--------------------------------------------");
+        model.addElement("gesamt Preis :  " + gesamtpreis);
         gelegteArtikel.setModel(model);
     }
 
@@ -171,14 +186,13 @@ public class KundenService implements ActionListener {
         try {
             if (mitarbeiterRadio.isSelected()) {
                 eshopCui.mitarbeiterEinloggen(emailText.getText(), passText.getText());
-            } else
+            } else {
                 person = eshopCui.kundenEinloggen(emailText.getText(), passText.getText()).person;
-          /*  alert = new Alert(parent, "Hallo Herr :" + person.getVorName() + " ^_^", "Hallo");
-            alert.showInfoMassage();*/
+            }
             parent.dispose();
-          JFrameArtikel jFrameArtikel=  new JFrameArtikel();
-            Runnable readable=new Dialog(jFrameArtikel,"Hallo Herr/Frau :"+person.getVorName(),"Wolcame", parent);
-            Thread thread=new Thread(readable);
+            JFrameArtikel jFrameArtikel = new JFrameArtikel();
+            Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
+            Thread thread = new Thread(readable);
             thread.start();
             eshopCui.setPerson(person);
             return;

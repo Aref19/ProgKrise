@@ -166,7 +166,7 @@ public class SaveFile implements SaveRepo {
         List<Kunde> kundeList = new ArrayList<>();
         try {
             String data = bufferedReader.readLine();
-            while (data != null&&!data.isEmpty()) {
+            while (data != null && !data.isEmpty()) {
                 String[] content = data.split(";");
                 kundeList.add(new Kunde(content[0], content[1], new Adresse(
                         Integer.parseInt(content[2])
@@ -200,17 +200,49 @@ public class SaveFile implements SaveRepo {
 
         try {
             String data = bufferedReader.readLine();
-            while (data !=null){
-                String [] content= data.split(";");
-                mitarbeiterList.add(new Mitarbeiter(UUID.fromString( content[0]),content[1],content[2],content[3],content[4]));
-                data =bufferedReader.readLine();
+            while (data != null) {
+                String[] content = data.split(";");
+                mitarbeiterList.add(new Mitarbeiter(UUID.fromString(content[0]), content[1], content[2], content[3], content[4]));
+                data = bufferedReader.readLine();
             }
 
-        }catch (IOException e){
-           throw e;
+        } catch (IOException e) {
+            throw e;
         }
 
         return mitarbeiterList;
+    }
+
+    @Override
+    public void saveWarenKorb(WarenKorp warenKorpList, Person person) {
+        try {
+            for (Artikel artikel : warenKorpList.hashtoList()) {
+                WarenKorp warenKorp1 = new WarenKorp(person.getEmail(), artikel.getArtikelBezeichnung(),
+                        warenKorpList.get().get(artikel) * artikel.getPreis(), warenKorpList.get().get(artikel));
+                bufferedWriter.append((warenKorp1 + System.lineSeparator()));
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<WarenKorp> loadWaren(Person person) throws IOException {
+        List<WarenKorp> WarenKorp = new ArrayList<>();
+        try {
+            String data = bufferedReader.readLine();
+            while (data != null&& !data.isEmpty()) {
+                String[] content = data.split(";");
+                if (person.getEmail().equals(content[0])) {
+                    WarenKorp.add(new WarenKorp(content[0], content[1], Double.parseDouble(content[2]), Integer.parseInt(content[3])));
+                }
+                data = bufferedReader.readLine();
+            }
+        } catch (IOException e) {
+            throw e;
+        }
+        return WarenKorp;
     }
 
     @Override

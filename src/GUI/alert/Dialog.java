@@ -10,7 +10,7 @@ public class Dialog extends JDialog implements Runnable {
     private final String title;
     private final JFrame parent;
 
-    public Dialog(JFrame owner, String massge, String title, JFrame parent) {
+    public Dialog(JFrame owner, String massge, String title) {
         super(owner);
         this.massge = massge;
         this.parent=owner;

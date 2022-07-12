@@ -18,6 +18,7 @@ public class JFrameKasse extends JFrame {
         initGUI();
         this.setVisible(true);
         KundenService kundenService = new KundenService(this, contentList);
+        btnSchlieen.addActionListener(kundenService);
     }
 
     public static void main(String[] args) {
@@ -43,7 +44,7 @@ public class JFrameKasse extends JFrame {
             contentPane.add(lblKasse);
         }
         {
-            btnSchlieen = new JButton("Schlie\u00DFen");
+            btnSchlieen = new JButton("Schliessen");
             btnSchlieen.setFont(new Font("Andalus", Font.ITALIC, 11));
             btnSchlieen.setFocusable(false);
             btnSchlieen.setFocusPainted(false);

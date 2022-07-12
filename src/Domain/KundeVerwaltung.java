@@ -68,9 +68,7 @@ public class KundeVerwaltung {
         }
     }
 
-    public WarenKorp getWarenKorb(Kunde kunde){
-       return kunde.getWarenKorp();
-    }
+
 
 
 }

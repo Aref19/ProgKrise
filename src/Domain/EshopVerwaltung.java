@@ -1,8 +1,6 @@
 package Domain;
 
 
-
-
 import exception.*;
 import model.*;
 
@@ -18,6 +16,7 @@ public class EshopVerwaltung {
     private KundeVerwaltung kundeVerwaltung;
     private MitarbeiterVerwaltung mitarbeiterVerwaltung;
     private RechnungWarenkorb rechnungWarenkorb;
+    private WarenkorbVerwaltung warenkorbVerwaltung;
 
     private EreignisVerwaltung ereignisVerwaltung;
 
@@ -26,7 +25,7 @@ public class EshopVerwaltung {
         kundeVerwaltung = new KundeVerwaltung();
         mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
         rechnungWarenkorb = new RechnungWarenkorb();
-
+        warenkorbVerwaltung = new WarenkorbVerwaltung();
         ereignisVerwaltung = new EreignisVerwaltung();
 
     }
@@ -41,24 +40,27 @@ public class EshopVerwaltung {
      *
      * @param kunde
      */
-    public void kundenRegistrieren(Kunde kunde) throws INcorrectEmailException,RegisitierungException {
+    public void kundenRegistrieren(Kunde kunde) throws INcorrectEmailException, RegisitierungException {
         Person.checkEmail(kunde.getEmail());
         kundeVerwaltung.registrieren(kunde);
     }
 
     public Einlogen kundenEinloggen(String na, String pas) throws LoginFailedException {
-        return kundeVerwaltung.einlogen(na, pas);
-    }
-    public void returnArikel(String artikel,String anzahl,Person person) throws NotFoundException {
-        Artikel artikel1=findArtikel(artikel);
-        artikelVerwaltung.returnWare(artikel1,anzahl);
-         ((Kunde) person).getWarenKorp().loschArtikle(artikel1);
+        Einlogen einlogen= kundeVerwaltung.einlogen(na, pas);
+        warenkorbVerwaltung.loadWaren(einlogen.person);
+        return einlogen;
     }
 
-    public void warenlegen(String name, int anzahl, Person kunde) throws BestandNichtAusreichendException, NotFoundException {
-            Artikel artikel=findArtikel(name);
-            artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
-            ((Kunde )kunde).getWarenKorp().addArtikle(artikel, anzahl);
+    public void returnArikel(String artiekelName, String anzahl, Person person) throws NotFoundException {
+        Artikel artikel = findArtikel(artiekelName);
+        artikelVerwaltung.returnWare(artikel, anzahl);
+        warenkorbVerwaltung.returnArtikel(person, artikel);
+    }
+
+    public void warenlegen(String name, int anzahl, Person person) throws BestandNichtAusreichendException, NotFoundException {
+        Artikel artikel = findArtikel(name);
+        artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
+        warenkorbVerwaltung.addArikel(person, artikel, anzahl);
 
     }
 
@@ -68,7 +70,7 @@ public class EshopVerwaltung {
 
     public Einlogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {
 
-            return mitarbeiterVerwaltung.mitarbeiterUeberprufen(email, password);
+        return mitarbeiterVerwaltung.mitarbeiterUeberprufen(email, password);
 
     }
 
@@ -84,7 +86,6 @@ public class EshopVerwaltung {
 
     public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email)
             throws RegisitierungException, INcorrectEmailException, IOException {
-
         Person.checkEmail(email);
         mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort, email);
 
@@ -100,5 +101,19 @@ public class EshopVerwaltung {
         }
         return rechnungWarenkorb.creatRec(kunde, artikels);
     }
+
+    public WarenKorp kundeWaren(Person person) throws NotFoundException {
+        List<WarenKorp> warenKorpList=warenkorbVerwaltung.getSavedWaren();
+        for(int i=0;i<warenKorpList.size();i++){
+          Artikel artikel=  findArtikel(warenKorpList.get(i).getNameArtikel());
+            warenkorbVerwaltung.getWarenKorb(person).addArtikle(artikel,warenKorpList.get(i).getAnzahl());
+        }
+        return warenkorbVerwaltung.getWarenKorb(person);
+    }
+
+    public void saveWaren(Person person){
+        warenkorbVerwaltung.saveWarenKorb(warenkorbVerwaltung.getWarenKorb(person),person);
+    }
+
 
 }
