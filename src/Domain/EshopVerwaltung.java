@@ -19,7 +19,11 @@ public class EshopVerwaltung {
     private WarenkorbVerwaltung warenkorbVerwaltung;
 
     private EreignisVerwaltung ereignisVerwaltung;
-
+    /**
+     ToDo if kaufen delete all artikel in waren korp from warenkorbVerwaltung.getSavedWaren() then save
+     ToDo if the custmor delte one item from waren korp
+     ToDo if make ereignis by bey and change Artikel Anzahl
+     **/
     public EshopVerwaltung() {
         artikelVerwaltung = new ArtikelVerwaltung();
         kundeVerwaltung = new KundeVerwaltung();
@@ -105,14 +109,46 @@ public class EshopVerwaltung {
     public WarenKorp kundeWaren(Person person) throws NotFoundException {
         List<WarenKorp> warenKorpList=warenkorbVerwaltung.getSavedWaren();
         for(int i=0;i<warenKorpList.size();i++){
-          Artikel artikel=  findArtikel(warenKorpList.get(i).getNameArtikel());
-            warenkorbVerwaltung.getWarenKorb(person).addArtikle(artikel,warenKorpList.get(i).getAnzahl());
+            if(warenKorpList.get(i).getEmail().equals(person.getEmail())){// nur waren von kund
+                Artikel artikel=  findArtikel(warenKorpList.get(i).getNameArtikel());
+                warenkorbVerwaltung.getWarenKorb(person).addArtikle(artikel,warenKorpList.get(i).getAnzahl());
+            }
         }
         return warenkorbVerwaltung.getWarenKorb(person);
     }
 
     public void saveWaren(Person person){
-        warenkorbVerwaltung.saveWarenKorb(warenkorbVerwaltung.getWarenKorb(person),person);
+        List<Artikel> artikels=((Kunde)person).getWarenKorp().hashtoList();
+        List<WarenKorp> warenKorpList= warenkorbVerwaltung.getSavedWaren();
+        boolean save=false;
+        for (int i=0;i<artikels.size();i++){
+            if(warenKorpList.size()>0){
+                for (int j=0;j<warenKorpList.size();j++){
+                    if(warenKorpList.get(j).getEmail().equals(person.getEmail())){
+                        if(artikels.get(i).getArtikelBezeichnung().equals(warenKorpList.get(j).getNameArtikel())){
+                            int anzahl=((Kunde)person).getWarenKorp().get().get(artikels.get(i));
+                            warenKorpList.add(new WarenKorp(person.getEmail(),warenKorpList.get(j).getNameArtikel(),
+                                    anzahl*artikels.get(i).getPreis(),anzahl));
+                            warenKorpList.remove(j);
+                            save=true;
+                        }
+                    }
+                }
+                if(!save){// if email nicht vorhanden
+                    int anzahl=((Kunde)person).getWarenKorp().get().get(artikels.get(i));
+                    warenKorpList.add(new WarenKorp(person.getEmail(),artikels.get(i).getArtikelBezeichnung(),
+                            anzahl*artikels.get(i).getPreis(),anzahl));
+                    save=false;
+                }
+
+            }else {// if data ist leer
+                int anzahl=((Kunde)person).getWarenKorp().get().get(artikels.get(i));
+                warenKorpList.add(new WarenKorp(person.getEmail(),artikels.get(i).getArtikelBezeichnung(),
+                        anzahl*artikels.get(i).getPreis(),anzahl));
+            }
+
+        }
+        warenkorbVerwaltung.saveWarenKorb(warenKorpList);
     }
 
 

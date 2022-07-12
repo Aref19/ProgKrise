@@ -214,14 +214,12 @@ public class SaveFile implements SaveRepo {
     }
 
     @Override
-    public void saveWarenKorb(WarenKorp warenKorpList, Person person) {
+    public void saveWarenKorb(List<WarenKorp> warenKorpList) {
         try {
-            for (Artikel artikel : warenKorpList.hashtoList()) {
-                WarenKorp warenKorp1 = new WarenKorp(person.getEmail(), artikel.getArtikelBezeichnung(),
-                        warenKorpList.get().get(artikel) * artikel.getPreis(), warenKorpList.get().get(artikel));
-                bufferedWriter.append((warenKorp1 + System.lineSeparator()));
+            for (WarenKorp warenkorp : warenKorpList) {
+                    WarenKorp warenKorp1 = warenkorp;
+                    bufferedWriter.write((warenKorp1 + System.lineSeparator()));
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -232,12 +230,11 @@ public class SaveFile implements SaveRepo {
         List<WarenKorp> WarenKorp = new ArrayList<>();
         try {
             String data = bufferedReader.readLine();
-            while (data != null&& !data.isEmpty()) {
+            while (data != null && !data.isEmpty()) {
                 String[] content = data.split(";");
-                if (person.getEmail().equals(content[0])) {
-                    WarenKorp.add(new WarenKorp(content[0], content[1], Double.parseDouble(content[2]), Integer.parseInt(content[3])));
-                }
+                WarenKorp.add(new WarenKorp(content[0], content[1], Double.parseDouble(content[2]), Integer.parseInt(content[3])));
                 data = bufferedReader.readLine();
+
             }
         } catch (IOException e) {
             throw e;

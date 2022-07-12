@@ -128,6 +128,7 @@ public class EshopCui {
 
     public WarenKorp kundeWaren() throws NotFoundException {
 
+
             return eshopVerwaltung.kundeWaren((Kunde) person);
 
 

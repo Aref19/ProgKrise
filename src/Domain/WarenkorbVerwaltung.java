@@ -10,21 +10,23 @@ import model.WarenKorp;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class WarenkorbVerwaltung {
     //ToDo
-    private final String filename="warenkorb.txt";
+    private final String filename = "warenkorb.txt";
     private SaveRepo saveRepo;
-    private List<WarenKorp> warenKorpList;
-    public WarenkorbVerwaltung(){
-        saveRepo=new SaveFile();
+
+    private List<WarenKorp> allkundWaren;
+
+    public WarenkorbVerwaltung() {
+        saveRepo = new SaveFile();
         saveRepo.creatFile(filename);
-        warenKorpList=new ArrayList<>();
+        allkundWaren = new ArrayList<>();
+
     }
 
-    public void addArikel(Person person, Artikel artikel,int anzahl) throws NotFoundException {
+    public void addArikel(Person person, Artikel artikel, int anzahl) throws NotFoundException {
         ((Kunde) person).getWarenKorp().addArtikle(artikel, anzahl);
     }
 
@@ -32,14 +34,15 @@ public class WarenkorbVerwaltung {
         ((Kunde) person).getWarenKorp().loschArtikle(artikel);
     }
 
-    public WarenKorp getWarenKorb(Person kunde){
-        return ((Kunde)kunde).getWarenKorp();
+    public WarenKorp getWarenKorb(Person kunde) {
+
+        return ((Kunde) kunde).getWarenKorp();
     }
 
-    public void saveWarenKorb(WarenKorp warenKorp,Person person) {
+    public void saveWarenKorb(List<WarenKorp> warenKorp) {
         try {
             saveRepo.openForWrite(filename);
-            saveRepo.saveWarenKorb(warenKorp,person);
+            saveRepo.saveWarenKorb(warenKorp);
             saveRepo.closeWrite();
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,18 +50,18 @@ public class WarenkorbVerwaltung {
 
     }
 
-    public void loadWaren(Person person){
+    public void loadWaren(Person  person) {
         try {
             saveRepo.openForRead(filename);
-            warenKorpList= saveRepo.loadWaren(person);
+            allkundWaren = saveRepo.loadWaren(person);
+
             saveRepo.closRead();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public List<WarenKorp> getSavedWaren(){
-            return warenKorpList;
+    public List<WarenKorp> getSavedWaren() {
+        return allkundWaren;
 
     }
 }
