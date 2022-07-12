@@ -18,12 +18,12 @@ public class LogIn extends JFrame {
         setContentPane(loginPanel);
         setVisible(true);
 
-        anmeldenButton.addActionListener(new LoginListener(emailInput,passInput));
+        anmeldenButton.addActionListener(new LoginListener(emailInput, passInput));
         regisierenButton.addActionListener(new LoginListener());
     }
 
     public static void main(String[] args) {
-        LogIn logIn=new LogIn("ds");
+        LogIn logIn = new LogIn("ds");
     }
 
 

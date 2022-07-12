@@ -1,6 +1,7 @@
-package Gui;
+package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class einlagerungMitarbeiter {
     private JPanel ArtikelRootPanel;
@@ -9,4 +10,5 @@ public class einlagerungMitarbeiter {
     private JTextField BestandArtikelTextField;
     private JButton artikelEinfuegenbutton;
     private JButton zuruckZuMenu;
+
 }

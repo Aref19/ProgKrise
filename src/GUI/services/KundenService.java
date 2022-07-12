@@ -16,8 +16,6 @@ public class KundenService implements ActionListener {
     private JPasswordField passwordField;
     private EshopCui eshopCui;
     Wilkommen willkommenPanel;
-
-
     public KundenService(Wilkommen willkommenPanel, JTextField emailText, JPasswordField passwordField) {
         this.willkommenPanel=willkommenPanel;
         eshopCui = new EshopCui();

@@ -34,8 +34,10 @@ public class ArtikelVerwaltung  {
     public void artikelAnlegen( int artikelBestand, String artikelBezeichnung,double preis) throws IOException { //Artikelerschaffen
         Artikel artikel = new Artikel(artikelBezeichnung, artikelBestand,preis);
 
-           checkArikel(artikelBezeichnung,artikelBestand);
+        if( checkArikel(artikelBezeichnung,artikelBestand)){
 
+        }else
+            artikelList.add(new Artikel(artikelBezeichnung,artikelBestand,preis));
           saveAtrikel( artikelList);
 
     }
@@ -150,13 +152,14 @@ public class ArtikelVerwaltung  {
         }
         throw new BestandNichtAusreichendException(artikel);
     }
-    private void checkArikel(String name,int anzahl){
+    private boolean checkArikel(String name,int anzahl){
         Artikel artikel = null;
         for (Artikel a:artikelList) {
             if (a.getArtikelBezeichnung().equals(name)){
                  artikel=a;
 
-            }
+            }else
+                return false;
         }
         if(artikel!=null){
             artikelList.remove(artikel);
@@ -165,6 +168,6 @@ public class ArtikelVerwaltung  {
             System.out.println("add");
         }
 
-
+        return true;
     }
 }

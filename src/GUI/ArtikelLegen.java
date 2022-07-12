@@ -3,7 +3,10 @@ package GUI;
 import GUI.services.KundenService;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.util.Locale;
 
 public class ArtikelLegen extends JFrame {
     private JLabel artikelLegenLabel;
@@ -18,13 +21,14 @@ public class ArtikelLegen extends JFrame {
     private JButton abbrechenButton;
     private JPanel rootPanel;
 
-    public ArtikelLegen(String title){
+    public ArtikelLegen(String title) {
         super(title);
         this.setContentPane(rootPanel);
-        this.setLocation(600,400);
+        this.setLocation(600, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();// damit die geöffnet wird
         this.setVisible(true);
 
     }
+
 }

@@ -6,7 +6,7 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.util.Locale;
 
-public class KundeRegistrieren extends  JFrame {
+public class KundeRegistrieren extends JFrame {
     private JPanel rootPanel;
     private JTextField vornameTxtField;
     private JTextField nachnametextField2;
@@ -26,14 +26,15 @@ public class KundeRegistrieren extends  JFrame {
     private JPasswordField passwordField1;
     private JTextField textField1;
 
-    public KundeRegistrieren(String title)  {
+    public KundeRegistrieren(String title) {
         super(title);
         this.setContentPane(rootPanel);
-        this.setLocation(600,400);
+        this.setLocation(600, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();// damit die geöffnet wird
         this.setVisible(true);
     }
+
 }
 
 

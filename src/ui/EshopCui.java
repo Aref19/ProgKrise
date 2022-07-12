@@ -115,8 +115,8 @@ public class EshopCui {
 
     }
 
-    public void einlagerung() {// Mitarbeiter einlagarung
-//        List<Artikel> artikels = new ArrayList<>();
+    public void einlagerung() {
+
         do {
             System.out.println("Name des Artikels :");
             String name = IO.inputString();
@@ -124,7 +124,6 @@ public class EshopCui {
             int bestand = IO.inputInt();
             System.out.println("Der Preis ist: ");
             double preis = IO.inputdoubel();
-//            artikels.add(new Artikel(2, na, be, pr));
             try {
                 eshopVerwaltung.artikelAnlegen((Mitarbeiter) person, new Artikel( name, bestand, preis));
             }catch (IOException e){
@@ -187,7 +186,7 @@ public class EshopCui {
 
     public void run() throws IOException {
         do {
-           // persistentMitarbeiter.ladeMitarbeiter();
+            //persistentMitarbeiter.ladeMitarbeiter();
             System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Einlogen ");
             int s = IO.inputInt();
             switch (s) {
@@ -219,7 +218,7 @@ public class EshopCui {
                     }
                 }
                 case 3 -> {
-                    if (mitarbeiterEinloggen("","")) {
+                    if (mitarbeiterEinloggen("Aj@gmail.com","w")) {
 
                         do {
                             System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung\n3-Sortierten \n 4 - abmelden" + "\t" + "\n5-Einlagerung");

@@ -1,6 +1,7 @@
-package Gui;
+package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class mainMitarbeiter extends JFrame {
     private JPanel rootPanel;
@@ -12,7 +13,6 @@ public class mainMitarbeiter extends JFrame {
     private JButton mainMeanu;
     private JLabel passwort;
     private JTextField textField1;
-
 
 
 }

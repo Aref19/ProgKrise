@@ -41,9 +41,7 @@ public class MitarbeiterVerwaltung{
 
     public void mitarbeiterAnlegen(String name, String nachname, String passwort,String email) throws RegisitierungException{
             for (Mitarbeiter listAusgeben : mitarbeiterList) {
-                if (name.equals(listAusgeben.getVorName())
-                        && nachname.equals(listAusgeben.getNachName())) {
-
+                if (email.equals(listAusgeben.getEmail() != listAusgeben.getEmail())) {
                     throw new RegisitierungException("Diese Kombination von Namen und Nachnamen esistiert Bereits schon");
                 }
             }
