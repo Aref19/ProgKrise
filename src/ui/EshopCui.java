@@ -18,12 +18,7 @@ public class EshopCui {
     static Person person;
 
     public static void main(String[] args) throws CustomIoException {
-        EshopCui eshopCui = new EshopCui();
-        try {
-            eshopCui.run();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     /**
@@ -127,9 +122,7 @@ public class EshopCui {
     }
 
     public WarenKorp kundeWaren() throws NotFoundException {
-
-
-            return eshopVerwaltung.kundeWaren((Kunde) person);
+            return eshopVerwaltung.kundeWaren(person);
 
 
     }
@@ -154,86 +147,10 @@ public class EshopCui {
         }
     }
 
-    public void saveWaren(){
-        eshopVerwaltung.saveWaren(person);
+    public void saveWaren(boolean buystatus){
+        eshopVerwaltung.saveWaren(person,buystatus);
     }
 
-    public void run() throws IOException {
-        do {
-            // persistentMitarbeiter.ladeMitarbeiter();
-            System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Einlogen ");
-            int s = IO.inputInt();
-            switch (s) {
-                case 1 -> {
-                    //kundeRegistrieren();
-                }
-                case 2 -> {
-                    Einlogen einlogen = null;
-                    try {
-                        einlogen = kundenEinloggen("", "");
-                    } catch (LoginFailedException e) {
-                        e.printStackTrace();
-                    }
-                    if (einlogen.gefunden) {
-                        person = einlogen.person;
-                        System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb: 1 oder Abmelden: 2");
-                        if (IO.inputInt() == 2) {
-                            run();
-                        }
 
-
-                        System.out.println("Weiter zu Kasse ==> j/n");
-                        String ein = IO.inputString();
-                        if (ein.equals("j")) {
-                            System.out.println("Hier können Sie Ihre Rechnung sehen : \n");
-                            rechnung();
-
-                            System.out.println("Der Ereignis ist jetzt: ");
-                            kundEreignis();
-                            System.out.println("Vielen Dank für Ihren Einkauf");
-
-                        } else System.out.println("Vielen Dank Ihre Warenkorb ist leer");
-                    }
-                }
-                case 3 -> {
-                    try {
-                        if (mitarbeiterEinloggen("", "")) {
-
-                            do {
-                                System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung\n3-Sortierten \n 4 - abmelden" + "\t" + "\n5-Einlagerung");
-                                int input = IO.inputInt();
-                                if (input == 4) {
-                                    run();
-                                }
-                                switch (input) {
-                                    case 1 -> {
-                                        mitarbeiterRegestieren();
-                                    }
-                                    case 2 -> {
-
-
-                                    }
-                                    case 3 -> {
-                                        zeigeArtikel();
-                                        System.out.println("wie wollen sie es sortieren");
-                                        int sort = IO.inputInt();
-                                        boolean artsort;
-                                        artsort = sort == 1 ? true : false;
-                                        artikelSortieren(artsort);
-                                    }
-
-                                }
-                                System.out.println("Wollen Sie als Mitarbeiter benden n/j");
-                            } while (IO.inputString().equals("n"));
-                        }
-                    } catch (LoginFailedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-            System.out.println("Wollen Sie System beenden n/j");
-        } while (IO.inputString().equals("n"));
-    }
 }
 
