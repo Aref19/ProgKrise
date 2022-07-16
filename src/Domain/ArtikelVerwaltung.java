@@ -42,7 +42,7 @@ public class ArtikelVerwaltung {
 
     }
 
-    private void saveAtrikel(List<Artikel> artikelList) {
+    public void saveAtrikel(List<Artikel> artikelList) {
         try {
             saveRepo.openForWrite(filename);
             saveRepo.saveArtikel(artikelList);
@@ -131,7 +131,7 @@ public class ArtikelVerwaltung {
 
 
     public void artikelBestandReduzieren(Artikel artikel, int anzahl) throws BestandNichtAusreichendException {
-        // TODO Bestand prüfen und - wenn genug - reduzieren (sonst Exception werfen)
+
         for (Artikel artikelSuchen : artikelList) {
             if (artikelSuchen.equals(artikel)) {
                 if(artikelSuchen.getArtikelBestand() - anzahl>=0){

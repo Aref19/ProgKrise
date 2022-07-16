@@ -13,11 +13,15 @@ public class Alert extends JOptionPane {
         this.title=title;
     }
     public  void showInfoMassage(){
-        Alert.showMessageDialog(parent,massge,title,1);
+        this.showMessageDialog(parent,massge,title,1);
     }
     public  void showWolcamMassge(){
-        Alert.showMessageDialog(parent,massge);
+        this.showMessageDialog(parent,massge);
     }
 
+    public  int vorsicht(){
+     int option =  this.showConfirmDialog (parent,massge,title,JOptionPane.YES_NO_OPTION);
+     return option;
+    }
 
 }

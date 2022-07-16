@@ -25,7 +25,7 @@ public class KundenService implements ActionListener {
     private JTextField emailText;
     private JTextField mengeText;
     private JPasswordField passText;
-    private static  EshopCui eshopCui=new EshopCui();
+    private static EshopCui eshopCui = new EshopCui();
     private JFrame parent;
     private JRadioButton mitarbeiterRadio;
     private JRadioButton kundeRadio;
@@ -51,7 +51,6 @@ public class KundenService implements ActionListener {
         this.verfügbarenArtikelntextPane_1 = verfügbarenArtikelntextPane_1;
         this.mengeText = mengeText;
         this.gelegteArtikel = gelegteArtikel;
-
         this.parent = jFrameArtikel;
         this.defaultTableModel = defaultTableModel;
         this.table = jtable;
@@ -93,22 +92,36 @@ public class KundenService implements ActionListener {
         } else if (e.getActionCommand().equals("entfernen")) {
             entfernenFromKorp();
         } else if (e.getActionCommand().equals("Schliessen")) {
-            saveWaren();
+            Alert alert = new Alert(parent, "wollen sie die sache speichern falls ja kann nicht mehr remove", "Vorsicht");
+            int option = alert.vorsicht();
+            if (option == JOptionPane.YES_OPTION) {
+                saveWarenWarenKorb(false);
+            }
+            parent.dispose();
+        } else if (e.getActionCommand().equals("Kaufen")) {
+
+            sacheKaufen();
         }
     }
 
-    private void saveWaren() {
-        eshopCui.saveWaren();
+    private void sacheKaufen() {
+        saveWarenWarenKorb(true);
+        Alert alert=new Alert(parent,"Danke für die Einkauf","^-^");
+        alert.showInfoMassage();
         parent.dispose();
     }
 
-    private void kasse()  {
+    private void saveWarenWarenKorb(boolean buyStatus) {
+        eshopCui.saveWaren(buyStatus);
+    }
+
+    private void kasse() {
         List<Artikel> artikelList = null;
-        HashMap<Artikel, Integer> artikels=null;
+        HashMap<Artikel, Integer> artikels = null;
         WarenKorp warenKorp;
         try {
             warenKorp = eshopCui.kundeWaren();
-            artikels=warenKorp.get();
+            artikels = warenKorp.get();
             artikelList = warenKorp.hashtoList();
         } catch (NotFoundException e) {
             e.getMessage();
