@@ -1,9 +1,13 @@
 package GUI;
 
+import GUI.alert.Alert;
+import GUI.kunde.JFRegistieren;
 import GUI.services.KundenService;
+import exception.LoginFailedException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Wilcomen extends JFrame {
     private Container container;
@@ -14,7 +18,7 @@ public class Wilcomen extends JFrame {
     private JButton anmeldJButton;
     private JButton registereJButton;
     private Panel rootPannel;
-    private  ButtonGroup buttonGroup;
+    private ButtonGroup buttonGroup;
     private KundenService kundenService;
     JRadioButton mitarbeiterRadio;
     JRadioButton kundRadio;
@@ -26,9 +30,9 @@ public class Wilcomen extends JFrame {
         getContentPane().setLayout(null);
         initialize();
         this.setVisible(true);
-        kundenService=new KundenService(this,emailText,passText,mitarbeiterRadio,kundRadio);
-        anmeldJButton.addActionListener(kundenService);
-        registereJButton.addActionListener(kundenService);
+        kundenService = new KundenService();
+        anmeldJButton.addActionListener(anmelden());
+        registereJButton.addActionListener(registrieren());
     }
 
     public void initialize() {
@@ -46,7 +50,7 @@ public class Wilcomen extends JFrame {
         pasJLabel.setBounds(42, 108, 46, 14);
         getContentPane().add(pasJLabel);
 
-         mitarbeiterRadio = new JRadioButton("mitarbeiter");
+        mitarbeiterRadio = new JRadioButton("mitarbeiter");
         buttonGroup.add(mitarbeiterRadio);
 
         mitarbeiterRadio.setBounds(292, 66, 109, 23);
@@ -62,7 +66,7 @@ public class Wilcomen extends JFrame {
         registereJButton.setBounds(246, 199, 100, 23);
         getContentPane().add(registereJButton);
 
-        anmeldJButton= new JButton("anmelden");
+        anmeldJButton = new JButton("anmelden");
         anmeldJButton.setBounds(128, 199, 100, 23);
         getContentPane().add(anmeldJButton);
 
@@ -71,7 +75,34 @@ public class Wilcomen extends JFrame {
         getContentPane().add(passText);
     }
 
+    private ActionListener registrieren() {
+        return e -> {
+            if (kundRadio.isSelected()) {
+                kundenService.kill(this);
+                new JFRegistieren("Registieren");
+            } else if (mitarbeiterRadio.isSelected()) {
+                //ToDo Ajab
+            }
+        };
+    }
+
+    private ActionListener anmelden() {
+        return e -> {
+            try {
+                kundenService.login(emailText.getText(),passText.getText());
+                kundenService.kill(this);
+                kundenService.setPerson();
+            } catch (LoginFailedException ex) {
+                Alert alert=new Alert(this,ex.getMessage(),"Erorr");
+                alert.showInfoMassage();
+            }
+        };
+    }
+
+
+
     public static void main(String[] args) {
         Wilcomen wilcomen = new Wilcomen("");
     }
+
 }
