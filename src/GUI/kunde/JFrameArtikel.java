@@ -58,7 +58,6 @@ public class JFrameArtikel extends JFrame {
             JScrollPane scrollPane = new JScrollPane();
             scrollPane.setBounds(10, 80, 200, 306);
             contentPane.add(scrollPane);
-
             artikelsTablle = new JTable();
             scrollPane.setViewportView(artikelsTablle);
 

@@ -167,13 +167,14 @@ public class EshopVerwaltung {
                 if (warenKorp.getEmail().equals(person.getEmail())) {
                     warenKorpList.remove(warenKorp);
                     Artikel artikel=findArtikel(warenKorp.getNameArtikel());
+                    i--;
                     try {
                         ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(person,Instant.now(),Ereignis.STATUS.Kauf,artikel));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                i--;
+
             }
         warenkorbVerwaltung.saveWarenKorb(warenKorpList);
     }
