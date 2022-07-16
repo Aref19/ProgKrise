@@ -48,7 +48,6 @@ public class KundenService implements ActionListener {
     }
 
     public KundenService(JFrame jFrameArtikel, JTextField mengeText, JList<String> gelegteArtikel, DefaultTableModel defaultTableModel, JTable jtable) {
-        this.verfügbarenArtikelntextPane_1 = verfügbarenArtikelntextPane_1;
         this.mengeText = mengeText;
         this.gelegteArtikel = gelegteArtikel;
         this.parent = jFrameArtikel;
@@ -99,7 +98,6 @@ public class KundenService implements ActionListener {
             }
             parent.dispose();
         } else if (e.getActionCommand().equals("Kaufen")) {
-
             sacheKaufen();
         }
     }

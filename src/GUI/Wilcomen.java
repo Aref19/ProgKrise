@@ -1,9 +1,14 @@
 package GUI;
 
+import GUI.alert.Alert;
+import GUI.mitarbeiter.JFrameMitarbeiterRegistrieren;
 import GUI.services.KundenService;
+import GUI.services.MitarbeiterService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class Wilcomen extends JFrame {
     private Container container;
@@ -14,10 +19,12 @@ public class Wilcomen extends JFrame {
     private JButton anmeldJButton;
     private JButton registereJButton;
     private Panel rootPannel;
-    private  ButtonGroup buttonGroup;
+    private ButtonGroup buttonGroup;
     private KundenService kundenService;
     JRadioButton mitarbeiterRadio;
     JRadioButton kundRadio;
+    MitarbeiterService mitarbeiterService = new MitarbeiterService();
+    JFrameMitarbeiterRegistrieren jFrameMitarbeiterRegistrieren = new JFrameMitarbeiterRegistrieren();
 
     public Wilcomen(String title) throws HeadlessException {
         super(title);
@@ -26,9 +33,9 @@ public class Wilcomen extends JFrame {
         getContentPane().setLayout(null);
         initialize();
         this.setVisible(true);
-        kundenService=new KundenService(this,emailText,passText,mitarbeiterRadio,kundRadio);
-        anmeldJButton.addActionListener(kundenService);
+
         registereJButton.addActionListener(kundenService);
+        anmeldJButton.addActionListener(einloggen());
     }
 
     public void initialize() {
@@ -46,7 +53,7 @@ public class Wilcomen extends JFrame {
         pasJLabel.setBounds(42, 108, 46, 14);
         getContentPane().add(pasJLabel);
 
-         mitarbeiterRadio = new JRadioButton("mitarbeiter");
+        mitarbeiterRadio = new JRadioButton("mitarbeiter");
         buttonGroup.add(mitarbeiterRadio);
 
         mitarbeiterRadio.setBounds(292, 66, 109, 23);
@@ -62,13 +69,29 @@ public class Wilcomen extends JFrame {
         registereJButton.setBounds(246, 199, 100, 23);
         getContentPane().add(registereJButton);
 
-        anmeldJButton= new JButton("anmelden");
+        anmeldJButton = new JButton("anmelden");
         anmeldJButton.setBounds(128, 199, 100, 23);
         getContentPane().add(anmeldJButton);
 
         passText = new JPasswordField();
         passText.setBounds(110, 105, 131, 20);
         getContentPane().add(passText);
+    }
+
+    private ActionListener einloggen() {
+        return e -> {
+            if (mitarbeiterRadio.isSelected()) {
+                boolean antwort = mitarbeiterService.anmelden(emailText.getText(), passText.getText());
+                if (antwort == true) {
+                    jFrameMitarbeiterRegistrieren.setVisible(true);
+                } else
+                    new Alert(this, "Ups Überprüf deine Daten", "anmelde Fehler").showInfoMassage();
+            } else if (kundRadio.isSelected()) {
+                kundenService = new KundenService(this, emailText, passText, mitarbeiterRadio, kundRadio);
+                anmeldJButton.addActionListener(kundenService);
+            }
+
+        };
     }
 
     public static void main(String[] args) {
