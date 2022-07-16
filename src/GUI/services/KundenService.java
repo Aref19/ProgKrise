@@ -6,6 +6,7 @@ import GUI.alert.Dialog;
 import GUI.kunde.JFRegistieren;
 import GUI.kunde.JFrameArtikel;
 import GUI.kunde.JFrameKasse;
+import GUI.until.PdfGenerator;
 import exception.BestandNichtAusreichendException;
 import exception.LoginFailedException;
 import exception.NotFoundException;
@@ -21,99 +22,32 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 
-public class KundenService implements ActionListener {
-    private JTextField emailText;
-    private JTextField mengeText;
-    private JPasswordField passText;
+public class KundenService  {
+
     private static EshopCui eshopCui = new EshopCui();
-    private JFrame parent;
-    private JRadioButton mitarbeiterRadio;
-    private JRadioButton kundeRadio;
-    private JTable verfügbarenArtikelntextPane_1;
+    private static Person person;
     private DefaultTableModel defaultTableModel;
-    private JList<String> gelegteArtikel;
     DefaultListModel<String> model;
-    private JTable table;
-    int anzahl = 0;
-    private Person person;
+
+    public KundenService() {
 
 
-    public KundenService(JFrame wilcomen, JTextField emailText, JPasswordField passText, JRadioButton mitarbeiterRadio, JRadioButton kundeRadio) {
-        this.mitarbeiterRadio = mitarbeiterRadio;
-        this.kundeRadio = kundeRadio;
-        this.parent = wilcomen;
-        this.emailText = emailText;
-        this.passText = passText;
-
+        defaultTableModel = new DefaultTableModel();
+        model = new DefaultListModel<>();
     }
 
-    public KundenService(JFrame jFrameArtikel, JTextField mengeText, JList<String> gelegteArtikel, DefaultTableModel defaultTableModel, JTable jtable) {
-        this.mengeText = mengeText;
-        this.gelegteArtikel = gelegteArtikel;
-        this.parent = jFrameArtikel;
-        this.defaultTableModel = defaultTableModel;
-        this.table = jtable;
-        this.model = new DefaultListModel<>();
-        model.addElement("name" + "    " + "bestand" + "    " + "preis");
-        putArtikel();
-        anzahl = 0;
-    }
 
-    public KundenService(JFrameKasse jFrameKasse, JList<String> contentList) {
-        this.gelegteArtikel = contentList;
-        this.parent = jFrameKasse;
-        this.model = new DefaultListModel<>();
-        model.addElement("name" + "    " + "bestand" + "    " + "preis");
 
-        kasse();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand());
-        if (e.getActionCommand().equals("anmelden")) {
-            login();
-        } else if (e.getActionCommand().equals("Registeren")) {
-            registieren();
-        } else if (e.getActionCommand().equals("+")) {
-            anzahl++;
-            mengeText.setText("" + anzahl);
-        } else if (e.getActionCommand().equals("-")) {
-            if (anzahl > 0) {
-                anzahl--;
-                mengeText.setText("" + anzahl);
-            }
-        } else if (e.getActionCommand().equals("Einfeugen")) {
-            artikelEinfugen();
-        } else if (e.getActionCommand().equals("kasse")) {
-            parent.dispose();
-            new JFrameKasse();
-        } else if (e.getActionCommand().equals("entfernen")) {
-            entfernenFromKorp();
-        } else if (e.getActionCommand().equals("Schliessen")) {
-            Alert alert = new Alert(parent, "wollen sie die sache speichern falls ja kann nicht mehr remove", "Vorsicht");
-            int option = alert.vorsicht();
-            if (option == JOptionPane.YES_OPTION) {
-                saveWarenWarenKorb(false);
-            }
-            parent.dispose();
-        } else if (e.getActionCommand().equals("Kaufen")) {
-            sacheKaufen();
-        }
-    }
-
-    private void sacheKaufen() {
+    public void sacheKaufen() {
         saveWarenWarenKorb(true);
-        Alert alert=new Alert(parent,"Danke für die Einkauf","^-^");
-        alert.showInfoMassage();
-        parent.dispose();
+
     }
 
-    private void saveWarenWarenKorb(boolean buyStatus) {
+    public void saveWarenWarenKorb(boolean buyStatus) {
         eshopCui.saveWaren(buyStatus);
     }
 
-    private void kasse() {
+    public DefaultListModel kasse() {
         List<Artikel> artikelList = null;
         HashMap<Artikel, Integer> artikels = null;
         WarenKorp warenKorp;
@@ -132,88 +66,44 @@ public class KundenService implements ActionListener {
         }
         model.addElement("--------------------------------------------");
         model.addElement("gesamt Preis :  " + gesamtpreis);
-        gelegteArtikel.setModel(model);
+        return model;
     }
 
-    private void entfernenFromKorp() {
-        Alert alert;
-        try {
-            if (gelegteArtikel.getSelectedIndex() >= 1) {
-                String artikel[] = model.get(gelegteArtikel.getSelectedIndex()).split("    ");
-                model.remove(gelegteArtikel.getSelectedIndex());
-                eshopCui.returnWare(artikel[0], artikel[1]);
-                putArtikel();
-                return;
-            } else {
-                alert = new Alert(parent, "select artikel", "Artikel");
-                alert.showInfoMassage();
-            }
-        } catch (NotFoundException e) {
-            alert = new Alert(parent, e.getMessage(), "Not found");
-            alert.showInfoMassage();
-        } catch (Exception e) {
-            alert = new Alert(parent, "Biite suchen sie Richtige Arikel aus", "Artikel");
-            alert.showInfoMassage();
+    public void entfernenFromKorp(int index) throws NotFoundException {
+
+        String artikel[] = model.get(index).split("    ");
+        model.remove(index);
+        eshopCui.returnWare(artikel[0], artikel[1]);
+        putArtikel();
+        return;
+
+
+    }
+
+    public DefaultListModel artikelEinfugen(String name, String bestand, String preis, int anzahl) throws BestandNichtAusreichendException, NotFoundException {
+
+        if (anzahl > 0) {
+            eshopCui.warenEinlegen(name, anzahl);
+            double gesamtpreis = Double.parseDouble(preis) * anzahl;
+            model.addElement(name + "    " + anzahl + "    " + gesamtpreis);
         }
+        return model;
     }
 
-    private void artikelEinfugen() {
-        String name = "";
-        String bestand = "";
-        String preis = "";
-        try {
-            name = table.getModel().getValueAt(table.getSelectedRow(), 0).toString();
-            bestand = table.getModel().getValueAt(table.getSelectedRow(), 1).toString();
-            preis = table.getModel().getValueAt(table.getSelectedRow(), 2).toString();
-            if (Integer.parseInt(mengeText.getText()) > 0) {
-                eshopCui.warenEinlegen(name, Integer.parseInt(mengeText.getText()));
-                double gesamtpreis = Double.parseDouble(preis) * Integer.parseInt(mengeText.getText());
-                model.addElement(name + "    " + mengeText.getText() + "    " + gesamtpreis);
-                gelegteArtikel.setModel(model);
-                putArtikel();
-            } else {
-                Alert alert = new Alert(parent, "check die Menge", "Menge");
-                alert.showInfoMassage();
-            }
-        } catch (BestandNichtAusreichendException e) {
-            Alert alert = new Alert(parent, e.getMessage(), "Menge");
-            alert.showInfoMassage();
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            Alert alert = new Alert(parent, "bitte select Produckt", "Menge");
-            alert.showInfoMassage();
-        }
-    }
 
-    private void registieren() {
-        parent.dispose();
-        new JFRegistieren("Registieren");
-    }
-
-    private void login() {
-        Alert alert;
+    public void login(String email, String pass) throws LoginFailedException {
         person = null;
-        try {
-            if (mitarbeiterRadio.isSelected()) {
-                eshopCui.mitarbeiterEinloggen(emailText.getText(), passText.getText());
-            } else {
-                person = eshopCui.kundenEinloggen(emailText.getText(), passText.getText()).person;
-            }
-            parent.dispose();
-            JFrameArtikel jFrameArtikel = new JFrameArtikel();
-            Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
-            Thread thread = new Thread(readable);
-            thread.start();
-            eshopCui.setPerson(person);
-            return;
-        } catch (LoginFailedException e) {
-            alert = new Alert(parent, e.getMessage(), "Error");
-        }
-        alert.showInfoMassage();
+        person = eshopCui.kundenEinloggen(email, pass).person;
+        JFrameArtikel jFrameArtikel = new JFrameArtikel();
+        Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
+        Thread thread = new Thread(readable);
+        thread.start();
+        eshopCui.setPerson(person);
+        return;
+
     }
 
-    private void putArtikel() {
+    public DefaultTableModel putArtikel() {
         List<Artikel> artikels = eshopCui.zeigeArtikel();
         defaultTableModel = new DefaultTableModel();
         defaultTableModel.addColumn("name");
@@ -225,7 +115,20 @@ public class KundenService implements ActionListener {
                 defaultTableModel.addRow(artikleArray);
             }
         }
-        table.setModel(defaultTableModel);
+        return defaultTableModel;
+    }
+
+    public void creatPdf(){
+       PdfGenerator pdfGenerator = new PdfGenerator(eshopCui.rechnung());
+        pdfGenerator.creatPdf();
+    }
+
+    public void kill(JFrame jFrame){
+        jFrame.dispose();
+    }
+
+    public void setPerson(){
+        eshopCui.setPerson(person);
     }
 
 

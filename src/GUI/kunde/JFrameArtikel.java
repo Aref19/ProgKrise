@@ -1,11 +1,16 @@
 package GUI.kunde;
 
+import GUI.alert.Alert;
 import GUI.services.KundenService;
+import exception.BestandNichtAusreichendException;
+import exception.NotFoundException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class JFrameArtikel extends JFrame {
 
@@ -25,16 +30,20 @@ public class JFrameArtikel extends JFrame {
     private KundenService kundenService;
     private DefaultTableModel defaultTableModel;
     private JButton entfernen;
+    int anzahl = 0;
 
     public JFrameArtikel() {
         initGUI();
+
         this.setVisible(true);
-        KundenService kundenService = new KundenService(this,mengetextField, ArtikelnhinzufügentextPane_1, defaultTableModel, artikelsTablle);
-        minusBtn.addActionListener(kundenService);
-        plusBtn.addActionListener(kundenService);
-        btnEinfgen.addActionListener(kundenService);
-        entfernen.addActionListener(kundenService);
-        kasse.addActionListener(kundenService);
+        kundenService = new KundenService();
+        insertArtikel();
+        minusBtn.addActionListener(cheangeCount());
+        plusBtn.addActionListener(cheangeCount());
+        btnEinfgen.addActionListener(fugeArtikel());
+        entfernen.addActionListener(entfernArtiekl());
+        kasse.addActionListener(kasse());
+
 
     }
 
@@ -148,6 +157,70 @@ public class JFrameArtikel extends JFrame {
             lArtikelLegenlb.setBounds(194, 10, 122, 28);
             contentPane.add(lArtikelLegenlb);
         }
+    }
+
+    private ActionListener cheangeCount() {
+        return e -> {
+            if (e.getActionCommand().equals("+")) {
+                anzahl++;
+                mengetextField.setText("" + anzahl);
+            } else if (e.getActionCommand().equals("-")) {
+                if (anzahl > 0) {
+                    anzahl--;
+                    mengetextField.setText("" + anzahl);
+                }
+            }
+        };
+    }
+
+    private void insertArtikel() {
+        defaultTableModel=kundenService.putArtikel();
+        artikelsTablle.setModel(defaultTableModel);
+
+    }
+
+    private ActionListener fugeArtikel() {
+        return e -> {
+            try {
+                ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
+                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
+                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
+                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 2).toString(),
+                        anzahl
+                ));
+                artikelsTablle.setModel(kundenService.putArtikel());
+            } catch (BestandNichtAusreichendException ex) {
+                Alert alert = new Alert(this, ex.getMessage(), "Menge");
+                alert.showInfoMassage();
+            } catch (NotFoundException ex) {
+                Alert alert = new Alert(this, "bitte select Produckt", "Menge");
+                alert.showInfoMassage();
+            }
+            anzahl = 0;
+            mengetextField.setText("" + anzahl);
+        };
+    }
+
+    private ActionListener entfernArtiekl() {
+        return e -> {
+            int index = ArtikelnhinzufügentextPane_1.getSelectedIndex();
+
+                try {
+                    kundenService.entfernenFromKorp(index);
+                } catch (NotFoundException ex) {
+                    Alert alert = new Alert(this, ex.getMessage(), "Eroor");
+                    alert.showInfoMassage();
+                }
+
+
+        };
+    }
+
+    private ActionListener kasse(){
+        return e->{
+            new JFrameKasse();
+            kundenService.kill(this);
+        };
     }
 }
 

@@ -2,13 +2,17 @@ package GUI;
 
 import GUI.alert.Alert;
 import GUI.mitarbeiter.JFrameMitarbeiterRegistrieren;
+import GUI.alert.Alert;
+import GUI.kunde.JFRegistieren;
 import GUI.services.KundenService;
 import GUI.services.MitarbeiterService;
+import exception.LoginFailedException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.awt.event.ActionListener;
 
 public class Wilcomen extends JFrame {
     private Container container;
@@ -33,8 +37,8 @@ public class Wilcomen extends JFrame {
         getContentPane().setLayout(null);
         initialize();
         this.setVisible(true);
-
-        registereJButton.addActionListener(kundenService);
+        kundenService = new KundenService();
+        registereJButton.addActionListener(registrieren());
         anmeldJButton.addActionListener(einloggen());
     }
 
@@ -87,14 +91,37 @@ public class Wilcomen extends JFrame {
                 } else
                     new Alert(this, "Ups Überprüf deine Daten", "anmelde Fehler").showInfoMassage();
             } else if (kundRadio.isSelected()) {
-                kundenService = new KundenService(this, emailText, passText, mitarbeiterRadio, kundRadio);
-                anmeldJButton.addActionListener(kundenService);
+                anmelden();
             }
 
         };
     }
 
+    private ActionListener registrieren() {
+        return e -> {
+            if (kundRadio.isSelected()) {
+                kundenService.kill(this);
+                new JFRegistieren("Registieren");
+            } else if (mitarbeiterRadio.isSelected()) {
+                //ToDo Ajab
+            }
+        };
+    }
+
+    private void anmelden() {
+        try {
+            kundenService.login(emailText.getText(), passText.getText());
+            kundenService.kill(this);
+            kundenService.setPerson();
+        } catch (LoginFailedException ex) {
+            Alert alert = new Alert(this, ex.getMessage(), "Error");
+            alert.showInfoMassage();
+        }
+    }
+
+
     public static void main(String[] args) {
         Wilcomen wilcomen = new Wilcomen("");
     }
+
 }

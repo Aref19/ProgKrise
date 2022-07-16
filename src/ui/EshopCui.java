@@ -123,7 +123,7 @@ public class EshopCui {
     }
 
     public WarenKorp kundeWaren() throws NotFoundException {
-            return eshopVerwaltung.kundeWaren(person);
+        return eshopVerwaltung.kundeWaren(person);
 
 
     }
@@ -132,13 +132,14 @@ public class EshopCui {
         return eshopVerwaltung.artielzeigen();
     }
 
-    public void rechnung() {
+    public Rechnung rechnung() {
+        Rechnung rechnung=null;
         try {
-            System.out.println(eshopVerwaltung.getRec((Kunde) person, ((Kunde) person).getWarenKorp().get()));
+            rechnung = eshopVerwaltung.getRec((Kunde) person, ((Kunde) person).getWarenKorp().get());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
+        return rechnung;
     }
 
     public void artikelSortieren(boolean artSort) {
@@ -148,8 +149,8 @@ public class EshopCui {
         }
     }
 
-    public void saveWaren(boolean buystatus){
-        eshopVerwaltung.saveWaren(person,buystatus);
+    public void saveWaren(boolean buystatus) {
+        eshopVerwaltung.saveWaren(person, buystatus);
     }
 
 

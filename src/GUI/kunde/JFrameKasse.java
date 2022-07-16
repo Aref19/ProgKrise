@@ -1,10 +1,13 @@
 package GUI.kunde;
 
+import GUI.alert.Alert;
 import GUI.services.KundenService;
+import GUI.until.PdfGenerator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class JFrameKasse extends JFrame {
     private JPanel contentPane;
@@ -13,13 +16,16 @@ public class JFrameKasse extends JFrame {
     private JButton btnEinkaufFortsetzen;
    private JList<String> contentList;
     private JButton btnHerunterladen;
+    private KundenService kundenService;
 
     public JFrameKasse() {
         initGUI();
+
         this.setVisible(true);
-        KundenService kundenService = new KundenService(this, contentList);
-        btnSchlieen.addActionListener(kundenService);
-        btnEinkaufFortsetzen.addActionListener(kundenService);
+        kundenService = new KundenService();
+        contentList.setModel(kundenService.kasse());
+        btnSchlieen.addActionListener(close());
+        btnEinkaufFortsetzen.addActionListener(buy());
     }
 
     public static void main(String[] args) {
@@ -76,4 +82,28 @@ public class JFrameKasse extends JFrame {
             contentPane.add(btnHerunterladen);
         }
     }
+    private ActionListener close(){
+        return e -> {
+            Alert alert = new Alert(this, "wollen sie die sache speichern falls ja kann nicht mehr remove", "Vorsicht");
+            int option = alert.vorsicht();
+            if (option == JOptionPane.YES_OPTION) {
+               kundenService.saveWarenWarenKorb(false);
+            }
+        };
+    }
+
+    private ActionListener buy(){
+        return e -> {
+            kundenService.sacheKaufen();
+            Alert alertRechnung = new Alert(this, "wollen sie Rechnung hrunterladen", "Rechnung");
+            int option = alertRechnung.vorsicht();
+            if (option == JOptionPane.YES_OPTION) {
+                kundenService.creatPdf();
+            }
+            Alert alert = new Alert(this, "Danke für die Einkauf", "^-^");
+            alert.showInfoMassage();
+            kundenService.kill(this);
+        };
+
+    };
 }
