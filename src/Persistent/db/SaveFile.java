@@ -186,7 +186,9 @@ public class SaveFile implements SaveRepo {
     public void mitarbeiterSpeichern(List<Mitarbeiter> mitarbeiterList) {
         try {
             for (Mitarbeiter mitarbeiter : mitarbeiterList) {
-                bufferedWriter.append((mitarbeiter + System.lineSeparator()));
+                if (!mitarbeiter.getEmail().isEmpty() && !mitarbeiter.getPasswort().isEmpty()) {
+                    bufferedWriter.append((mitarbeiter + System.lineSeparator()));
+                }
             }
 
         } catch (IOException e) {
@@ -217,8 +219,8 @@ public class SaveFile implements SaveRepo {
     public void saveWarenKorb(List<WarenKorp> warenKorpList) {
         try {
             for (WarenKorp warenkorp : warenKorpList) {
-                    WarenKorp warenKorp1 = warenkorp;
-                    bufferedWriter.write((warenKorp1 + System.lineSeparator()));
+                WarenKorp warenKorp1 = warenkorp;
+                bufferedWriter.write((warenKorp1 + System.lineSeparator()));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -263,7 +265,7 @@ public class SaveFile implements SaveRepo {
         List<ErignisToSave> ereignses = new ArrayList<>();
         try {
             String data = bufferedReader.readLine();
-            while (data != null&&!data.isEmpty()) {
+            while (data != null && !data.isEmpty()) {
                 String content[] = data.split(";");
 
                 ereignses.add(new ErignisToSave(

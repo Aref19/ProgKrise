@@ -1,12 +1,17 @@
 package GUI;
 
 import GUI.alert.Alert;
+import GUI.mitarbeiter.JFrameMitarbeiterRegistrieren;
+import GUI.alert.Alert;
 import GUI.kunde.JFRegistieren;
 import GUI.services.KundenService;
+import GUI.services.MitarbeiterService;
 import exception.LoginFailedException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.awt.event.ActionListener;
 
 public class Wilcomen extends JFrame {
@@ -22,6 +27,8 @@ public class Wilcomen extends JFrame {
     private KundenService kundenService;
     JRadioButton mitarbeiterRadio;
     JRadioButton kundRadio;
+    MitarbeiterService mitarbeiterService = new MitarbeiterService();
+    JFrameMitarbeiterRegistrieren jFrameMitarbeiterRegistrieren = new JFrameMitarbeiterRegistrieren();
 
     public Wilcomen(String title) throws HeadlessException {
         super(title);
@@ -31,8 +38,8 @@ public class Wilcomen extends JFrame {
         initialize();
         this.setVisible(true);
         kundenService = new KundenService();
-        anmeldJButton.addActionListener(anmelden());
         registereJButton.addActionListener(registrieren());
+        anmeldJButton.addActionListener(einloggen());
     }
 
     public void initialize() {
@@ -75,6 +82,21 @@ public class Wilcomen extends JFrame {
         getContentPane().add(passText);
     }
 
+    private ActionListener einloggen() {
+        return e -> {
+            if (mitarbeiterRadio.isSelected()) {
+                boolean antwort = mitarbeiterService.anmelden(emailText.getText(), passText.getText());
+                if (antwort == true) {
+                    jFrameMitarbeiterRegistrieren.setVisible(true);
+                } else
+                    new Alert(this, "Ups Überprüf deine Daten", "anmelde Fehler").showInfoMassage();
+            } else if (kundRadio.isSelected()) {
+                anmelden();
+            }
+
+        };
+    }
+
     private ActionListener registrieren() {
         return e -> {
             if (kundRadio.isSelected()) {
@@ -86,19 +108,21 @@ public class Wilcomen extends JFrame {
         };
     }
 
-    private ActionListener anmelden() {
-        return e -> {
-            try {
-                kundenService.login(emailText.getText(),passText.getText());
-                kundenService.kill(this);
-                kundenService.setPerson();
-            } catch (LoginFailedException ex) {
-                Alert alert=new Alert(this,ex.getMessage(),"Erorr");
-                alert.showInfoMassage();
-            }
-        };
+    private void anmelden() {
+        try {
+            kundenService.login(emailText.getText(), passText.getText());
+            kundenService.kill(this);
+            kundenService.setPerson();
+        } catch (LoginFailedException ex) {
+            Alert alert = new Alert(this, ex.getMessage(), "Error");
+            alert.showInfoMassage();
+        }
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9409a685b460857d55daf1f5b18f193cc4027312
     public static void main(String[] args) {
         Wilcomen wilcomen = new Wilcomen("");
     }

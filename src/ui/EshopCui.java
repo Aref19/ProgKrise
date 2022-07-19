@@ -18,7 +18,8 @@ public class EshopCui {
     static Person person;
 
     public static void main(String[] args) throws CustomIoException {
-
+        EshopCui a = new EshopCui();
+        a.mitarbeiterRegestieren();
     }
 
     /**
