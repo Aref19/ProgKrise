@@ -1,0 +1,2 @@
+test1@gmail.com;laptop;2.5;1
+test1@gmail.com;aphel;5.0;2

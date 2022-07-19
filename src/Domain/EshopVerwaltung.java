@@ -1,7 +1,6 @@
 package Domain;
 
-import Persistent.PersistentKunde;
-import Persistent.PersistentMitarbeiter;
+
 import exception.*;
 import model.*;
 
@@ -17,23 +16,26 @@ public class EshopVerwaltung {
     private KundeVerwaltung kundeVerwaltung;
     private MitarbeiterVerwaltung mitarbeiterVerwaltung;
     private RechnungWarenkorb rechnungWarenkorb;
-    private PersistentMitarbeiter persistentMitarbeiter;
-    private PersistentKunde persistentKunde;
+    private WarenkorbVerwaltung warenkorbVerwaltung;
+
     private EreignisVerwaltung ereignisVerwaltung;
 
+    /**
+     *
+     * TODO pdf Datei laden
+     **/
     public EshopVerwaltung() {
         artikelVerwaltung = new ArtikelVerwaltung();
         kundeVerwaltung = new KundeVerwaltung();
         mitarbeiterVerwaltung = new MitarbeiterVerwaltung();
         rechnungWarenkorb = new RechnungWarenkorb();
-        persistentMitarbeiter = new PersistentMitarbeiter();
+        warenkorbVerwaltung = new WarenkorbVerwaltung();
         ereignisVerwaltung = new EreignisVerwaltung();
-        persistentKunde = new PersistentKunde();
+
     }
 
     public ArrayList<Artikel> artikelSortieren(boolean artsort) {
         return artikelVerwaltung.artikelSortieren(artsort);
-
     }
 
     /**
@@ -42,69 +44,55 @@ public class EshopVerwaltung {
      *
      * @param kunde
      */
-    public void kundenRegistrieren(Kunde kunde) throws RegisitierungException, INcorrectEmailException {
-        try {
-            Person.checkEmail(kunde.getEmail());
-            kundeVerwaltung.registrieren(kunde);
-        } catch (RegisitierungException e) {
-            throw e;
-        } catch (INcorrectEmailException e) {
-            throw e;
-        }
+    public void kundenRegistrieren(Kunde kunde) throws INcorrectEmailException, RegisitierungException {
+        Person.checkEmail(kunde.getEmail());
+        kundeVerwaltung.registrieren(kunde);
     }
 
     public Einlogen kundenEinloggen(String na, String pas) throws LoginFailedException {
-        return kundeVerwaltung.einlogen(na, pas);
+        Einlogen einlogen = kundeVerwaltung.einlogen(na, pas);
+        warenkorbVerwaltung.loadWaren(einlogen.person);
+        return einlogen;
     }
 
-    public Artikel warenlegen(String name, int anzahl, Kunde kunde) throws BestandNichtAusreichendException, NotFoundException {
-        try {
-            Artikel artikel = artikelVerwaltung.findArtikel(name);
-            artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
-            kunde.getWarenKorp().addArtikle(artikel, anzahl);
+    public void returnArikel(String artiekelName, String anzahl, Person person) throws NotFoundException {
+        Artikel artikel = findArtikel(artiekelName);
+        artikelVerwaltung.returnWare(artikel, anzahl);
+        warenkorbVerwaltung.returnArtikel(person, artikel);
+    }
 
+    public void warenlegen(String name, int anzahl, Person person) throws BestandNichtAusreichendException, NotFoundException {
+        Artikel artikel = findArtikel(name);
+        artikelVerwaltung.artikelBestandReduzieren(artikel, anzahl);
+        warenkorbVerwaltung.addArikel(person, artikel, anzahl);
 
-            return artikelVerwaltung.findArtikel(name);
-        } catch (NotFoundException e) {
-            throw e;
+    }
 
-        } catch (BestandNichtAusreichendException e) {
-            throw e;
-        }
+    public Artikel findArtikel(String name) throws NotFoundException {
+        return artikelVerwaltung.findArtikel(name);
     }
 
     public Einlogen mitarbeiterEinloggen(String email, String password) throws LoginFailedException {
-        try {
-            return mitarbeiterVerwaltung.mitarbeiterUeberprufen(email, password);
-        } catch (LoginFailedException e) {
-            throw e;
-        }
+
+        return mitarbeiterVerwaltung.mitarbeiterUeberprufen(email, password);
+
     }
 
     public void artikelAnlegen(Mitarbeiter mitarbeiter, Artikel artikel) throws IOException {
-        System.out.println(artikel);
         try {
-            artikelVerwaltung.artikelAnlegen( artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(),artikel.getPreis());
-        }catch (IOException e){
+            artikelVerwaltung.artikelAnlegen(artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis());
+        } catch (IOException e) {
             throw e;
         }
         ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(mitarbeiter, Instant.now(), Ereignis.STATUS.Neu, artikel));
-       List< ErignisToSave> erignisToSave=ereignisVerwaltung.savedEreignises();
-        for (ErignisToSave erignisToSave1:erignisToSave) {
-            System.out.println(erignisToSave1);
-        }
+
     }
 
-    public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email) throws RegisitierungException, INcorrectEmailException {
-        try {
-            Person.checkEmail(email);
-            mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort, email);
-        } catch (RegisitierungException e) {
-            throw e;
-        } catch (INcorrectEmailException e) {
+    public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email)
+            throws RegisitierungException, INcorrectEmailException, IOException {
+        Person.checkEmail(email);
+        mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort, email);
 
-            throw e;
-        }
     }
 
     public List<Artikel> artielzeigen() {
@@ -115,8 +103,79 @@ public class EshopVerwaltung {
         for (Map.Entry<Artikel, Integer> artikelIntegerEntry : artikels.entrySet()) {
             ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(kunde, Instant.now(), Ereignis.STATUS.Kauf, artikelIntegerEntry.getKey()));
         }
-
         return rechnungWarenkorb.creatRec(kunde, artikels);
     }
 
+    public WarenKorp kundeWaren(Person person) throws NotFoundException {
+        List<WarenKorp> warenKorpList = warenkorbVerwaltung.getSavedWaren();
+        for (int i = 0; i < warenKorpList.size(); i++) {
+            if (warenKorpList.get(i).getEmail().equals(person.getEmail())) {// nur waren von kund
+                Artikel artikel = findArtikel(warenKorpList.get(i).getNameArtikel());
+                warenkorbVerwaltung.getWarenKorb(person).addArtikle(artikel, warenKorpList.get(i).getAnzahl());
+            }
+        }
+        return warenkorbVerwaltung.getWarenKorb(person);
+    }
+
+    public void saveWaren(Person person,boolean buystatus) {
+        List<Artikel> artikels = ((Kunde) person).getWarenKorp().hashtoList();
+        List<WarenKorp> warenKorpList = warenkorbVerwaltung.getSavedWaren();
+        boolean save = false;
+        for (int i = 0; i < artikels.size(); i++) {
+            if (warenKorpList.size() > 0) {
+                for (int j = 0; j < warenKorpList.size(); j++) {
+                    if (warenKorpList.get(j).getEmail().equals(person.getEmail())) {
+                        if (artikels.get(i).getArtikelBezeichnung().equals(warenKorpList.get(j).getNameArtikel())) {
+                            int anzahl = ((Kunde) person).getWarenKorp().get().get(artikels.get(i));
+                            warenKorpList.add(new WarenKorp(person.getEmail(), warenKorpList.get(j).getNameArtikel(),
+                                    anzahl * artikels.get(i).getPreis(), anzahl));
+                            warenKorpList.remove(j);
+                            save = true;
+                        }
+                    }
+                }
+                if (!save) {// if email nicht vorhanden
+                    int anzahl = ((Kunde) person).getWarenKorp().get().get(artikels.get(i));
+                    warenKorpList.add(new WarenKorp(person.getEmail(), artikels.get(i).getArtikelBezeichnung(),
+                            anzahl * artikels.get(i).getPreis(), anzahl));
+                    save = false;
+                }
+
+            } else {// if data ist leer
+                int anzahl = ((Kunde) person).getWarenKorp().get().get(artikels.get(i));
+                warenKorpList.add(new WarenKorp(person.getEmail(), artikels.get(i).getArtikelBezeichnung(),
+                        anzahl * artikels.get(i).getPreis(), anzahl));
+            }
+        }
+        artikelVerwaltung.saveAtrikel(artikelVerwaltung.getArtikelList());
+        warenkorbVerwaltung.saveWarenKorb(warenKorpList);
+        if (buystatus){
+            try {
+                checkIfBuy(person,warenKorpList);
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
+
+    private void checkIfBuy(Person person,  List<WarenKorp> warenKorpList) throws NotFoundException {
+
+            for (int i = 0; i < warenKorpList.size(); i++) {
+                WarenKorp warenKorp = warenKorpList.get(i);
+                if (warenKorp.getEmail().equals(person.getEmail())) {
+                    warenKorpList.remove(warenKorp);
+                    Artikel artikel=findArtikel(warenKorp.getNameArtikel());
+                    i--;
+                    try {
+                        ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(person,Instant.now(),Ereignis.STATUS.Kauf,artikel));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        warenkorbVerwaltung.saveWarenKorb(warenKorpList);
+    }
 }

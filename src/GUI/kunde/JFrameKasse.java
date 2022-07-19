@@ -1,25 +1,37 @@
 package GUI.kunde;
 
+import GUI.alert.Alert;
+import GUI.services.KundenService;
+import GUI.until.PdfGenerator;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class JFrameKasse extends JFrame {
     private JPanel contentPane;
     private JLabel lblKasse;
     private JButton btnSchlieen;
     private JButton btnEinkaufFortsetzen;
-
+   private JList<String> contentList;
     private JButton btnHerunterladen;
+    private KundenService kundenService;
 
     public JFrameKasse() {
         initGUI();
+
         this.setVisible(true);
+        kundenService = new KundenService();
+        contentList.setModel(kundenService.kasse());
+        btnSchlieen.addActionListener(close());
+        btnEinkaufFortsetzen.addActionListener(buy());
     }
 
     public static void main(String[] args) {
         new JFrameKasse();
     }
+
     private void initGUI() {
         setForeground(SystemColor.inactiveCaption);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,7 +51,7 @@ public class JFrameKasse extends JFrame {
             contentPane.add(lblKasse);
         }
         {
-            btnSchlieen = new JButton("Schlie\u00DFen");
+            btnSchlieen = new JButton("Schliessen");
             btnSchlieen.setFont(new Font("Andalus", Font.ITALIC, 11));
             btnSchlieen.setFocusable(false);
             btnSchlieen.setFocusPainted(false);
@@ -47,7 +59,7 @@ public class JFrameKasse extends JFrame {
             contentPane.add(btnSchlieen);
         }
         {
-            btnEinkaufFortsetzen = new JButton("Einkauf Fortsetzen");
+            btnEinkaufFortsetzen = new JButton("Kaufen");
             btnEinkaufFortsetzen.setFont(new Font("Andalus", Font.ITALIC, 11));
             btnEinkaufFortsetzen.setFocusPainted(false);
             btnEinkaufFortsetzen.setFocusable(false);
@@ -55,10 +67,11 @@ public class JFrameKasse extends JFrame {
             contentPane.add(btnEinkaufFortsetzen);
         }
         {
-            JTextArea textArea = new JTextArea();
-            textArea.setEditable(false);
-            textArea.setBounds(10, 33, 366, 289);
-            contentPane.add(textArea);
+            contentList = new JList<>();
+            contentList.setBounds(10, 33, 366, 289);
+            DefaultListCellRenderer renderer = (DefaultListCellRenderer) contentList.getCellRenderer();
+            renderer.setHorizontalAlignment(SwingConstants.CENTER);
+            contentPane.add(contentList);
         }
         {
             btnHerunterladen = new JButton("Herunterladen");
@@ -69,5 +82,28 @@ public class JFrameKasse extends JFrame {
             contentPane.add(btnHerunterladen);
         }
     }
+    private ActionListener close(){
+        return e -> {
+            Alert alert = new Alert(this, "wollen sie die sache speichern falls ja kann nicht mehr remove", "Vorsicht");
+            int option = alert.vorsicht();
+            if (option == JOptionPane.YES_OPTION) {
+               kundenService.saveWarenWarenKorb(false);
+            }
+        };
+    }
 
+    private ActionListener buy(){
+        return e -> {
+            kundenService.sacheKaufen();
+            Alert alertRechnung = new Alert(this, "wollen sie Rechnung hrunterladen", "Rechnung");
+            int option = alertRechnung.vorsicht();
+            if (option == JOptionPane.YES_OPTION) {
+                kundenService.creatPdf();
+            }
+            Alert alert = new Alert(this, "Danke für die Einkauf", "^-^");
+            alert.showInfoMassage();
+            kundenService.kill(this);
+        };
+
+    };
 }

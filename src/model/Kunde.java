@@ -21,6 +21,13 @@ public class Kunde extends Person {
         this.warenKorp=new WarenKorp();
     }
 
+    public Adresse getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(Adresse adresse) {
+        this.adresse = adresse;
+    }
 
     /**
      * Getter und Setter
@@ -49,6 +56,9 @@ public class Kunde extends Person {
         return this.warenKorp;
     }
 
-
+    @Override
+    public String toString() {
+        return this.getVorName() +";"+this.getNachName()+";"+this.adresse.toString()+";"+this.getPassword()+";"+this.getEmail();
+    }
 }
 

@@ -58,4 +58,9 @@ public class Adresse {
     public void setHerkunft(String herkunft) {
         this.herkunft = herkunft;
     }
+
+    @Override
+    public String toString() {
+        return hausNr+";"+plz+";"+stadt+";"+strasse;
+    }
 }
