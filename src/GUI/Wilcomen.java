@@ -99,8 +99,6 @@ public class Wilcomen extends JFrame {
         };
     }
 
-
-
     public static void main(String[] args) {
         Wilcomen wilcomen = new Wilcomen("");
     }

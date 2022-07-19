@@ -182,19 +182,30 @@ public class JFrameArtikel extends JFrame {
     private ActionListener fugeArtikel() {
         return e -> {
             try {
-                ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
-                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
-                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
-                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 2).toString(),
-                        anzahl
-                ));
+                if(anzahl>0){
+                    if(artikelsTablle.getSelectedRow()!=-1){
+                        ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
+                                defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
+                                defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
+                                defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 2).toString(),
+                                anzahl
+                        ));
+                    }else {
+                        Alert alert = new Alert(this, "bitte select Produckt", "Menge");
+                        alert.showInfoMassage();
+                    }
+
+                }else {
+                    Alert alert = new Alert(this, "bitte select nummer", "Menge");
+                    alert.showInfoMassage();
+                }
+
                 artikelsTablle.setModel(kundenService.putArtikel());
             } catch (BestandNichtAusreichendException ex) {
                 Alert alert = new Alert(this, ex.getMessage(), "Menge");
                 alert.showInfoMassage();
             } catch (NotFoundException ex) {
-                Alert alert = new Alert(this, "bitte select Produckt", "Menge");
-                alert.showInfoMassage();
+
             }
             anzahl = 0;
             mengetextField.setText("" + anzahl);
