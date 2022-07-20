@@ -1,11 +1,8 @@
 package GUI.services;
 
 
-import GUI.alert.Alert;
 import GUI.alert.Dialog;
-import GUI.kunde.JFRegistieren;
 import GUI.kunde.JFrameArtikel;
-import GUI.kunde.JFrameKasse;
 import GUI.until.PdfGenerator;
 import exception.BestandNichtAusreichendException;
 import exception.LoginFailedException;
@@ -17,8 +14,6 @@ import ui.EshopCui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,8 +25,6 @@ public class KundenService  {
     DefaultListModel<String> model;
 
     public KundenService() {
-
-
         defaultTableModel = new DefaultTableModel();
         model = new DefaultListModel<>();
     }
