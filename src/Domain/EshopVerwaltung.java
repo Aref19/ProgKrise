@@ -119,6 +119,7 @@ public class EshopVerwaltung {
 
     public void saveWaren(Person person,boolean buystatus) {
         List<Artikel> artikels = ((Kunde) person).getWarenKorp().hashtoList();
+        System.out.println(artikels.size());
         List<WarenKorp> warenKorpList = warenkorbVerwaltung.getSavedWaren();
         boolean save = false;
         for (int i = 0; i < artikels.size(); i++) {
@@ -134,7 +135,7 @@ public class EshopVerwaltung {
                         }
                     }
                 }
-                if (!save) {// if email nicht vorhanden
+                if (!save) { // if email nicht vorhanden oder Artikel andere Name
                     int anzahl = ((Kunde) person).getWarenKorp().get().get(artikels.get(i));
                     warenKorpList.add(new WarenKorp(person.getEmail(), artikels.get(i).getArtikelBezeichnung(),
                             anzahl * artikels.get(i).getPreis(), anzahl));
@@ -156,7 +157,6 @@ public class EshopVerwaltung {
                 e.printStackTrace();
             }
         }
-
 
     }
 
