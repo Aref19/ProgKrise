@@ -1,11 +1,14 @@
 package GUI;
 
 import GUI.alert.Alert;
+import GUI.alert.Dialog;
+import GUI.kunde.JFrameArtikel;
 import GUI.mitarbeiter.JFrameMitarbeiterRegistrieren;
 import GUI.kunde.JFRegistieren;
 import GUI.services.KundenService;
 import GUI.services.MitarbeiterService;
 import exception.LoginFailedException;
+import model.Person;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,7 +112,7 @@ public class Willkommen extends JFrame {
         return e -> {
             if (kundRadio.isSelected()) {
                 kundenService.kill(this);
-                new JFRegistieren("Registieren");
+                new JFRegistieren(kundenService);
             } else if (mitarbeiterRadio.isSelected()) {
                 //ToDo Ajab
             }
@@ -118,9 +121,12 @@ public class Willkommen extends JFrame {
 
     private void anmelden() {
         try {
-            kundenService.login(emailText.getText(), passText.getText());
+           Person person= kundenService.login(emailText.getText(), passText.getText());
             kundenService.kill(this);
-            kundenService.setPerson();
+            JFrameArtikel jFrameArtikel = new JFrameArtikel(kundenService);
+            Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
+            Thread thread = new Thread(readable);
+            thread.start();
         } catch (LoginFailedException ex) {
             Alert alert = new Alert(this, ex.getMessage(), "Error");
             alert.showInfoMassage();

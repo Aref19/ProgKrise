@@ -88,9 +88,9 @@ public class Artikel {
         return artikelNr+";"+artikelBezeichnung+";"+artikelBestand+";"+preis;
 
     }
+
     @Override
     public String toString() {
         return artikelBezeichnung+"  "+artikelBestand+"   "+preis;
-
     }
 }

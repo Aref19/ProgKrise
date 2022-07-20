@@ -32,11 +32,12 @@ public class JFrameArtikel extends JFrame {
     private JButton entfernen;
     int anzahl = 0;
 
-    public JFrameArtikel() {
+
+    public JFrameArtikel(KundenService kundenService) {
         initGUI();
 
         this.setVisible(true);
-        kundenService = new KundenService();
+        this.kundenService = kundenService;
         insertArtikel();
         minusBtn.addActionListener(cheangeCount());
         plusBtn.addActionListener(cheangeCount());
@@ -47,9 +48,7 @@ public class JFrameArtikel extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        new JFrameArtikel();
-    }
+
 
     private void initGUI() {
         setBounds(new Rectangle(20, 20, 20, 20));
@@ -184,13 +183,20 @@ public class JFrameArtikel extends JFrame {
             try {
                 if(anzahl>0){
                     if(artikelsTablle.getSelectedRow()!=-1){
-                        System.out.println( defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString());
-                        ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
-                                defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
-                                defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
-                                defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 2).toString(),
-                                anzahl
-                        ));
+                        int masse= Integer.parseInt(defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 3).toString());
+                        if(anzahl%masse==0){
+                            ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
+                                    defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
+                                    defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
+                                    defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 2).toString(),
+                                    anzahl
+                            ));
+
+                        }else {
+                            Alert alert = new Alert(this, "bitte in "+masse+" Mengen nehmen", "Menge");
+                            alert.showInfoMassage();
+                        }
+
                     }else {
                         Alert alert = new Alert(this, "bitte select Produckt", "Menge");
                         alert.showInfoMassage();
@@ -218,9 +224,9 @@ public class JFrameArtikel extends JFrame {
     private ActionListener entfernArtiekl() {
         return e -> {
             int index = ArtikelnhinzufügentextPane_1.getSelectedIndex();
-
                 try {
-                    kundenService.entfernenFromKorp(index);
+                   defaultTableModel= kundenService.entfernenFromKorp(index);
+                    artikelsTablle.setModel(defaultTableModel);
                 } catch (NotFoundException ex) {
                     Alert alert = new Alert(this, ex.getMessage(), "Eroor");
                     alert.showInfoMassage();
@@ -232,7 +238,7 @@ public class JFrameArtikel extends JFrame {
 
     private ActionListener kasse(){
         return e->{
-            new JFrameKasse();
+            new JFrameKasse(kundenService);
             kundenService.kill(this);
         };
     }

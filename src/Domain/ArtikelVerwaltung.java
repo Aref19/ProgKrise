@@ -5,6 +5,7 @@ import Persistent.repo.SaveRepo;
 import exception.BestandNichtAusreichendException;
 import exception.NotFoundException;
 import model.Artikel;
+import model.Massengutartikel;
 
 import java.io.IOException;
 import java.util.*;
@@ -33,8 +34,13 @@ public class ArtikelVerwaltung {
      * @param artikelBezeichnung
      */
 
-    public void artikelAnlegen(int artikelBestand, String artikelBezeichnung, double preis) throws IOException { //Artikelerschaffen
-        Artikel artikel = new Artikel(artikelBezeichnung, artikelBestand, preis);
+    public void artikelAnlegen(int artikelBestand, String artikelBezeichnung, double preis, int masse) throws IOException { //Artikelerschaffen
+        Artikel artikel;
+        if (masse > 1) {
+            artikel = new Massengutartikel(artikelBezeichnung, artikelBestand, preis, masse);
+        } else {
+            artikel = new Artikel(artikelBezeichnung, artikelBestand, preis);
+        }
         if (!checkArikel(artikelBezeichnung, artikelBestand)) {
             artikelList.add(artikel);
         }
