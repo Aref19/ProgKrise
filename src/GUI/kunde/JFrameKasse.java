@@ -3,7 +3,6 @@ package GUI.kunde;
 
 import GUI.alert.Alert;
 import GUI.services.KundenService;
-import GUI.until.PdfGenerator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -21,20 +20,23 @@ public class JFrameKasse extends JFrame {
     private JButton btnHerunterladen;
     private KundenService kundenService;
 
-    public JFrameKasse() {
+    public JFrameKasse(KundenService kundenService) {
         initGUI();
 
+//        this.kundenService = new KundenService(eshop);
+        this.kundenService = kundenService;
+
         this.setVisible(true);
-        kundenService = new KundenService();
-        contentList.setModel(kundenService.kasse());
+
         btnSchlieen.addActionListener(close());
         btnEinkaufFortsetzen.addActionListener(buy());
+        contentList.setModel(this.kundenService.kasse());
 
     }
 
-    public static void main(String[] args) {
-        new JFrameKasse();
-    }
+//    public static void main(String[] args) {
+//        new JFrameKasse(kundenService);
+//    }
 
     private void initGUI() {
         setForeground(SystemColor.inactiveCaption);
@@ -89,6 +91,7 @@ public class JFrameKasse extends JFrame {
             btnHerunterladen.setFont(new Font("Andalus", Font.ITALIC, 11));
             btnHerunterladen.setBounds(120, 332, 107, 21);
             contentPane.add(btnHerunterladen);
+
         }
     }
 

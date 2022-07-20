@@ -1,4 +1,6 @@
 
-Kunde:	test1;test1;2;2;bren;s;123;test1@gmail.com
-Datum :	2022-07-16T20:24:54.930363700Z
-laptop	 Anzahl: 	  1
+Kunde:	a;al;12;22855;bremen;St;369;a@gmail.com
+Datum :	2022-07-20T10:51:55.878226400Z
+Ladekabel	 Anzahl: 	  2
+Coca Cola	 Anzahl: 	  2
+Laptop	 Anzahl: 	  1

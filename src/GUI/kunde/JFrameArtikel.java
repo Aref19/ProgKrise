@@ -1,5 +1,6 @@
 package GUI.kunde;
 
+import Domain.EshopVerwaltung;
 import GUI.alert.Alert;
 import GUI.services.KundenService;
 import exception.BestandNichtAusreichendException;
@@ -10,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class JFrameArtikel extends JFrame {
 
@@ -32,11 +32,12 @@ public class JFrameArtikel extends JFrame {
     private JButton entfernen;
     int anzahl = 0;
 
-    public JFrameArtikel() {
+    public JFrameArtikel(KundenService kundenService) {
         initGUI();
 
         this.setVisible(true);
-        kundenService = new KundenService();
+//        kundenService = new KundenService();
+        this.kundenService = kundenService;
         insertArtikel();
         minusBtn.addActionListener(cheangeCount());
         plusBtn.addActionListener(cheangeCount());
@@ -47,9 +48,9 @@ public class JFrameArtikel extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        new JFrameArtikel();
-    }
+//    public static void main(String[] args) {
+//        new JFrameArtikel();
+//    }
 
     private void initGUI() {
         setBounds(new Rectangle(20, 20, 20, 20));
@@ -232,7 +233,7 @@ public class JFrameArtikel extends JFrame {
 
     private ActionListener kasse(){
         return e->{
-            new JFrameKasse();
+            new JFrameKasse(kundenService);
             kundenService.kill(this);
         };
     }

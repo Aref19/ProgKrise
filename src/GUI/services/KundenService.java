@@ -1,35 +1,36 @@
 package GUI.services;
 
 
+import Domain.EshopVerwaltung;
 import GUI.alert.Dialog;
 import GUI.kunde.JFrameArtikel;
 import GUI.until.PdfGenerator;
 import exception.BestandNichtAusreichendException;
 import exception.LoginFailedException;
 import exception.NotFoundException;
-import model.Artikel;
-import model.Person;
-import model.WarenKorp;
+import model.*;
 import ui.EshopCui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 public class KundenService  {
 
-    private static EshopCui eshopCui = new EshopCui();
+//    private static EshopCui eshopCui = new EshopCui();
     private static Person person;
     private DefaultTableModel defaultTableModel;
     DefaultListModel<String> model;
 
-    public KundenService() {
+    private EshopVerwaltung eshop;
+
+    public KundenService(EshopVerwaltung eshop) {
+        this.eshop = eshop;
         defaultTableModel = new DefaultTableModel();
         model = new DefaultListModel<>();
     }
-
-
 
     public void sacheKaufen() {
         saveWarenWarenKorb(true);
@@ -37,25 +38,28 @@ public class KundenService  {
     }
 
     public void saveWarenWarenKorb(boolean buyStatus) {
-        eshopCui.saveWaren(buyStatus);
+//        eshopCui.saveWaren(buyStatus);
+        eshop.saveWaren(person, buyStatus);
     }
 
     public DefaultListModel kasse() {
         List<Artikel> artikelList = null;
-        HashMap<Artikel, Integer> artikels = null;
+        HashMap<Artikel, Integer> artikelHash = null;
         WarenKorp warenKorp;
         try {
-            warenKorp = eshopCui.kundeWaren();
-            artikels = warenKorp.get();
+            model=new DefaultListModel<>();
+//            warenKorp = eshopCui.kundeWaren();
+            warenKorp = eshop.kundeWaren(person);
+            artikelHash = warenKorp.get();
             artikelList = warenKorp.hashtoList();
         } catch (NotFoundException e) {
             e.getMessage();
         }
         double gesamtpreis = 0;
-        for (int i = 0; i < artikelList.size(); i++) {
-            Artikel artikel = artikelList.get(i);
-            model.addElement(artikel.getArtikelBezeichnung() + "     " + artikels.get(artikel) + "    " + (artikel.getPreis() * artikels.get(artikel)));
-            gesamtpreis += (artikel.getPreis() * artikels.get(artikel));
+        for (Artikel artikel:artikelList) {
+            Artikel artikel1 = artikel;
+            model.addElement(artikel1.getArtikelBezeichnung() + "     " + artikelHash.get(artikel1) + "    " + (artikel1.getPreis() * artikelHash.get(artikel1)));
+            gesamtpreis += (artikel1.getPreis() * artikelHash.get(artikel1));
         }
         model.addElement("--------------------------------------------");
         model.addElement("gesamt Preis :  " + gesamtpreis);
@@ -64,9 +68,10 @@ public class KundenService  {
 
     public void entfernenFromKorp(int index) throws NotFoundException {
 
-        String artikel[] = model.get(index).split("    ");
+        String artikeldaten[] = model.get(index).split("    ");
         model.remove(index);
-        eshopCui.returnWare(artikel[0], artikel[1]);
+//        eshopCui.returnWare(artikel[0], artikel[1]);
+        eshop.returnArikel(artikeldaten[0], artikeldaten[1], person);
         putArtikel();
         return;
 
@@ -76,7 +81,8 @@ public class KundenService  {
     public DefaultListModel artikelEinfugen(String name, String bestand, String preis, int anzahl) throws BestandNichtAusreichendException, NotFoundException {
 
         if (anzahl > 0) {
-            eshopCui.warenEinlegen(name, anzahl);
+//            eshopCui.warenEinlegen(name, anzahl);
+            eshop.warenlegen(name, anzahl, person);
             double gesamtpreis = Double.parseDouble(preis) * anzahl;
             model.addElement(name + "    " + anzahl + "    " + gesamtpreis);
         }
@@ -85,19 +91,20 @@ public class KundenService  {
 
 
     public void login(String email, String pass) throws LoginFailedException {
-        person = null;
-        person = eshopCui.kundenEinloggen(email, pass).person;
-        JFrameArtikel jFrameArtikel = new JFrameArtikel();
+//        person = eshopCui.kundenEinloggen(email, pass).person;
+        person = eshop.kundenEinloggen(email, pass).person;
+//        eshopCui.setPerson(person);
+        JFrameArtikel jFrameArtikel = new JFrameArtikel(this);
         Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
         Thread thread = new Thread(readable);
         thread.start();
-        eshopCui.setPerson(person);
         return;
 
     }
 
     public DefaultTableModel putArtikel() {
-        List<Artikel> artikels = eshopCui.zeigeArtikel();
+//        List<Artikel> artikels = eshopCui.zeigeArtikel();
+        List<Artikel> artikels = eshop.artielzeigen();
         defaultTableModel = new DefaultTableModel();
         defaultTableModel.addColumn("name");
         defaultTableModel.addColumn("betsand");
@@ -112,17 +119,23 @@ public class KundenService  {
     }
 
     public void creatPdf(){
-       PdfGenerator pdfGenerator = new PdfGenerator(eshopCui.rechnung());
-        pdfGenerator.creatPdf();
+//       PdfGenerator pdfGenerator = new PdfGenerator(eshopCui.rechnung());
+        try {
+            Rechnung re = eshop.getRec((Kunde) person, ((Kunde) person).getWarenKorp().get());
+            PdfGenerator pdfGenerator = new PdfGenerator(re);
+            pdfGenerator.creatPdf();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void kill(JFrame jFrame){
         jFrame.dispose();
     }
 
-    public void setPerson(){
-        eshopCui.setPerson(person);
-    }
+//    public void setPerson(){
+//        eshopCui.setPerson(person);
+//    }
 
 
 }

@@ -1,5 +1,6 @@
 package GUI;
 
+import Domain.EshopVerwaltung;
 import GUI.alert.Alert;
 import GUI.mitarbeiter.JFrameMitarbeiterRegistrieren;
 import GUI.kunde.JFRegistieren;
@@ -27,6 +28,8 @@ public class Willkommen extends JFrame {
     MitarbeiterService mitarbeiterService = new MitarbeiterService();
     JFrameMitarbeiterRegistrieren jFrameMitarbeiterRegistrieren = new JFrameMitarbeiterRegistrieren();
 
+    private EshopVerwaltung eshop;
+
     public Willkommen(String title) throws HeadlessException {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,7 +38,8 @@ public class Willkommen extends JFrame {
         getContentPane().setLayout(null);
         initialize();
         this.setVisible(true);
-        kundenService = new KundenService();
+        eshop = new EshopVerwaltung();
+        kundenService = new KundenService(eshop);
         registereJButton.addActionListener(registrieren());
         anmeldJButton.addActionListener(einloggen());
     }
@@ -120,7 +124,7 @@ public class Willkommen extends JFrame {
         try {
             kundenService.login(emailText.getText(), passText.getText());
             kundenService.kill(this);
-            kundenService.setPerson();
+//            kundenService.setPerson();
         } catch (LoginFailedException ex) {
             Alert alert = new Alert(this, ex.getMessage(), "Error");
             alert.showInfoMassage();
