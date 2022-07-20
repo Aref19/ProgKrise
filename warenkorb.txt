@@ -1,2 +1,5 @@
 test1@gmail.com;laptop;2.5;1
 test1@gmail.com;aphel;5.0;2
+m@gmail.com;Coca Cola;2.98;2
+m@gmail.com;Maus;9.99;1
+m@gmail.com;schmuck;12.0;1
