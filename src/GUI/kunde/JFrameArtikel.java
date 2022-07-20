@@ -57,7 +57,7 @@ public class JFrameArtikel extends JFrame {
         setBounds(100, 100, 484, 520);
         contentPane = new JPanel();
         contentPane.setBackground(SystemColor.inactiveCaption);
-        contentPane.setForeground(Color.BLACK);
+        //contentPane.setForeground(Color.BLACK);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
@@ -184,6 +184,7 @@ public class JFrameArtikel extends JFrame {
             try {
                 if(anzahl>0){
                     if(artikelsTablle.getSelectedRow()!=-1){
+                        System.out.println( defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString());
                         ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
                                 defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
                                 defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
@@ -200,7 +201,7 @@ public class JFrameArtikel extends JFrame {
                     alert.showInfoMassage();
                 }
 
-                artikelsTablle.setModel(kundenService.putArtikel());
+
             } catch (BestandNichtAusreichendException ex) {
                 Alert alert = new Alert(this, ex.getMessage(), "Menge");
                 alert.showInfoMassage();
@@ -209,6 +210,8 @@ public class JFrameArtikel extends JFrame {
             }
             anzahl = 0;
             mengetextField.setText("" + anzahl);
+            defaultTableModel=kundenService.putArtikel();
+            artikelsTablle.setModel(defaultTableModel);
         };
     }
 

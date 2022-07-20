@@ -49,10 +49,7 @@ public class JFRegistieren extends JFrame implements ActionListener {
         panel.setBounds(100, 11, 311, 236);
         contentPane.add(panel);
         GridBagLayout gbl_panel = new GridBagLayout();
-        gbl_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
-        gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-        gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel.setLayout(gbl_panel);
 
         JLabel lblNewLabel = new JLabel("Name :");
@@ -199,7 +196,7 @@ public class JFRegistieren extends JFrame implements ActionListener {
         panel.add(passText2, gbc_passText2);
         passText2.setColumns(10);
 
-        abshlissen = new JButton("absclissen");
+        abshlissen = new JButton("Registrieren");
         abshlissen.setBounds(202, 258, 100, 23);
         contentPane.add(abshlissen);
     }

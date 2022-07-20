@@ -1,10 +1,8 @@
 package GUI.services;
 
 import Domain.MitarbeiterVerwaltung;
-import GUI.Wilcomen;
 import exception.LoginFailedException;
 import exception.RegisitierungException;
-import model.Mitarbeiter;
 
 import java.io.IOException;
 

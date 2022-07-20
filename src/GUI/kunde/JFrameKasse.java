@@ -1,5 +1,6 @@
 package GUI.kunde;
 
+
 import GUI.alert.Alert;
 import GUI.services.KundenService;
 import GUI.until.PdfGenerator;
@@ -9,11 +10,13 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+
 public class JFrameKasse extends JFrame {
     private JPanel contentPane;
     private JLabel lblKasse;
     private JButton btnSchlieen;
     private JButton btnEinkaufFortsetzen;
+
    private JList<String> contentList;
     private JButton btnHerunterladen;
     private KundenService kundenService;
@@ -26,6 +29,7 @@ public class JFrameKasse extends JFrame {
         contentList.setModel(kundenService.kasse());
         btnSchlieen.addActionListener(close());
         btnEinkaufFortsetzen.addActionListener(buy());
+
     }
 
     public static void main(String[] args) {
@@ -51,6 +55,7 @@ public class JFrameKasse extends JFrame {
             contentPane.add(lblKasse);
         }
         {
+
             btnSchlieen = new JButton("Schliessen");
             btnSchlieen.setFont(new Font("Andalus", Font.ITALIC, 11));
             btnSchlieen.setFocusable(false);
@@ -59,7 +64,9 @@ public class JFrameKasse extends JFrame {
             contentPane.add(btnSchlieen);
         }
         {
+
             btnEinkaufFortsetzen = new JButton("Kaufen");
+
             btnEinkaufFortsetzen.setFont(new Font("Andalus", Font.ITALIC, 11));
             btnEinkaufFortsetzen.setFocusPainted(false);
             btnEinkaufFortsetzen.setFocusable(false);
@@ -67,11 +74,13 @@ public class JFrameKasse extends JFrame {
             contentPane.add(btnEinkaufFortsetzen);
         }
         {
+
             contentList = new JList<>();
             contentList.setBounds(10, 33, 366, 289);
             DefaultListCellRenderer renderer = (DefaultListCellRenderer) contentList.getCellRenderer();
             renderer.setHorizontalAlignment(SwingConstants.CENTER);
             contentPane.add(contentList);
+
         }
         {
             btnHerunterladen = new JButton("Herunterladen");
@@ -82,6 +91,7 @@ public class JFrameKasse extends JFrame {
             contentPane.add(btnHerunterladen);
         }
     }
+
     private ActionListener close(){
         return e -> {
             Alert alert = new Alert(this, "wollen sie die sache speichern falls ja kann nicht mehr remove", "Vorsicht");
@@ -89,6 +99,7 @@ public class JFrameKasse extends JFrame {
             if (option == JOptionPane.YES_OPTION) {
                kundenService.saveWarenWarenKorb(false);
             }
+            kundenService.kill(this);
         };
     }
 
@@ -107,3 +118,4 @@ public class JFrameKasse extends JFrame {
 
     };
 }
+
