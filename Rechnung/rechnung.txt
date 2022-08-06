@@ -1,5 +1,7 @@
 
-Kunde:	test1;test1;2;2;bren;s;123;test1@gmail.com
-Datum :	2022-07-20T14:48:02.187954500Z
+Kunde:	m;m;2;222;m;m;147;m@gmail.com
+Datum :	2022-08-06T13:44:11.231756900Z
 Wasser	 Anzahl: 	  1
-Laptop	 Anzahl: 	  1
+Uhr	 Anzahl: 	  1
+pp	 Anzahl: 	  4
+schmuck	 Anzahl: 	  1

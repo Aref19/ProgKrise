@@ -125,6 +125,8 @@ public class EshopCui {
             System.out.println(e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (EmailExisted e) {
+            throw new RuntimeException(e);
         }
 
 
