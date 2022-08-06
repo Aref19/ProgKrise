@@ -21,7 +21,6 @@ public class EshopVerwaltung {
     private EreignisVerwaltung ereignisVerwaltung;
 
     /**
-     *
      * TODO pdf Datei laden
      **/
     public EshopVerwaltung() {
@@ -80,7 +79,11 @@ public class EshopVerwaltung {
 
     public void artikelAnlegen(Mitarbeiter mitarbeiter, Artikel artikel) throws IOException {
         try {
-            artikelVerwaltung.artikelAnlegen(artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis());
+            if (artikel instanceof Massengutartikel) {
+                artikelVerwaltung.artikelAnlegen(artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis(), ((Massengutartikel) artikel).getMasse());
+            } else {
+                artikelVerwaltung.artikelAnlegen(artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis(), 1);
+            }
         } catch (IOException e) {
             throw e;
         }
@@ -117,12 +120,14 @@ public class EshopVerwaltung {
         return warenkorbVerwaltung.getWarenKorb(person);
     }
 
-    public void saveWaren(Person person,boolean buystatus) {
+    public void saveWaren(Person person, boolean buystatus) {
         List<Artikel> artikels = ((Kunde) person).getWarenKorp().hashtoList();
+        System.out.println(artikels.size());
         List<WarenKorp> warenKorpList = warenkorbVerwaltung.getSavedWaren();
         boolean save = false;
         for (int i = 0; i < artikels.size(); i++) {
             if (warenKorpList.size() > 0) {
+                save = false;
                 for (int j = 0; j < warenKorpList.size(); j++) {
                     if (warenKorpList.get(j).getEmail().equals(person.getEmail())) {
                         if (artikels.get(i).getArtikelBezeichnung().equals(warenKorpList.get(j).getNameArtikel())) {
@@ -134,7 +139,7 @@ public class EshopVerwaltung {
                         }
                     }
                 }
-                if (!save) {// if email nicht vorhanden
+                if (!save) { // if email nicht vorhanden oder Artikel andere Name
                     int anzahl = ((Kunde) person).getWarenKorp().get().get(artikels.get(i));
                     warenKorpList.add(new WarenKorp(person.getEmail(), artikels.get(i).getArtikelBezeichnung(),
                             anzahl * artikels.get(i).getPreis(), anzahl));
@@ -149,33 +154,32 @@ public class EshopVerwaltung {
         }
         artikelVerwaltung.saveAtrikel(artikelVerwaltung.getArtikelList());
         warenkorbVerwaltung.saveWarenKorb(warenKorpList);
-        if (buystatus){
+        if (buystatus) {
             try {
-                checkIfBuy(person,warenKorpList);
+                checkIfBuy(person, warenKorpList);
             } catch (NotFoundException e) {
                 e.printStackTrace();
             }
         }
 
-
     }
 
-    private void checkIfBuy(Person person,  List<WarenKorp> warenKorpList) throws NotFoundException {
+    private void checkIfBuy(Person person, List<WarenKorp> warenKorpList) throws NotFoundException {
 
-            for (int i = 0; i < warenKorpList.size(); i++) {
-                WarenKorp warenKorp = warenKorpList.get(i);
-                if (warenKorp.getEmail().equals(person.getEmail())) {
-                    warenKorpList.remove(warenKorp);
-                    Artikel artikel=findArtikel(warenKorp.getNameArtikel());
-                    i--;
-                    try {
-                        ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(person,Instant.now(),Ereignis.STATUS.Kauf,artikel));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        for (int i = 0; i < warenKorpList.size(); i++) {
+            WarenKorp warenKorp = warenKorpList.get(i);
+            if (warenKorp.getEmail().equals(person.getEmail())) {
+                warenKorpList.remove(warenKorp);
+                Artikel artikel = findArtikel(warenKorp.getNameArtikel());
+                i--;
+                try {
+                    ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(person, Instant.now(), Ereignis.STATUS.Kauf, artikel));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
             }
+
+        }
         warenkorbVerwaltung.saveWarenKorb(warenKorpList);
     }
 }

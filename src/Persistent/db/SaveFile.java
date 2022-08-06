@@ -81,10 +81,21 @@ public class SaveFile implements SaveRepo {
             String data = bufferedReader.readLine();
             System.out.println(data);
             while (data != null) {
-                String content[] = data.split(";");
-                artikels.add(new Artikel(Integer.valueOf(content[0]),
-                        content[1], Integer.valueOf(content[2]),
-                        Double.valueOf(content[3])));
+                String[] content = data.split(";");
+                Artikel newArtikel;
+                int content0 = Integer.parseInt(content[0]);
+                String content1 = content[1];
+                int content2 = Integer.parseInt(content[2]);
+                double content3 = Double.parseDouble(content[3]);
+
+                if (content.length >= 5) {
+                    newArtikel = new Massengutartikel(content0, content1, content2, content3,
+                            Integer.parseInt(content[4]));
+                } else {
+                    newArtikel = new Artikel(content0, content1, content2, content3);
+                }
+                artikels.add(newArtikel);
+
                 data = bufferedReader.readLine();
                 System.out.println(data);
             }

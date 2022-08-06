@@ -3,6 +3,8 @@ package GUI.kunde;
 
 import GUI.alert.Alert;
 import GUI.services.KundenService;
+import GUI.until.PdfGenerator;
+import model.Rechnung;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -17,26 +19,21 @@ public class JFrameKasse extends JFrame {
     private JButton btnEinkaufFortsetzen;
 
    private JList<String> contentList;
-    private JButton btnHerunterladen;
+
     private KundenService kundenService;
 
     public JFrameKasse(KundenService kundenService) {
         initGUI();
 
-//        this.kundenService = new KundenService(eshop);
-        this.kundenService = kundenService;
-
         this.setVisible(true);
-
+        this.kundenService =kundenService;
+        contentList.setModel(kundenService.kasse());
         btnSchlieen.addActionListener(close());
         btnEinkaufFortsetzen.addActionListener(buy());
-        contentList.setModel(this.kundenService.kasse());
 
     }
 
-//    public static void main(String[] args) {
-//        new JFrameKasse(kundenService);
-//    }
+
 
     private void initGUI() {
         setForeground(SystemColor.inactiveCaption);
@@ -84,15 +81,8 @@ public class JFrameKasse extends JFrame {
             contentPane.add(contentList);
 
         }
-        {
-            btnHerunterladen = new JButton("Herunterladen");
-            btnHerunterladen.setFocusable(false);
-            btnHerunterladen.setFocusPainted(false);
-            btnHerunterladen.setFont(new Font("Andalus", Font.ITALIC, 11));
-            btnHerunterladen.setBounds(120, 332, 107, 21);
-            contentPane.add(btnHerunterladen);
 
-        }
+
     }
 
     private ActionListener close(){
@@ -109,10 +99,11 @@ public class JFrameKasse extends JFrame {
     private ActionListener buy(){
         return e -> {
             kundenService.sacheKaufen();
-            Alert alertRechnung = new Alert(this, "wollen sie Rechnung hrunterladen", "Rechnung");
+            Alert alertRechnung = new Alert(this, "wollen sie Rechnung zeigen und HunterLaden", "Rechnung");
             int option = alertRechnung.vorsicht();
             if (option == JOptionPane.YES_OPTION) {
-                kundenService.creatPdf();
+                Rechnung rechnung=kundenService.creatPdf();
+
             }
             Alert alert = new Alert(this, "Danke für die Einkauf", "^-^");
             alert.showInfoMassage();
