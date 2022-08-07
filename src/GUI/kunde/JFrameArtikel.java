@@ -35,8 +35,8 @@ public class JFrameArtikel extends JFrame {
 
     public JFrameArtikel(KundenService kundenService) {
         initGUI();
-
         this.setVisible(true);
+        kundenService.model=new DefaultListModel<>();
         this.kundenService = kundenService;
         insertArtikel();
         minusBtn.addActionListener(cheangeCount());

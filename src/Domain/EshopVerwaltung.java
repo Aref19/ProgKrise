@@ -19,6 +19,7 @@ public class EshopVerwaltung {
     private WarenkorbVerwaltung warenkorbVerwaltung;
 
     private EreignisVerwaltung ereignisVerwaltung;
+    List<Ereignis> ereignisList;
 
     /**
      * TODO pdf Datei laden
@@ -78,17 +79,17 @@ public class EshopVerwaltung {
     }
 
     public void artikelAnlegen(Mitarbeiter mitarbeiter, Artikel artikel) throws IOException {
+        Ereignis.STATUS status=null;
         try {
             if (artikel instanceof Massengutartikel) {
-                artikelVerwaltung.artikelAnlegen(artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis(), ((Massengutartikel) artikel).getMasse());
+                status = artikelVerwaltung.artikelAnlegen(artikel.getArtikelNr(),artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis(), ((Massengutartikel) artikel).getMasse());
             } else {
-                artikelVerwaltung.artikelAnlegen(artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis(), 1);
+                status = artikelVerwaltung.artikelAnlegen(artikel.getArtikelNr(),artikel.getArtikelBestand(), artikel.getArtikelBezeichnung(), artikel.getPreis(), 1);
             }
         } catch (IOException e) {
             throw e;
         }
-        ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(mitarbeiter, Instant.now(), Ereignis.STATUS.Neu, artikel));
-
+        ereignisVerwaltung.fuegeEreignisHinzu(new Ereignis(mitarbeiter, Instant.now(), status, artikel));
     }
 
     public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email)
@@ -181,5 +182,41 @@ public class EshopVerwaltung {
 
         }
         warenkorbVerwaltung.saveWarenKorb(warenKorpList);
+    }
+
+    public List<Ereignis> ereignissToSaveToEreigniss() {
+         ereignisList = new ArrayList<>();
+        List<ErignisToSave> listErignisSave = ereignisVerwaltung.getEreignisse();
+        List<Mitarbeiter> mitarbeiterList = mitarbeiterVerwaltung.getMitarbeiterList();
+        List<Kunde> kundeList = kundeVerwaltung.getKundeArrayList();
+        List<Artikel> artikels = artikelVerwaltung.getArtikelList();
+
+        for (ErignisToSave erignisToSave : listErignisSave) {
+            //mitarbeiter
+            for (Person mitarbeiter : mitarbeiterList) {
+                if (erignisToSave.personId().equals(mitarbeiter.getId())) {
+                    for (Artikel artikel : artikels) {
+                        if (artikel.getArtikelNr().equals( erignisToSave.getArtikelNummer())) {
+                            ereignisList.add(new Ereignis(mitarbeiter, erignisToSave.getDatum(), erignisToSave.getStatus(), artikel));
+                        }
+                    }
+                }
+            }
+            //kunde
+            for (Person kund : kundeList) {
+                if (erignisToSave.personId().equals(kund.getId())) {
+                    for (Artikel artikel : artikels) {
+                        if (artikel.getArtikelNr().equals( erignisToSave.getArtikelNummer())) {
+                            ereignisList.add(new Ereignis(kund, erignisToSave.getDatum(), erignisToSave.getStatus(), artikel));
+                        }
+                    }
+                }
+            }
+        }
+        return ereignisList;
+    }
+
+    public List<Ereignis> sortedErigmis(int sortart){
+      return   ereignisVerwaltung.sortEreignisse(sortart,ereignisList);
     }
 }

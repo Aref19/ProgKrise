@@ -5,22 +5,25 @@ import exception.EmailExisted;
 import exception.INcorrectEmailException;
 import exception.LoginFailedException;
 import exception.RegisitierungException;
-import model.Artikel;
-import model.Massengutartikel;
+import model.*;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MitarbeiterService {
     EshopVerwaltung eschopverwaltung = new EshopVerwaltung();
     private DefaultTableModel defaultTableModel;
-    public boolean anmelden (String email, String password){
+    Person mitarbeiter;
+    public void anmelden (String email, String password) throws LoginFailedException {
         try {
-            eschopverwaltung.mitarbeiterEinloggen(email,password);
-            return true;
+            mitarbeiter=eschopverwaltung.mitarbeiterEinloggen(email,password).person;
+            System.out.println(mitarbeiter.getId());
         } catch (LoginFailedException e) {
-            return false;
+            throw  e;
         }
     }
     public boolean registrieren(String name, String nachname, String passwort, String email)
@@ -67,6 +70,51 @@ public class MitarbeiterService {
         return defaultTableModel;
     }
 
+    public void artikelLegen(Artikel artikel) throws IOException {
+        eschopverwaltung.artikelAnlegen(((Mitarbeiter) mitarbeiter),artikel);
+    }
+
+    public DefaultTableModel putErignisse(){
+        List<Ereignis> ereignis = eschopverwaltung.ereignissToSaveToEreigniss();
+        defaultTableModel = new DefaultTableModel();
+        defaultTableModel.addColumn("Person");
+        defaultTableModel.addColumn("Datum");
+        defaultTableModel.addColumn("Artikel");
+        defaultTableModel.addColumn("Menge");
+        defaultTableModel.addColumn("Satus");
+        for (Ereignis ereignis1 : ereignis) {
+                String[] artikleArray = {ereignis1.getPerson().getVorName(),simpleFormat( Date.from(ereignis1.getDatum())),
+                        ereignis1.getArtikel().getArtikelBezeichnung(),String.valueOf( ereignis1.getArtikel().getArtikelBestand()),
+                ereignis1.getStatus().toString()};
+                defaultTableModel.addRow(artikleArray);
+
+        }
+        return defaultTableModel;
+    }
+
+    private String simpleFormat(Date date){
+        SimpleDateFormat simpleFormatter=new SimpleDateFormat("HH:mm dd.MM yyyy");
+        return simpleFormatter.format(date);
+
+    }
+
+    public DefaultTableModel putErignisseSorted(int sort){
+        List<Ereignis> ereignis = eschopverwaltung.sortedErigmis(sort);
+        defaultTableModel = new DefaultTableModel();
+        defaultTableModel.addColumn("Person");
+        defaultTableModel.addColumn("Datum");
+        defaultTableModel.addColumn("Artikel");
+        defaultTableModel.addColumn("Menge");
+        defaultTableModel.addColumn("Satus");
+        for (Ereignis ereignis1 : ereignis) {
+            String[] artikleArray = {ereignis1.getPerson().getVorName(),simpleFormat( Date.from(ereignis1.getDatum())),
+                    ereignis1.getArtikel().getArtikelBezeichnung(),String.valueOf( ereignis1.getArtikel().getArtikelBestand()),
+                    ereignis1.getStatus().toString()};
+            defaultTableModel.addRow(artikleArray);
+
+        }
+        return defaultTableModel;
+    }
 
 
 

@@ -25,6 +25,7 @@ public class JFrameNewMitarbeiter extends JFrame {
     private JLabel lblPasswort;
     private JPasswordField passwordField;
     private JButton btnRegistrieren;
+    private JButton btnZurck;
 
     MitarbeiterService mitarbeiterService = new MitarbeiterService();
     public JFrameNewMitarbeiter(){
@@ -32,17 +33,18 @@ public class JFrameNewMitarbeiter extends JFrame {
         this.setVisible(true);
         this.setLocation(400,40);
         btnRegistrieren.addActionListener(mitarbeiterRegistrieren());
+        btnZurck.addActionListener(back());
     }
 
 
 
     public static void main(String[] args) {
-       new JFrameNewMitarbeiter();
+        new JFrameNewMitarbeiter();
     }
 
     private void initGUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 400, 365);
+        setBounds(100, 100, 410, 365);
         contentPane = new JPanel();
         contentPane.setBackground(SystemColor.inactiveCaption);
         setContentPane(contentPane);
@@ -127,8 +129,22 @@ public class JFrameNewMitarbeiter extends JFrame {
             btnRegistrieren.setFocusPainted(false);
             btnRegistrieren.setFocusable(false);
             btnRegistrieren.setFont(new Font("Andalus", Font.ITALIC, 12));
-            btnRegistrieren.setBounds(10, 303, 366, 21);
+            btnRegistrieren.setBounds(250, 303, 140, 21);
             contentPane.add(btnRegistrieren);
+        }
+        {
+            btnZurck = new JButton("Zur\u00FCck");
+            btnZurck.addActionListener(new ActionListener() {
+
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            btnZurck.setFocusPainted(false);
+            btnZurck.setFocusable(false);
+            btnZurck.setFont(new Font("Andalus", Font.ITALIC, 13));
+            btnZurck.setBounds(10, 303, 140, 21);
+            contentPane.add(btnZurck);
         }
 
     }
@@ -137,7 +153,7 @@ public class JFrameNewMitarbeiter extends JFrame {
 
             boolean antwort = false;
             if(checkData(textFieldVorname ,textFieldNachname,passwordField,textFieldEmail)){
-            try {
+                try {
                     antwort = mitarbeiterService.registrieren(
                             textFieldVorname.getText(),
                             textFieldNachname.getText(),
@@ -145,7 +161,7 @@ public class JFrameNewMitarbeiter extends JFrame {
                             textFieldEmail.getText()
                     );
                 } catch(EmailExisted e){
-                new Alert(this, "check Email Existed", "Registrierung ").showInfoMassage();
+                    new Alert(this, "check Email Existed", "Registrierung ").showInfoMassage();
                 } catch(INcorrectEmailException e){
                     new Alert(this, "check Email", "Registrierung ").showInfoMassage();
                 }
@@ -175,6 +191,13 @@ public class JFrameNewMitarbeiter extends JFrame {
             }
         }
         return true;
+    }
+
+    public ActionListener back(){
+        return e->{
+            new JFrameMitarbeiter(mitarbeiterService);
+            this.dispose();
+        };
     }
 
 

@@ -53,6 +53,7 @@ public class MitarbeiterVerwaltung {
         }
 
         Mitarbeiter mitarbeiter = new Mitarbeiter(name, nachname, passwort, email);
+        System.out.println("id Mit :"+mitarbeiter.getId());
         mitarbeiterList.add(mitarbeiter);
 
         saveMitarbeiter();
@@ -81,6 +82,21 @@ public class MitarbeiterVerwaltung {
         saveRepo.openForWrite(filename);
         saveRepo.mitarbeiterSpeichern(mitarbeiterList);
         saveRepo.closeWrite();
+    }
+
+    public List<Mitarbeiter> getMitarbeiterList(){
+        try {
+            loadMitarbeiter();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return mitarbeiterList;
+    }
+
+    private void loadMitarbeiter() throws IOException {
+        saveRepo.openForRead(filename);
+        mitarbeiterList = saveRepo.loadMitarbeiter();
+        saveRepo.closRead();
     }
 
 
