@@ -3,6 +3,7 @@ package Domain;
 import Persistent.db.SaveFile;
 import Persistent.repo.SaveRepo;
 import exception.CustomIoException;
+import exception.EmailExisted;
 import exception.LoginFailedException;
 import exception.RegisitierungException;
 import model.*;
@@ -44,13 +45,10 @@ public class MitarbeiterVerwaltung {
      * @throws CustomIoException
      */
 
-    public void mitarbeiterAnlegen(String name, String nachname, String passwort, String email) throws RegisitierungException, IOException {
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort, String email) throws RegisitierungException, IOException,EmailExisted {
         for (Mitarbeiter listAusgeben : mitarbeiterList) {
-            if (name.equals(listAusgeben.getVorName())
-                    && nachname.equals(listAusgeben.getNachName())
-                    && email.equals(listAusgeben.getEmail())) {
-                throw new RegisitierungException("Diese Kombination von Namen :" + name + "und Nachnamen" + nachname +
-                     email + "und E-Mail"   + "esistiert Bereits schon");
+            if (email.equals(listAusgeben.getEmail())) {
+                throw new EmailExisted();
             }
         }
 

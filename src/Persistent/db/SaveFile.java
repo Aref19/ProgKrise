@@ -278,7 +278,6 @@ public class SaveFile implements SaveRepo {
             String data = bufferedReader.readLine();
             while (data != null && !data.isEmpty()) {
                 String content[] = data.split(";");
-
                 ereignses.add(new ErignisToSave(
                         UUID.fromString(content[1]),
                         Integer.valueOf(content[2]),

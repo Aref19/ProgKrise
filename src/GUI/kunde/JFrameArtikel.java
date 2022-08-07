@@ -242,5 +242,6 @@ public class JFrameArtikel extends JFrame {
             kundenService.kill(this);
         };
     }
+
 }
 

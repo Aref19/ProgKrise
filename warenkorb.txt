@@ -1,3 +1,0 @@
-m@gmail.com;schmuck;12.0;1
-m@gmail.com;Uhr;39.99;1
-m@gmail.com;Wasser;0.75;1

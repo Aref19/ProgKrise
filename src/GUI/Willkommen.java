@@ -3,8 +3,9 @@ package GUI;
 import GUI.alert.Alert;
 import GUI.alert.Dialog;
 import GUI.kunde.JFrameArtikel;
-import GUI.mitarbeiter.JFrameMitarbeiterRegistrieren;
 import GUI.kunde.JFRegistieren;
+import GUI.mitarbeiter.JFrameMitarbeiter;
+import GUI.mitarbeiter.JFrameNewMitarbeiter;
 import GUI.services.KundenService;
 import GUI.services.MitarbeiterService;
 import exception.LoginFailedException;
@@ -28,8 +29,7 @@ public class Willkommen extends JFrame {
     JRadioButton mitarbeiterRadio;
     JRadioButton kundRadio;
     MitarbeiterService mitarbeiterService = new MitarbeiterService();
-    JFrameMitarbeiterRegistrieren jFrameMitarbeiterRegistrieren = new JFrameMitarbeiterRegistrieren();
-
+    JFrameNewMitarbeiter jFrameMitarbeiterRegistrieren ;
     public Willkommen(String title) throws HeadlessException {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,7 +97,8 @@ public class Willkommen extends JFrame {
             if (mitarbeiterRadio.isSelected()) {
                 boolean antwort = mitarbeiterService.anmelden(emailText.getText(), passText.getText());
                 if (antwort == true) {
-                    jFrameMitarbeiterRegistrieren.setVisible(true);
+                    new JFrameMitarbeiter(mitarbeiterService);
+                    this.dispose();
                 } else
                     new Alert(this, "Ups! Überprüfe deine Daten", "Anmelde Fehler").showInfoMassage();
             } else if (kundRadio.isSelected()) {
@@ -114,7 +115,8 @@ public class Willkommen extends JFrame {
                 kundenService.kill(this);
                 new JFRegistieren(kundenService);
             } else if (mitarbeiterRadio.isSelected()) {
-                //ToDo Ajab
+                jFrameMitarbeiterRegistrieren = new JFrameNewMitarbeiter();
+                kundenService.kill(this);
             }
         };
     }

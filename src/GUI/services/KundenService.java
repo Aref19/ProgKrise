@@ -100,7 +100,7 @@ public class KundenService {
         return defaultTableModel;
     }
 
-    public Rechnung creatPdf() {
+    public void creatPdf() {
         PdfGenerator pdfGenerator = null;
         Rechnung rechnung = null;
         try {
@@ -110,6 +110,15 @@ public class KundenService {
             e.printStackTrace();
         }
         pdfGenerator.creatPdf();
+    }
+
+    public Rechnung getRechnung() {
+        Rechnung rechnung = null;
+        try {
+            rechnung = eshop.getRec(((Kunde) person), ((Kunde) person).getWarenKorp().get());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return rechnung;
     }
 

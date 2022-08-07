@@ -92,7 +92,7 @@ public class EshopVerwaltung {
     }
 
     public void mitarbeiterAnthorRegiseren(String name, String nachname, String passwort, String email)
-            throws RegisitierungException, INcorrectEmailException, IOException {
+            throws RegisitierungException, INcorrectEmailException, IOException, EmailExisted {
         Person.checkEmail(email);
         mitarbeiterVerwaltung.mitarbeiterAnlegen(name, nachname, passwort, email);
 

@@ -1,8 +1,16 @@
 package GUI.mitarbeiter;
 
+import GUI.Willkommen;
+import GUI.alert.Alert;
+import GUI.services.MitarbeiterService;
+import exception.EmailExisted;
+import exception.INcorrectEmailException;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class JFrameNewMitarbeiter extends JFrame {
 
@@ -18,12 +26,15 @@ public class JFrameNewMitarbeiter extends JFrame {
     private JPasswordField passwordField;
     private JButton btnRegistrieren;
 
-
+    MitarbeiterService mitarbeiterService = new MitarbeiterService();
     public JFrameNewMitarbeiter(){
         initGUI();
         this.setVisible(true);
         this.setLocation(400,40);
+        btnRegistrieren.addActionListener(mitarbeiterRegistrieren());
     }
+
+
 
     public static void main(String[] args) {
        new JFrameNewMitarbeiter();
@@ -36,6 +47,7 @@ public class JFrameNewMitarbeiter extends JFrame {
         contentPane.setBackground(SystemColor.inactiveCaption);
         setContentPane(contentPane);
         contentPane.setLayout(null);
+
 
 
         {
@@ -120,4 +132,50 @@ public class JFrameNewMitarbeiter extends JFrame {
         }
 
     }
+    public ActionListener mitarbeiterRegistrieren() {
+        return event -> {
+
+            boolean antwort = false;
+            if(checkData(textFieldVorname ,textFieldNachname,passwordField,textFieldEmail)){
+            try {
+                    antwort = mitarbeiterService.registrieren(
+                            textFieldVorname.getText(),
+                            textFieldNachname.getText(),
+                            passwordField.getText(),
+                            textFieldEmail.getText()
+                    );
+                } catch(EmailExisted e){
+                new Alert(this, "check Email Existed", "Registrierung ").showInfoMassage();
+                } catch(INcorrectEmailException e){
+                    new Alert(this, "check Email", "Registrierung ").showInfoMassage();
+                }
+                if (antwort) {
+                    new Alert(this, "Du würdest Registriert", "Registrierung Erfolgreich").showInfoMassage();
+                    leereFelder();
+                    new JFrameMitarbeiter();
+                    this.dispose();
+                }
+            }else
+                new Alert(this, "one Field Text is empty", "Registrierung Erfolgreich").showInfoMassage();
+
+        };
+    }
+    public void leereFelder(){
+        textFieldVorname.setText("");
+        textFieldNachname.setText("");
+        passwordField.setText("");
+        textFieldEmail.setText("");
+
+    }
+
+    public boolean checkData(JTextField...textFields){
+        for (JTextField jTextField : textFields){
+            if(jTextField.getText().equals("")){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
