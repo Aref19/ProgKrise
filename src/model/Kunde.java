@@ -60,5 +60,6 @@ public class Kunde extends Person {
     public String toString() {
         return this.getVorName() +";"+this.getNachName()+";"+this.adresse.toString()+";"+this.getPassword()+";"+this.getEmail();
     }
+
 }
 

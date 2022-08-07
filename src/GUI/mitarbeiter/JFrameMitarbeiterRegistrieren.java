@@ -114,6 +114,7 @@ public class JFrameMitarbeiterRegistrieren extends JFrame {
         mitarbeiterNachnameTextField.setText("");
         mitarbeiterPasswortTextField.setText("");
         emailMitarbeiterTextField.setText("");
-
     }
+
+
 }
