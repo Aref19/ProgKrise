@@ -4,6 +4,7 @@ import model.Artikel;
 import model.Rechnung;
 import org.w3c.dom.Document;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class PdfGenerator {
             file.mkdir();
         }
         try {
-            pdfFile=new File("Rechnung/rechnung.txt");
+            pdfFile=new File("Rechnung/Artikel_"+Instant.now().getEpochSecond()+".txt");
             pdfFile.createNewFile();
             FileWriter writer=new FileWriter(pdfFile);
              String rec=rechnung.toString();
@@ -34,6 +35,8 @@ public class PdfGenerator {
             e.printStackTrace();
         }
     }
+
+
 
 
 }

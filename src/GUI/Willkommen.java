@@ -1,20 +1,21 @@
 package GUI;
 
 import GUI.alert.Alert;
-import GUI.mitarbeiter.JFrameMitarbeiterRegistrieren;
-import GUI.alert.Alert;
+import GUI.alert.Dialog;
+import GUI.kunde.JFrameArtikel;
 import GUI.kunde.JFRegistieren;
+import GUI.mitarbeiter.JFrameMitarbeiter;
+import GUI.mitarbeiter.JFrameNewMitarbeiter;
 import GUI.services.KundenService;
 import GUI.services.MitarbeiterService;
 import exception.LoginFailedException;
+import model.Person;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.awt.event.ActionListener;
 
-public class Wilcomen extends JFrame {
+public class Willkommen extends JFrame {
     private Container container;
     private JTextField emailText;
     private JPasswordField passText;
@@ -28,11 +29,11 @@ public class Wilcomen extends JFrame {
     JRadioButton mitarbeiterRadio;
     JRadioButton kundRadio;
     MitarbeiterService mitarbeiterService = new MitarbeiterService();
-    JFrameMitarbeiterRegistrieren jFrameMitarbeiterRegistrieren = new JFrameMitarbeiterRegistrieren();
-
-    public Wilcomen(String title) throws HeadlessException {
+    JFrameNewMitarbeiter jFrameMitarbeiterRegistrieren ;
+    public Willkommen(String title) throws HeadlessException {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(SystemColor.inactiveCaption);
         setBounds(100, 100, 423, 272);
         getContentPane().setLayout(null);
         initialize();
@@ -44,42 +45,51 @@ public class Wilcomen extends JFrame {
 
     public void initialize() {
 
-        emaiJLabel = new JLabel("email");
-        emaiJLabel.setBounds(42, 70, 46, 14);
+        emaiJLabel = new JLabel("Email");
+        emaiJLabel.setFont(new Font("Andalus", Font.ITALIC, 12));
+        emaiJLabel.setBounds(15, 60, 46, 14);
         getContentPane().add(emaiJLabel);
         buttonGroup = new ButtonGroup();
         emailText = new JTextField();
-        emailText.setBounds(110, 67, 131, 20);
+        emailText.setBounds(80, 59, 131, 20);
         getContentPane().add(emailText);
         emailText.setColumns(10);
 
-        pasJLabel = new JLabel("pass");
-        pasJLabel.setBounds(42, 108, 46, 14);
+        pasJLabel = new JLabel("Passwort");
+        pasJLabel.setFont(new Font("Andalus", Font.ITALIC, 12));
+        pasJLabel.setBounds(13, 108, 60, 14);
         getContentPane().add(pasJLabel);
+        passText = new JPasswordField();
+        passText.setBounds(80, 105, 131, 20);
+        getContentPane().add(passText);
 
-        mitarbeiterRadio = new JRadioButton("mitarbeiter");
+        mitarbeiterRadio = new JRadioButton("Mitarbeiter");
         buttonGroup.add(mitarbeiterRadio);
 
         mitarbeiterRadio.setBounds(292, 66, 109, 23);
         getContentPane().add(mitarbeiterRadio);
 
-        kundRadio = new JRadioButton("kunde");
+        kundRadio = new JRadioButton("Kunde");
         buttonGroup.add(kundRadio);
         kundRadio.setSelected(true);
         kundRadio.setBounds(292, 104, 109, 23);
         getContentPane().add(kundRadio);
 
-        registereJButton = new JButton("Registeren");
-        registereJButton.setBounds(246, 199, 100, 23);
+        registereJButton = new JButton("Registrieren");
+        registereJButton.setFont(new Font("Andalus", Font.ITALIC, 12));
+        registereJButton.setFocusable(false);
+        registereJButton.setFocusPainted(false);
+        registereJButton.setBounds(275, 199, 120, 23);
         getContentPane().add(registereJButton);
 
-        anmeldJButton = new JButton("anmelden");
-        anmeldJButton.setBounds(128, 199, 100, 23);
+        anmeldJButton = new JButton("Anmelden");
+        anmeldJButton.setFont(new Font("Andalus", Font.ITALIC, 12));
+        anmeldJButton.setFocusable(false);
+        anmeldJButton.setFocusPainted(false);
+        anmeldJButton.setBounds(15, 199, 100, 23);
         getContentPane().add(anmeldJButton);
 
-        passText = new JPasswordField();
-        passText.setBounds(110, 105, 131, 20);
-        getContentPane().add(passText);
+
     }
 
     private ActionListener einloggen() {
@@ -87,9 +97,10 @@ public class Wilcomen extends JFrame {
             if (mitarbeiterRadio.isSelected()) {
                 boolean antwort = mitarbeiterService.anmelden(emailText.getText(), passText.getText());
                 if (antwort == true) {
-                    jFrameMitarbeiterRegistrieren.setVisible(true);
+                    new JFrameMitarbeiter(mitarbeiterService);
+                    this.dispose();
                 } else
-                    new Alert(this, "Ups Überprüf deine Daten", "anmelde Fehler").showInfoMassage();
+                    new Alert(this, "Ups! Überprüfe deine Daten", "Anmelde Fehler").showInfoMassage();
             } else if (kundRadio.isSelected()) {
                 anmelden();
             }
@@ -98,21 +109,26 @@ public class Wilcomen extends JFrame {
     }
 
     private ActionListener registrieren() {
+
         return e -> {
             if (kundRadio.isSelected()) {
                 kundenService.kill(this);
-                new JFRegistieren("Registieren");
+                new JFRegistieren(kundenService);
             } else if (mitarbeiterRadio.isSelected()) {
-                //ToDo Ajab
+                jFrameMitarbeiterRegistrieren = new JFrameNewMitarbeiter();
+                kundenService.kill(this);
             }
         };
     }
 
     private void anmelden() {
         try {
-            kundenService.login(emailText.getText(), passText.getText());
+           Person person= kundenService.login(emailText.getText(), passText.getText());
             kundenService.kill(this);
-            kundenService.setPerson();
+            JFrameArtikel jFrameArtikel = new JFrameArtikel(kundenService);
+            Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
+            Thread thread = new Thread(readable);
+            thread.start();
         } catch (LoginFailedException ex) {
             Alert alert = new Alert(this, ex.getMessage(), "Error");
             alert.showInfoMassage();
@@ -120,8 +136,10 @@ public class Wilcomen extends JFrame {
     }
 
 
+
     public static void main(String[] args) {
-        Wilcomen wilcomen = new Wilcomen("");
+        Willkommen willkommen = new Willkommen("");
     }
+
 
 }

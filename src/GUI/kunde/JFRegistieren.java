@@ -1,6 +1,7 @@
 package GUI.kunde;
 
 import GUI.alert.Alert;
+import GUI.services.KundenService;
 import exception.INcorrectEmailException;
 import exception.RegisitierungException;
 import model.Adresse;
@@ -25,10 +26,11 @@ public class JFRegistieren extends JFrame implements ActionListener {
     private JPasswordField passText1;
     private JPasswordField passText2;
     private JButton abshlissen;
-    private EshopCui eshopCui;
+    private KundenService kundenService;
 
-    public JFRegistieren(String title) throws HeadlessException {
-        super(title);
+
+    public JFRegistieren(KundenService  kundenService) throws HeadlessException {
+
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 505, 337);
@@ -37,7 +39,7 @@ public class JFRegistieren extends JFrame implements ActionListener {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
-        eshopCui = new EshopCui();
+        this.kundenService = kundenService;
         instalizer();
         setVisible(true);
         abshlissen.addActionListener(this);
@@ -49,10 +51,7 @@ public class JFRegistieren extends JFrame implements ActionListener {
         panel.setBounds(100, 11, 311, 236);
         contentPane.add(panel);
         GridBagLayout gbl_panel = new GridBagLayout();
-        gbl_panel.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0};
-        gbl_panel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-        gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
         panel.setLayout(gbl_panel);
 
         JLabel lblNewLabel = new JLabel("Name :");
@@ -199,39 +198,27 @@ public class JFRegistieren extends JFrame implements ActionListener {
         panel.add(passText2, gbc_passText2);
         passText2.setColumns(10);
 
-        abshlissen = new JButton("absclissen");
+        abshlissen = new JButton("Registrieren");
         abshlissen.setBounds(202, 258, 100, 23);
         contentPane.add(abshlissen);
     }
 
-    public static void main(String[] args) {
-        JFRegistieren jfRegistieren = new JFRegistieren("");
-    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Alert alert;
-        try {
-            if (passText1.getText().equals(passText2.getText())) {
-                Kunde kunde = new Kunde(nameText.getText(), nachnameText.getText(), new Adresse(Integer.valueOf(hasunuText.getText()),
-                        Integer.valueOf(plzText.getText()), stadtText.getText(), strasseText.getText()), passText1.getText(), emailText.getText());
-                eshopCui.kundeRegistrieren(kunde);
-                this.dispose();
-                //ToDo new JFarme Artikel oder so was
-                return;
-            } else {
-                alert = new Alert(this, "pass nicht gleich", "Password");
-            }
-        } catch (INcorrectEmailException ex) {
-            alert = new Alert(this, ex.getMessage(), "Email!");
-        } catch (NumberFormatException ne) {
-            alert = new Alert(this, "das ist keine Nr\n" + ne.getMessage(), "Nummer");
-        } catch (RegisitierungException regex) {
-            System.out.println("na");
-            ;
-            alert = new Alert(this, regex.getMessage(), "Registeren");
+        Kunde kunde = new Kunde(nameText.getText(), nachnameText.getText(), new Adresse(Integer.valueOf(hasunuText.getText()),
+                Integer.valueOf(plzText.getText()), stadtText.getText(), strasseText.getText()), passText1.getText(), emailText.getText());
+        if (passText1.getText().equals(passText2.getText())) {
+            kundenService.kundRegisteren(kunde,this);
+            this.dispose();
+            //ToDo new JFarme Artikel oder so was
+            return;
+        } else {
+            alert = new Alert(this, "pass nicht gleich", "Password");
+            alert.showInfoMassage();
         }
-        alert.showInfoMassage();
 
     }
 }

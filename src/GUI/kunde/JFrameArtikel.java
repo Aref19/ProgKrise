@@ -32,11 +32,12 @@ public class JFrameArtikel extends JFrame {
     private JButton entfernen;
     int anzahl = 0;
 
-    public JFrameArtikel() {
+
+    public JFrameArtikel(KundenService kundenService) {
         initGUI();
 
         this.setVisible(true);
-        kundenService = new KundenService();
+        this.kundenService = kundenService;
         insertArtikel();
         minusBtn.addActionListener(cheangeCount());
         plusBtn.addActionListener(cheangeCount());
@@ -47,9 +48,7 @@ public class JFrameArtikel extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        new JFrameArtikel();
-    }
+
 
     private void initGUI() {
         setBounds(new Rectangle(20, 20, 20, 20));
@@ -57,7 +56,7 @@ public class JFrameArtikel extends JFrame {
         setBounds(100, 100, 484, 520);
         contentPane = new JPanel();
         contentPane.setBackground(SystemColor.inactiveCaption);
-        contentPane.setForeground(Color.BLACK);
+        //contentPane.setForeground(Color.BLACK);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
@@ -182,31 +181,52 @@ public class JFrameArtikel extends JFrame {
     private ActionListener fugeArtikel() {
         return e -> {
             try {
-                ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
-                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
-                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
-                        defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 2).toString(),
-                        anzahl
-                ));
-                artikelsTablle.setModel(kundenService.putArtikel());
+                if(anzahl>0){
+                    if(artikelsTablle.getSelectedRow()!=-1){
+                        int masse= Integer.parseInt(defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 3).toString());
+                        if(anzahl%masse==0){
+                            ArtikelnhinzufügentextPane_1.setModel(kundenService.artikelEinfugen(
+                                    defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 0).toString(),
+                                    defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 1).toString(),
+                                    defaultTableModel.getValueAt(artikelsTablle.getSelectedRow(), 2).toString(),
+                                    anzahl
+                            ));
+
+                        }else {
+                            Alert alert = new Alert(this, "bitte in "+masse+" Mengen nehmen", "Menge");
+                            alert.showInfoMassage();
+                        }
+
+                    }else {
+                        Alert alert = new Alert(this, "bitte select Produckt", "Menge");
+                        alert.showInfoMassage();
+                    }
+
+                }else {
+                    Alert alert = new Alert(this, "bitte select nummer", "Menge");
+                    alert.showInfoMassage();
+                }
+
+
             } catch (BestandNichtAusreichendException ex) {
                 Alert alert = new Alert(this, ex.getMessage(), "Menge");
                 alert.showInfoMassage();
             } catch (NotFoundException ex) {
-                Alert alert = new Alert(this, "bitte select Produckt", "Menge");
-                alert.showInfoMassage();
+
             }
             anzahl = 0;
             mengetextField.setText("" + anzahl);
+            defaultTableModel=kundenService.putArtikel();
+            artikelsTablle.setModel(defaultTableModel);
         };
     }
 
     private ActionListener entfernArtiekl() {
         return e -> {
             int index = ArtikelnhinzufügentextPane_1.getSelectedIndex();
-
                 try {
-                    kundenService.entfernenFromKorp(index);
+                   defaultTableModel= kundenService.entfernenFromKorp(index);
+                    artikelsTablle.setModel(defaultTableModel);
                 } catch (NotFoundException ex) {
                     Alert alert = new Alert(this, ex.getMessage(), "Eroor");
                     alert.showInfoMassage();
@@ -218,9 +238,10 @@ public class JFrameArtikel extends JFrame {
 
     private ActionListener kasse(){
         return e->{
-            new JFrameKasse();
+            new JFrameKasse(kundenService);
             kundenService.kill(this);
         };
     }
+
 }
 

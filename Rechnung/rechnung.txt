@@ -1,4 +1,0 @@
-
-Kunde:	test1;test1;2;2;bren;s;123;test1@gmail.com
-Datum :	2022-07-16T20:24:54.930363700Z
-laptop	 Anzahl: 	  1
