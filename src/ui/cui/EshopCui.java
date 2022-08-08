@@ -2,7 +2,6 @@
 package ui.cui;
 
 import Domain.*;
-import Persistent.PersistentMitarbeiter;
 import Utilities.IO;
 import exception.*;
 import model.*;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class EshopCui {
     EshopVerwaltung eshopVerwaltung = new EshopVerwaltung();
-    PersistentMitarbeiter persistentMitarbeiter = new PersistentMitarbeiter();
+
 
     static Person person;
 
@@ -63,13 +62,14 @@ public class EshopCui {
      *
      * @return
      */
-    public KundeEinlogen kundenEinloggen(String email,String pass) {
+    public Einlogen kundenEinloggen(String email,String pass) {
         try {
             return eshopVerwaltung.kundenEinloggen(email, pass);
         } catch (LoginFailedException ex) {
             System.out.println(ex.getMessage());
         }
-        return new KundeEinlogen(null, false);
+        return null;
+
     }
 
 
@@ -80,10 +80,9 @@ public class EshopCui {
      * @throws CustomIoException
      */
     public boolean mitarbeiterEinloggen(String email,String pass) throws IOException {
-        MItarbeiterEilogen mItarbeiterEilogen=new MItarbeiterEilogen(null,false);
+        Einlogen mItarbeiterEilogen=new Einlogen(null,false);
         try {
             mItarbeiterEilogen=eshopVerwaltung.mitarbeiterEinloggen(email,pass);
-            person=mItarbeiterEilogen.mitarbeiter;
             return mItarbeiterEilogen.gefunden;
         } catch (LoginFailedException e) {
             System.out.println( e.getMessage());
@@ -100,7 +99,7 @@ public class EshopCui {
             System.out.println("Geben Sie Anzahl der Artikel:");
             int anzahlArtikel = IO.inputInt();
             try {
-                artikels.add(eshopVerwaltung.warenlegen(name, anzahlArtikel, (Kunde) person));
+               eshopVerwaltung.warenlegen(name, anzahlArtikel, (Kunde) person);
             } catch (BestandNichtAusreichendException e) {
                 System.out.println(e.getMessage());
             } catch (NotFoundException e) {
@@ -154,10 +153,12 @@ public class EshopCui {
         try {
             eshopVerwaltung.mitarbeiterAnthorRegiseren(name, namchname, passwort,email);
             System.out.println("Registrierung ist Erfolgreich Abgeschlossen");
-        } catch (RegisitierungException e) {
+        } catch (INcorrectEmailException e){
             System.out.println(e.getMessage());
-        }catch (INcorrectEmailException e){
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (EmailExisted e) {
+            throw new RuntimeException(e);
         }
 
 
@@ -197,9 +198,9 @@ public class EshopCui {
                     kundeRegistrieren();
                 }
                 case 2 -> {
-                    KundeEinlogen kundeEinlogen = kundenEinloggen("Aj@gmail.com","w");
+                    Einlogen kundeEinlogen = kundenEinloggen("Aj@gmail.com","w");
                     if (kundeEinlogen.gefunden) {
-                        person = kundeEinlogen.kunde;
+
                         System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb: 1 oder Abmelden: 2");
                         if (IO.inputInt() == 2) {
                             run();

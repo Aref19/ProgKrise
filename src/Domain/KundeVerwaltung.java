@@ -1,34 +1,37 @@
 package Domain;
 
 
-import Persistent.PersistentKunde;
+import Persistent.db.SaveFile;
+import Persistent.repo.SaveRepo;
 import exception.LoginFailedException;
 
 import exception.RegisitierungException;
-import model.Artikel;
-import model.Ereignis;
-import model.KundeEinlogen;
+import model.Einlogen;
 import model.Kunde;
+import model.WarenKorp;
 
 
-import java.time.Instant;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.List;
 
 public class KundeVerwaltung {
 
-    private ArrayList<Kunde> kundeArrayList;
-    private PersistentKunde persistentKunde = new PersistentKunde();
-    Kunde kunde;
+    private List<Kunde> kundeArrayList;
+    private SaveRepo saveRepo;
+    final String fileName = "kundsave.txt";
 
     public KundeVerwaltung() {
-        kundeArrayList = new ArrayList<>();
+        saveRepo = new SaveFile();
+        saveRepo.creatFile(fileName);
+        saveRepo.openForRead(fileName);
+        kundeArrayList = saveRepo.loadKunde();
+        saveRepo.closRead();
     }
 
-    public KundeEinlogen einlogen(String na, String pass) throws LoginFailedException {
+    public Einlogen einlogen(String na, String pass) throws LoginFailedException {
         for (Kunde kunde : kundeArrayList) {
-            if (kunde.getVorName().equals(na) && kunde.getPassword().equals(pass)) {
-                this.kunde = kunde;
-                return new KundeEinlogen(kunde, true);
+            if (kunde.getEmail().equals(na) && kunde.getPassword().equals(pass)) {
+                return new Einlogen(kunde, true);
             }
         }
         throw new LoginFailedException();
@@ -43,20 +46,30 @@ public class KundeVerwaltung {
      */
     public void registrieren(Kunde kunde) throws RegisitierungException {
         if (kundeArrayList.size() > 0) {
-            for (Kunde kund1 : kundeArrayList) {
-                if (kund1.getVorName().equals(kunde.getVorName()) && kund1.getNachName().equals(kunde.getNachName())) {
-                    throw new RegisitierungException(kund1.getVorName() + "\t ist bereits vorhanden\t");
-
-                } else {
-                    kundeArrayList.add(kunde);
-                    persistentKunde.kundeSpeichern(kunde);
+            for (int i = 0; i < kundeArrayList.size(); i++) {
+                if (kundeArrayList.get(i).getEmail().equals(kunde.getEmail())) {
+                    throw new RegisitierungException(kundeArrayList.get(i).getEmail() + "\n ist bereits vorhanden\t");
                 }
             }
-        } else {
-            kundeArrayList.add(kunde);
-            persistentKunde.kundeSpeichern(kunde);
+        }
+        kundeArrayList.add(kunde);
+
+
+        saveKund();
+    }
+
+    private void saveKund() {
+        try {
+            saveRepo.openForWrite(fileName);
+            saveRepo.saveKunde(kundeArrayList);
+            saveRepo.closeWrite();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    public List<Kunde> getKundeArrayList(){
+        return kundeArrayList;
+    }
 
 }

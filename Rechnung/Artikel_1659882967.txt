@@ -1,0 +1,8 @@
+
+Kunde:	test1
+Datum :	2022-08-07T14:36:07.702507700Z
+Ladekabel	 Anzahl: 	  1
+schmuck	 Anzahl: 	  1
+
+--------------------------------
+preis 	 :22.0
