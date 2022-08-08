@@ -68,7 +68,8 @@ public class KundeVerwaltung {
         }
     }
 
-
-
+    public List<Kunde> getKundeArrayList(){
+        return kundeArrayList;
+    }
 
 }

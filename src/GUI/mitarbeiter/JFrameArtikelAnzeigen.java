@@ -129,7 +129,7 @@ public class JFrameArtikelAnzeigen extends JFrame {
 
    public ActionListener back(){
         return e->{
-            new JFrameMitarbeiter();
+            new JFrameMitarbeiter(mitarbeiterService);
             this.dispose();
         };
    }

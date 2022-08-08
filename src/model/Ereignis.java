@@ -30,7 +30,6 @@ public class Ereignis  implements Serializable {
 //        this.status = lagerung;
 //    }
     public Ereignis(Person person, Instant datum, STATUS status, Artikel artikel) {
-        System.out.println(person);
         this.person = person;
         this.artikel = artikel;
         Datum = datum;

@@ -13,10 +13,14 @@ public class Kunde extends Person {
     private Adresse adresse;
     private WarenKorp warenKorp;
 
-
-
     public Kunde(String kundenVorname, String nachName, Adresse adresse, String pass, String email){
         super(kundenVorname, nachName,pass,email);
+        this.adresse=adresse;
+        this.warenKorp=new WarenKorp();
+    }
+
+    public Kunde(UUID id,String kundenVorname, String nachName, Adresse adresse, String pass, String email){
+        super(id,kundenVorname, nachName,pass,email);
         this.adresse=adresse;
         this.warenKorp=new WarenKorp();
     }
@@ -58,7 +62,7 @@ public class Kunde extends Person {
 
     @Override
     public String toString() {
-        return this.getVorName() +";"+this.getNachName()+";"+this.adresse.toString()+";"+this.getPassword()+";"+this.getEmail();
+        return this.getId().toString()+ this.getVorName() +";"+this.getNachName()+";"+this.adresse.toString()+";"+this.getPassword()+";"+this.getEmail();
     }
 }
 

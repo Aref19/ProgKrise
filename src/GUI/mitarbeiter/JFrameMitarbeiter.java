@@ -26,8 +26,11 @@ public class JFrameMitarbeiter extends JFrame {
         btnNeuerMitarbeiterHinzufgen.addActionListener(newMitarbeiter());
         btnArtikelAnzeigen.addActionListener(artikelAnzeigen());
         btnArtkelnEinlagern.addActionListener(newArtikel());
+        btnEreignissAnzeigen.addActionListener(erginse());
 
     }
+
+
 
     public JFrameMitarbeiter() {
         this.setVisible(true);
@@ -114,8 +117,15 @@ public class JFrameMitarbeiter extends JFrame {
 
     public ActionListener newArtikel() {
         return e -> {
-            new JFrameEinlagerung();
+            new JFrameEinlagerung(mitarbeiterService);
             this.dispose();
+        };
+    }
+
+    private ActionListener erginse() {
+        return e->{
+          new JFrameEreigniss(mitarbeiterService);
+          this.dispose();
         };
     }
 }
