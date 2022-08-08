@@ -1,10 +1,12 @@
 package model;
 
+import java.util.UUID;
+
 public class Massengutartikel extends Artikel {
 
     private int masse;
 
-    public Massengutartikel(int artikelNr, String artikelBezeichnung, int artikelBestand, double preis, int masse) {
+    public Massengutartikel(UUID artikelNr, String artikelBezeichnung, int artikelBestand, double preis, int masse) {
         super(artikelNr, artikelBezeichnung, artikelBestand, preis);
         this.masse = masse;
     }

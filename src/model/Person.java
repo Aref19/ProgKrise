@@ -31,7 +31,14 @@ public abstract class Person implements Serializable {
         this.nachName = nachName;
         this.passwort = passwort;
         this.email=email;
+    }
 
+    public Person(UUID id, String vorName, String nachName, String passwort,String email) {
+        this.id=id;
+        this.vorName = vorName;
+        this.nachName = nachName;
+        this.passwort = passwort;
+        this.email=email;
     }
 
     /**
@@ -92,7 +99,7 @@ public abstract class Person implements Serializable {
     }
 
     public String toString() {
-        String person = id + ";" +  vorName + ";" + nachName + ";" + passwort+";"+email;
+        String person = id.toString() + ";" +  vorName + ";" + nachName + ";" + passwort+";"+email;
         return person;
     }
 

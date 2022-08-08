@@ -18,7 +18,7 @@ public class KundenService {
     private static EshopVerwaltung eshop;
     private static Person person;
     private DefaultTableModel defaultTableModel;
-    DefaultListModel<String> model;
+    public DefaultListModel<String> model;
 
     public KundenService() {
         defaultTableModel = new DefaultTableModel();
@@ -142,15 +142,13 @@ public class KundenService {
 
     }
 
-    private void saveModel(DefaultListModel defaultListModel,
-                           String name, String bestand, String preis, int anzahl) {
+    private void saveModel(DefaultListModel defaultListModel, String name, String bestand, String preis, int anzahl) {
         double gesamtpreis = Double.parseDouble(preis) * anzahl;
-
         for (int i = 0; i < defaultListModel.size(); i++) {
             String content[] = defaultListModel.getElementAt(i).toString().split("    ");
             if (content[0].equals(name)) {
                 defaultListModel.remove(i);
-                anzahl = Integer.parseInt(content[1]) + anzahl;
+                anzahl = Integer.parseInt(content[1].trim()) + anzahl;
                 gesamtpreis = Double.parseDouble(preis) * anzahl;
                 defaultListModel.addElement(content[0] + "    " + anzahl + "    " + gesamtpreis);
                 return;

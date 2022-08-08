@@ -95,12 +95,14 @@ public class Willkommen extends JFrame {
     private ActionListener einloggen() {
         return e -> {
             if (mitarbeiterRadio.isSelected()) {
-                boolean antwort = mitarbeiterService.anmelden(emailText.getText(), passText.getText());
-                if (antwort == true) {
+                try {
+                    mitarbeiterService.anmelden(emailText.getText(), passText.getText());
                     new JFrameMitarbeiter(mitarbeiterService);
                     this.dispose();
-                } else
-                    new Alert(this, "Ups! Überprüfe deine Daten", "Anmelde Fehler").showInfoMassage();
+                } catch (LoginFailedException ex) {
+                    new Alert(this, ex.getMessage(), "Anmelde Fehler").showInfoMassage();
+                }
+
             } else if (kundRadio.isSelected()) {
                 anmelden();
             }
@@ -115,8 +117,8 @@ public class Willkommen extends JFrame {
                 kundenService.kill(this);
                 new JFRegistieren(kundenService);
             } else if (mitarbeiterRadio.isSelected()) {
-                jFrameMitarbeiterRegistrieren = new JFrameNewMitarbeiter();
-                kundenService.kill(this);
+                Alert alert=new Alert(this,"für Mitarbeite mussen sie sich zuerst anmelden","Vorsicht");
+                alert.showInfoMassage();
             }
         };
     }

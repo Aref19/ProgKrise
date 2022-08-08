@@ -1,0 +1,8 @@
+
+Kunde:	test1
+Datum :	21:10 07.08 2022
+schmuck	 Anzahl: 	  3
+Handy	 Anzahl: 	  2
+
+--------------------------------
+preis 	 :136.0
