@@ -15,8 +15,11 @@ public class JFrameEreigniss extends JFrame {
     private JTable table;
     private JComboBox jComboBox;
     private JButton btnSortierenNach;
+    private JButton btnFlittern;
+    private JComboBox jCombFlittern;
     private JButton btnZurck;
     private JButton btnSchlissen;
+    private JTextField filterData;
     private MitarbeiterService mitarbeiterService;
     private DefaultTableModel defaultTableModel;
 
@@ -28,6 +31,7 @@ public class JFrameEreigniss extends JFrame {
         putEreignisse();
         btnSchlissen.addActionListener(back());
         btnSortierenNach.addActionListener(sortieren());
+        btnFlittern.addActionListener(fillternErigniss());
     }
 
 
@@ -67,15 +71,27 @@ public class JFrameEreigniss extends JFrame {
         jComboBox.setFocusable(false);
         jComboBox.setToolTipText("");
         jComboBox.setFont(new Font("Andalus", Font.ITALIC, 12));
-        jComboBox.setBounds(259, 272, 87, 22);
+        jComboBox.setBounds(450, 272, 87, 22);
         contentPane.add(jComboBox);
 
         btnSortierenNach = new JButton("Sortieren Nach");
         btnSortierenNach.setFocusPainted(false);
         btnSortierenNach.setFocusable(false);
         btnSortierenNach.setFont(new Font("Andalus", Font.ITALIC, 12));
-        btnSortierenNach.setBounds(135, 272, 120, 23);
+        btnSortierenNach.setBounds(300, 272, 120, 23);
         contentPane.add(btnSortierenNach);
+
+        btnFlittern = new JButton("Flittern Nach");
+        btnFlittern.setFocusPainted(false);
+        btnFlittern.setFocusable(false);
+        btnFlittern.setFont(new Font("Andalus", Font.ITALIC, 12));
+        btnFlittern.setBounds(25, 272, 120, 23);
+        contentPane.add(btnFlittern);
+
+        filterData = new JTextField();
+        filterData.setBounds(150, 272, 120, 23);
+        contentPane.add(filterData);
+
 
         btnSchlissen = new JButton("Schließen");
         btnSchlissen.setFont(new Font("Andalus", Font.ITALIC, 12));
@@ -111,5 +127,13 @@ public class JFrameEreigniss extends JFrame {
        };
 
     }
+
+    private ActionListener fillternErigniss() {
+        return (e)->{
+          defaultTableModel=  mitarbeiterService.ereignisFiltern(jComboBox.getSelectedIndex(),filterData.getText());
+            table.setModel(defaultTableModel);
+        };
+    }
+
 
 }

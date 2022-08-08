@@ -219,4 +219,8 @@ public class EshopVerwaltung {
     public List<Ereignis> sortedErigmis(int sortart){
       return   ereignisVerwaltung.sortEreignisse(sortart,ereignisList);
     }
+
+    public List<Ereignis> ereignisFiltern(int filter,String data) {
+        return ereignisVerwaltung.ereignisFilttern(ereignisList,filter,data);
+    }
 }
