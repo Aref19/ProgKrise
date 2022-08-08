@@ -86,9 +86,9 @@ public class KundenService {
     public DefaultTableModel putArtikel() {
         List<Artikel> artikels = eshop.artielzeigen();
         defaultTableModel = new DefaultTableModel();
-        defaultTableModel.addColumn("name");
-        defaultTableModel.addColumn("betsand");
-        defaultTableModel.addColumn("preis");
+        defaultTableModel.addColumn("Name");
+        defaultTableModel.addColumn("Betsand");
+        defaultTableModel.addColumn("Preis");
         defaultTableModel.addColumn("Masse");
         for (Artikel ar : artikels) {
             int masse = ar instanceof Massengutartikel ? ((Massengutartikel) ar).getMasse() : 1;

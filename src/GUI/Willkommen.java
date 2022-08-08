@@ -30,8 +30,8 @@ public class Willkommen extends JFrame {
     JRadioButton kundRadio;
     MitarbeiterService mitarbeiterService = new MitarbeiterService();
     JFrameNewMitarbeiter jFrameMitarbeiterRegistrieren ;
-    public Willkommen(String title) throws HeadlessException {
-        super(title);
+    public Willkommen() throws HeadlessException {
+        this.setTitle("Willkommen");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(SystemColor.inactiveCaption);
         setBounds(100, 100, 423, 272);
@@ -90,6 +90,13 @@ public class Willkommen extends JFrame {
         getContentPane().add(anmeldJButton);
 
 
+            JLabel lblWillkommen = new JLabel("Willkommen");
+            lblWillkommen.setVerticalTextPosition(SwingConstants.TOP);
+            lblWillkommen.setFont(new Font("Andalus", Font.BOLD, 14));
+            lblWillkommen.setBounds(165, 10, 89, 13);
+            getContentPane().add(lblWillkommen);
+
+
     }
 
     private ActionListener einloggen() {
@@ -138,7 +145,7 @@ public class Willkommen extends JFrame {
 
 
     public static void main(String[] args) {
-        Willkommen willkommen = new Willkommen("");
+        Willkommen willkommen = new Willkommen();
     }
 
 

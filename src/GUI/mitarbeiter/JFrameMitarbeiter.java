@@ -31,6 +31,7 @@ public class JFrameMitarbeiter extends JFrame {
 
     public JFrameMitarbeiter() {
         this.setVisible(true);
+
         initGUI();
         this.mitarbeiterService=mitarbeiterService;
         btnNeuerMitarbeiterHinzufgen.addActionListener(newMitarbeiter());
