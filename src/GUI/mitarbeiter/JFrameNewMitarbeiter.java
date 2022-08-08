@@ -161,9 +161,9 @@ public class JFrameNewMitarbeiter extends JFrame {
                             textFieldEmail.getText()
                     );
                 } catch(EmailExisted e){
-                    new Alert(this, "check Email Existed", "Registrierung ").showInfoMassage();
+                    new Alert(this, e.getMessage(), "Registrierung ").showInfoMassage();
                 } catch(INcorrectEmailException e){
-                    new Alert(this, "check Email", "Registrierung ").showInfoMassage();
+                    new Alert(this, "check Email :"+e.getMessage(), "Registrierung ").showInfoMassage();
                 }
                 if (antwort) {
                     new Alert(this, "Du würdest Registriert", "Registrierung Erfolgreich").showInfoMassage();
@@ -195,7 +195,9 @@ public class JFrameNewMitarbeiter extends JFrame {
 
     public ActionListener back(){
         return e->{
+
             new JFrameMitarbeiter(mitarbeiterService);
+
             this.dispose();
         };
     }

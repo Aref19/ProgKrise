@@ -1,5 +1,6 @@
 package GUI.kunde;
 
+import GUI.Willkommen;
 import GUI.alert.Alert;
 import GUI.services.KundenService;
 import exception.BestandNichtAusreichendException;
@@ -32,7 +33,9 @@ public class JFrameArtikel extends JFrame {
     private JButton entfernen;
     int anzahl = 0;
 
-
+    public static void main(String[] args) {
+        new JFrameArtikel(new KundenService());
+    }
     public JFrameArtikel(KundenService kundenService) {
         initGUI();
         this.setVisible(true);
@@ -44,6 +47,7 @@ public class JFrameArtikel extends JFrame {
         btnEinfgen.addActionListener(fugeArtikel());
         entfernen.addActionListener(entfernArtiekl());
         kasse.addActionListener(kasse());
+        abbrechenBtn.addActionListener(cancel());
 
 
     }
@@ -135,7 +139,7 @@ public class JFrameArtikel extends JFrame {
             contentPane.add(separator);
         }
         {
-            kasse = new JButton("kasse");
+            kasse = new JButton("Zur kasse");
             kasse.setFont(new Font("Andalus", Font.ITALIC, 12));
             kasse.setFocusPainted(false);
             kasse.setFocusable(false);
@@ -157,6 +161,8 @@ public class JFrameArtikel extends JFrame {
             contentPane.add(lArtikelLegenlb);
         }
     }
+
+
 
     private ActionListener cheangeCount() {
         return e -> {
@@ -240,6 +246,13 @@ public class JFrameArtikel extends JFrame {
         return e->{
             new JFrameKasse(kundenService);
             kundenService.kill(this);
+        };
+    }
+    public ActionListener cancel(){
+        return e->{
+            new Willkommen();
+            dispose();
+
         };
     }
 

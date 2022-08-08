@@ -54,7 +54,7 @@ public class JFRegistieren extends JFrame implements ActionListener {
         gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
         panel.setLayout(gbl_panel);
 
-        JLabel lblNewLabel = new JLabel("Name :");
+        JLabel lblNewLabel = new JLabel("Name");
         GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
         gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
         gbc_lblNewLabel.gridx = 1;
@@ -70,7 +70,7 @@ public class JFRegistieren extends JFrame implements ActionListener {
         panel.add(nameText, gbc_nachnameText);
         nameText.setColumns(10);
 
-        JLabel lblNewLabel_1 = new JLabel("Nach Name :");
+        JLabel lblNewLabel_1 = new JLabel("Nach Name");
         GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
         gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
         gbc_lblNewLabel_1.gridx = 1;

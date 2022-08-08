@@ -105,6 +105,11 @@ public class JFrameKasse extends JFrame {
                 kundenService.kill(this);
                 new JFrameRechnung(kundenService);
             }
+            else {
+                Alert alertRechnung1 = new Alert(this,"Danke für Ihren Einkauf","Dankeschön");
+                alertRechnung1.showInfoMassage();
+                dispose();
+            }
         };
 
     };

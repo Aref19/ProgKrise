@@ -1,5 +1,6 @@
 package GUI.mitarbeiter;
 
+import GUI.Willkommen;
 import GUI.services.MitarbeiterService;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class JFrameEreigniss extends JFrame {
     private JButton btnFlittern;
     private JComboBox jCombFlittern;
     private JButton btnZurck;
-    private JButton btnSchlissen;
+    private JButton btnSchließen;
     private JTextField filterData;
     private MitarbeiterService mitarbeiterService;
     private DefaultTableModel defaultTableModel;
@@ -29,9 +30,11 @@ public class JFrameEreigniss extends JFrame {
         this.setVisible(true);
         Gitinit();
         putEreignisse();
-        btnSchlissen.addActionListener(back());
+        btnZurck.addActionListener(back());
         btnSortierenNach.addActionListener(sortieren());
         btnFlittern.addActionListener(fillternErigniss());
+        btnSchließen.addActionListener(close());
+
     }
 
 
@@ -41,7 +44,7 @@ public class JFrameEreigniss extends JFrame {
         this.setVisible(true);
         Gitinit();
 
-        btnSchlissen.addActionListener(back());
+        btnZurck.addActionListener(back());
     }
 
     public void Gitinit() {
@@ -55,7 +58,7 @@ public class JFrameEreigniss extends JFrame {
 
         lblEreigniss = new JLabel("Ereigniss");
         lblEreigniss.setFont(new Font("Andalus", Font.BOLD | Font.ITALIC, 14));
-        lblEreigniss.setBounds(191, 11, 74, 31);
+        lblEreigniss.setBounds(250, 11, 74, 31);
         contentPane.add(lblEreigniss);
 
         JScrollPane scrollPane = new JScrollPane();
@@ -93,19 +96,19 @@ public class JFrameEreigniss extends JFrame {
         contentPane.add(filterData);
 
 
-        btnSchlissen = new JButton("Schließen");
-        btnSchlissen.setFont(new Font("Andalus", Font.ITALIC, 12));
-        btnSchlissen.setFocusable(false);
-        btnSchlissen.setFocusPainted(false);
-        btnSchlissen.setBounds(359, 327, 106, 23);
-        contentPane.add(btnSchlissen);
+        btnZurck = new JButton("Zurück");
+        btnZurck.setFont(new Font("Andalus", Font.ITALIC, 12));
+        btnZurck.setFocusable(false);
+        btnZurck.setFocusPainted(false);
+        btnZurck.setBounds(470, 327, 100, 23);
+        contentPane.add(btnZurck);
 
-        btnSchlissen = new JButton("Zurück");
-        btnSchlissen.setFont(new Font("Andalus", Font.ITALIC, 12));
-        btnSchlissen.setFocusable(false);
-        btnSchlissen.setFocusPainted(false);
-        btnSchlissen.setBounds(10, 327, 106, 23);
-        contentPane.add(btnSchlissen);
+        btnSchließen = new JButton("Schließen");
+        btnSchließen.setFont(new Font("Andalus", Font.ITALIC, 12));
+        btnSchließen.setFocusable(false);
+        btnSchließen.setFocusPainted(false);
+        btnSchließen.setBounds(10, 327, 106, 23);
+        contentPane.add(btnSchließen);
     }
 
     public ActionListener back() {
@@ -114,6 +117,8 @@ public class JFrameEreigniss extends JFrame {
             this.dispose();
         };
     }
+
+
 
     private void putEreignisse(){
         defaultTableModel=mitarbeiterService.putErignisse();
@@ -129,11 +134,17 @@ public class JFrameEreigniss extends JFrame {
     }
 
     private ActionListener fillternErigniss() {
-        return (e)->{
+        return e->{
           defaultTableModel=  mitarbeiterService.ereignisFiltern(jComboBox.getSelectedIndex(),filterData.getText());
             table.setModel(defaultTableModel);
         };
     }
 
+    public ActionListener close(){
+        return e->{
+            this.dispose();
+            new Willkommen();
+        };
+    }
 
 }

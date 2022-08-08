@@ -91,7 +91,14 @@ public class JFrameRechnung extends JFrame {
         return e->{
             Alert alert = new Alert(this, "Danek", "Danke");
             alert.showInfoMassage();
+
+            Alert alertRechnung = new Alert(this, "wollen sie weiter Kaufen ", "Rechnung");
+            int option = alertRechnung.vorsicht();
+            if (option == JOptionPane.YES_OPTION) {
+                new JFrameArtikel(kundenService);
+            }
             kundenService.kill(this);
+
 
         };
     }

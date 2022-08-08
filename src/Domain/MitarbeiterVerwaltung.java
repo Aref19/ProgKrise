@@ -45,7 +45,8 @@ public class MitarbeiterVerwaltung {
      * @throws CustomIoException
      */
 
-    public void mitarbeiterAnlegen(String name, String nachname, String passwort, String email) throws RegisitierungException, IOException,EmailExisted {
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort, String email) throws
+            IOException,EmailExisted {
         for (Mitarbeiter listAusgeben : mitarbeiterList) {
             if (email.equals(listAusgeben.getEmail())) {
                 throw new EmailExisted();

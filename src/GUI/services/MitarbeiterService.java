@@ -1,7 +1,6 @@
 package GUI.services;
 
 import Domain.EshopVerwaltung;
-import Grafic.LineChartWithCategoryDatasetExample;
 import exception.EmailExisted;
 import exception.INcorrectEmailException;
 import exception.LoginFailedException;
@@ -19,24 +18,45 @@ public class MitarbeiterService {
     private DefaultTableModel defaultTableModel;
     Person mitarbeiter;
 
-    static List<Ereignis> listEreignise;
-
+    /**
+     * Anmelden Methode
+     * Die Einloggen Informationen(Email und Passwort) werden von der
+     * MitarbeiterVerwaltung durch eshopVerwaltung aufgerufen
+     * Ansonsten wird ein Exception geworfen "Sie haben noch kein Account"
+     * @param email
+     * @param password
+     * @throws LoginFailedException
+     */
     public void anmelden(String email, String password) throws LoginFailedException {
         try {
             mitarbeiter = eschopverwaltung.mitarbeiterEinloggen(email, password).person;
-            System.out.println(mitarbeiter.getId());
+
         } catch (LoginFailedException e) {
             throw e;
         }
     }
 
+    /**
+     *
+     * @param name
+     * @param nachname
+     * @param passwort
+     * @param email
+     * @return
+     * @throws EmailExisted
+     * @throws INcorrectEmailException
+     */
     public boolean registrieren(String name, String nachname, String passwort, String email)
             throws EmailExisted, INcorrectEmailException {
         try {
             eschopverwaltung.mitarbeiterAnthorRegiseren(name, nachname, passwort, email);
             return true;
-        } catch (RegisitierungException | IOException e) {
+        } catch ( IOException e) {
             return false;
+        }catch (INcorrectEmailException eI){
+            throw eI;
+        }catch (EmailExisted emailExisted){
+            throw emailExisted;
         }
     }
 
@@ -116,9 +136,5 @@ public class MitarbeiterService {
             defaultTableModel.addColumn("Masse");
         }
         return defaultTableModel;
-    }
-
-    public void zeigDigramm(String name) {
-        new LineChartWithCategoryDatasetExample(eschopverwaltung.ereignissToSaveToEreigniss(),name).setVisible(true);
     }
 }

@@ -115,7 +115,7 @@ public class ArtikelVerwaltung {
      * @return
      */
     public List<Artikel> getArtikelList() {
-        loadArtikel();
+       // loadArtikel();
         return artikelList;
     }
 

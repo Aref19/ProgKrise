@@ -6,22 +6,27 @@ import javax.swing.text.Style;
 import java.awt.*;
 
 public class Dialog extends JDialog implements Runnable {
-    private final  String massge;
+    private final String massge;
     private final String title;
     private final JFrame parent;
 
     public Dialog(JFrame owner, String massge, String title) {
         super(owner);
         this.massge = massge;
-        this.parent=owner;
+        this.parent = owner;
         this.title = title;
+        setPreferredSize(new Dimension(300,75));
+        setLocationRelativeTo(owner);
+        setTitle(title);
+
+
     }
 
     @Override
     public void run() {
-     Dialog  dialog= showWolcame();
+        Dialog dialog = showWolcame();
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1500);
             dialog.dispose();
             Thread.interrupted();
         } catch (InterruptedException e) {
@@ -29,13 +34,11 @@ public class Dialog extends JDialog implements Runnable {
         }
     }
 
-    private  Dialog showWolcame(){
-        JLabel messageLable=new JLabel(massge);
-        messageLable.setFont(new Font(massge, Font.ITALIC,12));
+    private Dialog showWolcame() {
+        JLabel messageLable = new JLabel(massge,SwingConstants.CENTER);
         this.add(messageLable);
-        setBounds(300, 300, 300, 250);
         this.pack();
         this.setVisible(true);
-     return this;
+        return this;
     }
 }

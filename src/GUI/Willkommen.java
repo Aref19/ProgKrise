@@ -30,8 +30,8 @@ public class Willkommen extends JFrame {
     JRadioButton kundRadio;
     MitarbeiterService mitarbeiterService = new MitarbeiterService();
     JFrameNewMitarbeiter jFrameMitarbeiterRegistrieren ;
-    public Willkommen(String title) throws HeadlessException {
-        super(title);
+    public Willkommen() throws HeadlessException {
+        this.setTitle("Willkommen");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setBackground(SystemColor.inactiveCaption);
         setBounds(100, 100, 423, 272);
@@ -43,6 +43,10 @@ public class Willkommen extends JFrame {
         anmeldJButton.addActionListener(einloggen());
     }
 
+    /**
+
+     * Hier sind die GUI Attribute erstellt und Positioniert
+     */
     public void initialize() {
 
         emaiJLabel = new JLabel("Email");
@@ -90,15 +94,29 @@ public class Willkommen extends JFrame {
         getContentPane().add(anmeldJButton);
 
 
+            JLabel lblWillkommen = new JLabel("Willkommen");
+            lblWillkommen.setVerticalTextPosition(SwingConstants.TOP);
+            lblWillkommen.setFont(new Font("Andalus", Font.BOLD, 14));
+            lblWillkommen.setBounds(165, 10, 89, 13);
+            getContentPane().add(lblWillkommen);
+
+
     }
 
+    /**
+     * Einloggen Methode
+     * Wenn aus der Groupbutton "Mitarbeiter" ausgewählt ist, dann
+     * geht auf die mitarbeiterservice und loggt sich als Mitarbeiter ein
+     * Ansonsten als Kunde anmelden
+     * @return
+     */
     private ActionListener einloggen() {
         return e -> {
             if (mitarbeiterRadio.isSelected()) {
                 try {
                     mitarbeiterService.anmelden(emailText.getText(), passText.getText());
                     new JFrameMitarbeiter(mitarbeiterService);
-                    this.dispose();
+                            dispose();
                 } catch (LoginFailedException ex) {
                     new Alert(this, ex.getMessage(), "Anmelde Fehler").showInfoMassage();
                 }
@@ -110,25 +128,38 @@ public class Willkommen extends JFrame {
         };
     }
 
+    /**
+     * Wenn aus der Groupbutton "Kunde" ausgewählt ist, dann
+     *geht auf die Kundenservice und registriert sich als Kunde
+     * Ansonsten als Mitarbeiter anmelden, um neuer Mitarbeiter registrieren zu können
+     * @return
+     */
     private ActionListener registrieren() {
 
         return e -> {
             if (kundRadio.isSelected()) {
-                kundenService.kill(this);
+                dispose();
                 new JFRegistieren(kundenService);
             } else if (mitarbeiterRadio.isSelected()) {
-                Alert alert=new Alert(this,"für Mitarbeite mussen sie sich zuerst anmelden","Vorsicht");
+                Alert alert=new Alert(this,"Melden Sie sich zu erst als Mitarbeiter","Vorsicht");
                 alert.showInfoMassage();
             }
         };
     }
 
+
+    /**
+     * Hier wird der Kunde sich anmelden
+     * Wenn er sich erfolgreich angemeldet hat, dann wird ein Begrüßungsfenster Angezeigt
+     * Wenn die Daten nicht vorhanden sind, dann wird ein Exception geworfen "Sie haben noch kein Account"
+     */
     private void anmelden() {
         try {
            Person person= kundenService.login(emailText.getText(), passText.getText());
-            kundenService.kill(this);
+            dispose();
+
             JFrameArtikel jFrameArtikel = new JFrameArtikel(kundenService);
-            Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
+            Runnable readable = new Dialog(jFrameArtikel, "Hallo   " + person.getVorName(), "Willkommen");
             Thread thread = new Thread(readable);
             thread.start();
         } catch (LoginFailedException ex) {
@@ -140,7 +171,7 @@ public class Willkommen extends JFrame {
 
 
     public static void main(String[] args) {
-        Willkommen willkommen = new Willkommen("");
+        Willkommen willkommen = new Willkommen();
     }
 
 
