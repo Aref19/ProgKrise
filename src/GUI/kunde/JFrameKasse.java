@@ -99,15 +99,17 @@ public class JFrameKasse extends JFrame {
     private ActionListener buy(){
         return e -> {
             kundenService.sacheKaufen();
-            Alert alertRechnung = new Alert(this, "wollen sie Rechnung zeigen und HunterLaden", "Rechnung");
+            Alert alertRechnung = new Alert(this, "wollen sie Rechnung zeigen ", "Rechnung");
             int option = alertRechnung.vorsicht();
             if (option == JOptionPane.YES_OPTION) {
-                Rechnung rechnung=kundenService.creatPdf();
-
+                kundenService.kill(this);
+                new JFrameRechnung(kundenService);
             }
-            Alert alert = new Alert(this, "Danke für die Einkauf", "^-^");
-            alert.showInfoMassage();
-            kundenService.kill(this);
+            else {
+                Alert alertRechnung1 = new Alert(this,"Danke für Ihren Einkauf","Dankeschön");
+                alertRechnung1.showInfoMassage();
+                dispose();
+            }
         };
 
     };

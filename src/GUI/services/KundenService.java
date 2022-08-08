@@ -18,7 +18,7 @@ public class KundenService {
     private static EshopVerwaltung eshop;
     private static Person person;
     private DefaultTableModel defaultTableModel;
-    DefaultListModel<String> model;
+    public DefaultListModel<String> model;
 
     public KundenService() {
         defaultTableModel = new DefaultTableModel();
@@ -100,7 +100,7 @@ public class KundenService {
         return defaultTableModel;
     }
 
-    public Rechnung creatPdf() {
+    public void creatPdf() {
         PdfGenerator pdfGenerator = null;
         Rechnung rechnung = null;
         try {
@@ -110,6 +110,16 @@ public class KundenService {
             e.printStackTrace();
         }
         pdfGenerator.creatPdf();
+    }
+
+    public Rechnung getRechnung() {
+        Rechnung rechnung = null;
+        try {
+            rechnung = eshop.getRec(((Kunde) person), ((Kunde) person).getWarenKorp().get());
+            ((Kunde)person).setWarenKorp(new WarenKorp());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return rechnung;
     }
 
@@ -133,15 +143,13 @@ public class KundenService {
 
     }
 
-    private void saveModel(DefaultListModel defaultListModel,
-                           String name, String bestand, String preis, int anzahl) {
+    private void saveModel(DefaultListModel defaultListModel, String name, String bestand, String preis, int anzahl) {
         double gesamtpreis = Double.parseDouble(preis) * anzahl;
-
         for (int i = 0; i < defaultListModel.size(); i++) {
             String content[] = defaultListModel.getElementAt(i).toString().split("    ");
             if (content[0].equals(name)) {
                 defaultListModel.remove(i);
-                anzahl = Integer.parseInt(content[1]) + anzahl;
+                anzahl = Integer.parseInt(content[1].trim()) + anzahl;
                 gesamtpreis = Double.parseDouble(preis) * anzahl;
                 defaultListModel.addElement(content[0] + "    " + anzahl + "    " + gesamtpreis);
                 return;

@@ -38,8 +38,8 @@ public class JFrameArtikel extends JFrame {
     }
     public JFrameArtikel(KundenService kundenService) {
         initGUI();
-
         this.setVisible(true);
+        kundenService.model=new DefaultListModel<>();
         this.kundenService = kundenService;
         insertArtikel();
         minusBtn.addActionListener(cheangeCount());
@@ -68,7 +68,7 @@ public class JFrameArtikel extends JFrame {
 
 
             JScrollPane scrollPane = new JScrollPane();
-            scrollPane.setBounds(27, 49, 329, 159);
+            scrollPane.setBounds(10, 80, 200, 306);
             contentPane.add(scrollPane);
             artikelsTablle = new JTable();
             scrollPane.setViewportView(artikelsTablle);
@@ -255,5 +255,6 @@ public class JFrameArtikel extends JFrame {
 
         };
     }
+
 }
 

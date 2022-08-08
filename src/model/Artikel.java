@@ -8,7 +8,7 @@ public class Artikel {
      * @author AJ
      * Klasse zu einzelne Artikel
      */
-    private int artikelNr;
+    private UUID artikelNr;
     private String artikelBezeichnung;
     private int artikelBestand;
     private double preis;
@@ -22,12 +22,12 @@ public class Artikel {
      * @param artikelBestand
      */
     public Artikel( String artikelBezeichnung, int artikelBestand,double preis) {
-        this.artikelNr = creatId();
+        this.artikelNr = UUID.randomUUID();
         this.artikelBezeichnung = artikelBezeichnung;
         this.artikelBestand = artikelBestand;
         this.preis=preis;
     }
-    public Artikel( int artikelNr,String artikelBezeichnung, int artikelBestand,double preis) {
+    public Artikel( UUID artikelNr,String artikelBezeichnung, int artikelBestand,double preis) {
         this.artikelNr = artikelNr;
         this.artikelBezeichnung = artikelBezeichnung;
         this.artikelBestand = artikelBestand;
@@ -39,7 +39,7 @@ public class Artikel {
      *
      * @return
      */
-    public int getArtikelNr() {return artikelNr;
+    public UUID getArtikelNr() {return artikelNr;
     }
 
     public double getPreis() {
@@ -50,7 +50,7 @@ public class Artikel {
         this.preis = preis;
     }
 
-    public void setArtikelNr(int artikelNr) {
+    public void setArtikelNr(UUID artikelNr) {
         this.artikelNr = artikelNr;
     }
 
@@ -70,13 +70,7 @@ public class Artikel {
         this.artikelBestand = artikelBestand;
     }
 
-    private int creatId(){
-        int zahl=new Random().nextInt();
-        if(zahl<0){
-            zahl=zahl*-1;
-        }
-        return zahl;
-    }
+
 
     /**
      * Default String zu überschreiben. danit es keine hash Code vom id gibt.

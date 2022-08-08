@@ -45,7 +45,8 @@ public class MitarbeiterVerwaltung {
      * @throws CustomIoException
      */
 
-    public void mitarbeiterAnlegen(String name, String nachname, String passwort, String email) throws RegisitierungException, IOException,EmailExisted {
+    public void mitarbeiterAnlegen(String name, String nachname, String passwort, String email) throws
+            IOException,EmailExisted {
         for (Mitarbeiter listAusgeben : mitarbeiterList) {
             if (email.equals(listAusgeben.getEmail())) {
                 throw new EmailExisted();
@@ -53,6 +54,7 @@ public class MitarbeiterVerwaltung {
         }
 
         Mitarbeiter mitarbeiter = new Mitarbeiter(name, nachname, passwort, email);
+        System.out.println("id Mit :"+mitarbeiter.getId());
         mitarbeiterList.add(mitarbeiter);
 
         saveMitarbeiter();
@@ -81,6 +83,21 @@ public class MitarbeiterVerwaltung {
         saveRepo.openForWrite(filename);
         saveRepo.mitarbeiterSpeichern(mitarbeiterList);
         saveRepo.closeWrite();
+    }
+
+    public List<Mitarbeiter> getMitarbeiterList(){
+        try {
+            loadMitarbeiter();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return mitarbeiterList;
+    }
+
+    private void loadMitarbeiter() throws IOException {
+        saveRepo.openForRead(filename);
+        mitarbeiterList = saveRepo.loadMitarbeiter();
+        saveRepo.closRead();
     }
 
 

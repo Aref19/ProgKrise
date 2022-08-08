@@ -83,7 +83,7 @@ public class SaveFile implements SaveRepo {
             while (data != null) {
                 String[] content = data.split(";");
                 Artikel newArtikel;
-                int content0 = Integer.parseInt(content[0]);
+                UUID content0 = UUID.fromString(content[0]);
                 String content1 = content[1];
                 int content2 = Integer.parseInt(content[2]);
                 double content3 = Double.parseDouble(content[3]);
@@ -128,13 +128,13 @@ public class SaveFile implements SaveRepo {
 
     @Override
     public void saveEreignisSerializer(Ereignis ereignis) {
-        try {
+     /*   try {
             System.out.println(ereignis.getPerson());
             objectOutputStream.writeObject(new ErignisToSave(ereignis.getPerson().getId(), ereignis.getArtikel().getArtikelNr()
                     , Instant.now(), ereignis.getStatus(), ereignis.getArtikel().getArtikelBestand()));
         } catch (IOException e) {
             System.out.println(e.getMessage());
-        }
+        }*/
     }
 
     @Override
@@ -179,12 +179,12 @@ public class SaveFile implements SaveRepo {
             String data = bufferedReader.readLine();
             while (data != null && !data.isEmpty()) {
                 String[] content = data.split(";");
-                kundeList.add(new Kunde(content[0], content[1], new Adresse(
-                        Integer.parseInt(content[2])
-                        , Integer.parseInt(content[3])
-                        , content[4]
+                kundeList.add(new Kunde(UUID.fromString(content[0]),content[1], content[2], new Adresse(
+                        Integer.parseInt(content[3])
+                        , Integer.parseInt(content[4])
                         , content[5]
-                ), content[6], content[7]));
+                        , content[6]
+                ), content[7], content[8]));
                 data = bufferedReader.readLine();
             }
         } catch (IOException e) {
@@ -215,6 +215,9 @@ public class SaveFile implements SaveRepo {
             String data = bufferedReader.readLine();
             while (data != null) {
                 String[] content = data.split(";");
+                System.out.println("id"+content[0]);
+                System.out.println("id String :"+content[0]);
+                System.out.println("id UUid :"+UUID.fromString(content[0]));
                 mitarbeiterList.add(new Mitarbeiter(UUID.fromString(content[0]), content[1], content[2], content[3], content[4]));
                 data = bufferedReader.readLine();
             }
@@ -263,6 +266,7 @@ public class SaveFile implements SaveRepo {
     @Override
     public void saveEreignis(Ereignis ereignis) throws IOException {
         try {
+            
             bufferedWriter.append(new ErignisToSave(ereignis.getPerson().getId(), ereignis.getArtikel().getArtikelNr()
                     , Instant.now(), ereignis.getStatus(), ereignis.getArtikel().getArtikelBestand()).toString() + System.lineSeparator());
         } catch (IOException e) {
@@ -278,10 +282,9 @@ public class SaveFile implements SaveRepo {
             String data = bufferedReader.readLine();
             while (data != null && !data.isEmpty()) {
                 String content[] = data.split(";");
-
                 ereignses.add(new ErignisToSave(
                         UUID.fromString(content[1]),
-                        Integer.valueOf(content[2]),
+                       UUID.fromString(content[2]),
                         ErignisToSave.convertStringToInstat(content[0]),
                         ErignisToSave.statusFromString(content[4]),
                         Integer.valueOf(content[3])));

@@ -5,9 +5,11 @@ import Persistent.repo.SaveRepo;
 import exception.BestandNichtAusreichendException;
 import exception.NotFoundException;
 import model.Artikel;
+import model.Ereignis;
 import model.Massengutartikel;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
 public class ArtikelVerwaltung {
@@ -34,18 +36,20 @@ public class ArtikelVerwaltung {
      * @param artikelBezeichnung
      */
 
-    public void artikelAnlegen(int artikelBestand, String artikelBezeichnung, double preis, int masse) throws IOException { //Artikelerschaffen
+    public Ereignis.STATUS artikelAnlegen(UUID id,int artikelBestand, String artikelBezeichnung, double preis, int masse) throws IOException { //Artikelerschaffen
         Artikel artikel;
         if (masse > 1) {
-            artikel = new Massengutartikel(artikelBezeichnung, artikelBestand, preis, masse);
+            artikel = new Massengutartikel(id,artikelBezeichnung, artikelBestand, preis, masse);
         } else {
-            artikel = new Artikel(artikelBezeichnung, artikelBestand, preis);
+            artikel = new Artikel(id,artikelBezeichnung, artikelBestand, preis);
         }
-        if (!checkArikel(artikelBezeichnung, artikelBestand)) {
-            artikelList.add(artikel);
+        if (!checkArikel(artikelBezeichnung, artikelBestand,preis)) {
+            saveAtrikel(artikelList);
+            return Ereignis.STATUS.Einlagerung;
         }
+        artikelList.add(artikel);
         saveAtrikel(artikelList);
-
+        return Ereignis.STATUS.Neu;
     }
 
     public void saveAtrikel(List<Artikel> artikelList) {
@@ -111,6 +115,7 @@ public class ArtikelVerwaltung {
      * @return
      */
     public List<Artikel> getArtikelList() {
+       // loadArtikel();
         return artikelList;
     }
 
@@ -120,7 +125,7 @@ public class ArtikelVerwaltung {
             Collections.sort(sortertlist, new Comparator<Artikel>() {
                 @Override
                 public int compare(Artikel artikel1, Artikel artikel2) {
-                    return Integer.valueOf(artikel1.getArtikelNr()).compareTo(artikel2.getArtikelNr());
+                    return artikel1.getArtikelNr().compareTo(artikel2.getArtikelNr());
                 }
             });
         } else {
@@ -140,7 +145,7 @@ public class ArtikelVerwaltung {
 
         for (Artikel artikelSuchen : artikelList) {
             if (artikelSuchen.equals(artikel)) {
-                if(artikelSuchen.getArtikelBestand() - anzahl>=0){
+                if (artikelSuchen.getArtikelBestand() - anzahl >= 0) {
                     artikelSuchen.setArtikelBestand(artikelSuchen.getArtikelBestand() - anzahl);
                     return;
                 }
@@ -150,31 +155,34 @@ public class ArtikelVerwaltung {
         throw new BestandNichtAusreichendException(artikel);
     }
 
-    private boolean checkArikel(String name, int anzahl) {
+    private boolean checkArikel(String name, int anzahl, double preis) {
         Artikel artikel = null;
         for (Artikel a : artikelList) {
-            if (a.getArtikelBezeichnung().equals(name)) {
+            if (a.getArtikelBezeichnung().toLowerCase().equals(name.toLowerCase())&&a.getPreis()==preis) {
                 artikel = a;
-
-            } else
+                artikelList.remove(artikel);
+                artikel.setArtikelBestand(artikel.getArtikelBestand() + anzahl);
+                artikelList.add(artikel);
                 return false;
+            }
         }
-        if (artikel != null) {
-            artikelList.remove(artikel);
-            artikel.setArtikelBestand(artikel.getArtikelBestand() + anzahl);
-            artikelList.add(artikel);
-            System.out.println("add");
-        }
-
         return true;
     }
-    public void returnWare(Artikel artikel,String anzah){
-        for(int i=0;i<artikelList.size();i++){
-            if(artikel.getArtikelBezeichnung().equals(artikelList.get(i).getArtikelBezeichnung())){
-                artikelList.get(i).setArtikelBestand((artikelList.get(i).getArtikelBestand()+Integer.parseInt(anzah)));
+
+    public void returnWare(Artikel artikel, String anzah) {
+        for (int i = 0; i < artikelList.size(); i++) {
+            if (artikel.getArtikelBezeichnung().equals(artikelList.get(i).getArtikelBezeichnung())) {
+                artikelList.get(i).setArtikelBestand((artikelList.get(i).getArtikelBestand() + Integer.parseInt(anzah)));
                 return;
             }
         }
         artikelList.add(artikel);
     }
+
+    private void loadArtikel(){
+        saveRepo.openForRead(filename);
+        artikelList = saveRepo.loadListArtikels();
+        saveRepo.closRead();
+    }
+
 }

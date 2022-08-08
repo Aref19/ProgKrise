@@ -119,8 +119,6 @@ public class EshopCui {
         try {
             eshopVerwaltung.mitarbeiterAnthorRegiseren(name, namchname, passwort, email);
             System.out.println("Registrierung ist Erfolgreich Abgeschlossen");
-        } catch (RegisitierungException e) {
-            System.out.println(e.getMessage());
         } catch (INcorrectEmailException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {

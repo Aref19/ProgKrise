@@ -1,0 +1,8 @@
+
+Kunde:	test1
+Datum :	14:59 08.08 2022
+Handy	 Anzahl: 	  1
+Tastatur	 Anzahl: 	  1
+
+--------------------------------
+preis 	 :70.99

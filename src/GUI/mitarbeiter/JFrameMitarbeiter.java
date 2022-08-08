@@ -1,11 +1,11 @@
 package GUI.mitarbeiter;
 
+import GUI.Willkommen;
 import GUI.services.MitarbeiterService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class JFrameMitarbeiter extends JFrame {
@@ -18,6 +18,10 @@ public class JFrameMitarbeiter extends JFrame {
     private JButton btnEreignissAnzeigen;
 
     private MitarbeiterService mitarbeiterService;
+    private JButton btnAusloggen;
+
+
+
 
     public JFrameMitarbeiter(MitarbeiterService mitarbeiterService) {
         this.setVisible(true);
@@ -26,8 +30,12 @@ public class JFrameMitarbeiter extends JFrame {
         btnNeuerMitarbeiterHinzufgen.addActionListener(newMitarbeiter());
         btnArtikelAnzeigen.addActionListener(artikelAnzeigen());
         btnArtkelnEinlagern.addActionListener(newArtikel());
+        btnEreignissAnzeigen.addActionListener(erginse());
+        btnAusloggen.addActionListener(backToMenu());
 
     }
+
+
 
     public JFrameMitarbeiter() {
         this.setVisible(true);
@@ -45,12 +53,14 @@ public class JFrameMitarbeiter extends JFrame {
     private void initGUI() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 377, 252);
+       // setBounds(100, 100, 377, 252);
         contentPane = new JPanel();
         contentPane.setBackground(SystemColor.inactiveCaption);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
+        setBounds(100,50,385,305);
+
 
         {
             lblMitarbeiter = new JLabel("Mitarbeiter");
@@ -83,14 +93,16 @@ public class JFrameMitarbeiter extends JFrame {
             contentPane.add(btnArtkelnEinlagern);
         }
         {
+            btnAusloggen = new JButton("Ausloggen");
+            btnAusloggen.setFont(new Font("Andalus", Font.ITALIC, 12));
+            btnAusloggen.setFocusable(false);
+            btnAusloggen.setFocusPainted(false);
+            btnAusloggen.setBounds(15, 240, 110, 21);
+            contentPane.add(btnAusloggen);
+
+        }
+        {
             btnEreignissAnzeigen = new JButton("Ereigniss Anzeigen");
-            btnEreignissAnzeigen.addActionListener(new ActionListener() {
-
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
             btnEreignissAnzeigen.setFont(new Font("Andalus", Font.ITALIC, 12));
             btnEreignissAnzeigen.setFocusable(false);
             btnEreignissAnzeigen.setFocusPainted(false);
@@ -115,8 +127,21 @@ public class JFrameMitarbeiter extends JFrame {
 
     public ActionListener newArtikel() {
         return e -> {
-            new JFrameEinlagerung();
+            new JFrameEinlagerung(mitarbeiterService);
             this.dispose();
+        };
+    }
+
+    private ActionListener erginse() {
+        return e->{
+          new JFrameEreigniss(mitarbeiterService);
+          this.dispose();
+        };
+    }
+    public ActionListener backToMenu(){
+        return e->{
+          new Willkommen();
+          dispose();
         };
     }
 }

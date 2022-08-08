@@ -43,6 +43,10 @@ public class Willkommen extends JFrame {
         anmeldJButton.addActionListener(einloggen());
     }
 
+    /**
+
+     * Hier sind die GUI Attribute erstellt und Positioniert
+     */
     public void initialize() {
 
         emaiJLabel = new JLabel("Email");
@@ -99,15 +103,24 @@ public class Willkommen extends JFrame {
 
     }
 
+    /**
+     * Einloggen Methode
+     * Wenn aus der Groupbutton "Mitarbeiter" ausgewählt ist, dann
+     * geht auf die mitarbeiterservice und loggt sich als Mitarbeiter ein
+     * Ansonsten als Kunde anmelden
+     * @return
+     */
     private ActionListener einloggen() {
         return e -> {
             if (mitarbeiterRadio.isSelected()) {
-                boolean antwort = mitarbeiterService.anmelden(emailText.getText(), passText.getText());
-                if (antwort == true) {
+                try {
+                    mitarbeiterService.anmelden(emailText.getText(), passText.getText());
                     new JFrameMitarbeiter(mitarbeiterService);
-                    this.dispose();
-                } else
-                    new Alert(this, "Ups! Überprüfe deine Daten", "Anmelde Fehler").showInfoMassage();
+                            dispose();
+                } catch (LoginFailedException ex) {
+                    new Alert(this, ex.getMessage(), "Anmelde Fehler").showInfoMassage();
+                }
+
             } else if (kundRadio.isSelected()) {
                 anmelden();
             }
@@ -115,25 +128,38 @@ public class Willkommen extends JFrame {
         };
     }
 
+    /**
+     * Wenn aus der Groupbutton "Kunde" ausgewählt ist, dann
+     *geht auf die Kundenservice und registriert sich als Kunde
+     * Ansonsten als Mitarbeiter anmelden, um neuer Mitarbeiter registrieren zu können
+     * @return
+     */
     private ActionListener registrieren() {
 
         return e -> {
             if (kundRadio.isSelected()) {
-                kundenService.kill(this);
+                dispose();
                 new JFRegistieren(kundenService);
             } else if (mitarbeiterRadio.isSelected()) {
-                jFrameMitarbeiterRegistrieren = new JFrameNewMitarbeiter();
-                kundenService.kill(this);
+                Alert alert=new Alert(this,"Melden Sie sich zu erst als Mitarbeiter","Vorsicht");
+                alert.showInfoMassage();
             }
         };
     }
 
+
+    /**
+     * Hier wird der Kunde sich anmelden
+     * Wenn er sich erfolgreich angemeldet hat, dann wird ein Begrüßungsfenster Angezeigt
+     * Wenn die Daten nicht vorhanden sind, dann wird ein Exception geworfen "Sie haben noch kein Account"
+     */
     private void anmelden() {
         try {
            Person person= kundenService.login(emailText.getText(), passText.getText());
-            kundenService.kill(this);
+            dispose();
+
             JFrameArtikel jFrameArtikel = new JFrameArtikel(kundenService);
-            Runnable readable = new Dialog(jFrameArtikel, "Hallo Herr/Frau :" + person.getVorName(), "Wolcame");
+            Runnable readable = new Dialog(jFrameArtikel, "Hallo   " + person.getVorName(), "Willkommen");
             Thread thread = new Thread(readable);
             thread.start();
         } catch (LoginFailedException ex) {
