@@ -152,7 +152,7 @@ public class JFrameNewMitarbeiter extends JFrame {
                 if (antwort) {
                     new Alert(this, "Du würdest Registriert", "Registrierung Erfolgreich").showInfoMassage();
                     leereFelder();
-                    new JFrameMitarbeiter();
+                    new JFrameMitarbeiter(mitarbeiterService);
                     this.dispose();
                 }
             }else

@@ -1,6 +1,7 @@
 package GUI.mitarbeiter;
 
 import GUI.services.MitarbeiterService;
+import exception.ListeLeerException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -25,7 +26,11 @@ public class JFrameArtikelAnzeigen extends JFrame {
         this.setVisible(true);
         initGUI();
         this.mitarbeiterService=mitarbeiterService;
-        putArtikel();
+        try {
+            putArtikel();
+        } catch (ListeLeerException e) {
+            throw new RuntimeException(e);
+        }
 
         btnSortieren.addActionListener(sortieren());
         btnZurck.addActionListener(back());
@@ -97,9 +102,14 @@ public class JFrameArtikelAnzeigen extends JFrame {
         }
     }
 
-    private void putArtikel(){
-       defaultTableModel= mitarbeiterService.putArtikel();
-       textArea.setModel(defaultTableModel);
+    private void putArtikel() throws ListeLeerException {
+        try{
+            defaultTableModel= mitarbeiterService.putArtikel();
+            textArea.setModel(defaultTableModel);
+        }catch (Exception e){
+
+        }
+
     }
 
    private void artikelSortieren(){
