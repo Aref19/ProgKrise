@@ -1,11 +1,15 @@
 package Domain;
 
-import Persistent.SaveService;
+
+import Persistent.db.SaveFile;
+
 import Persistent.repo.SaveRepo;
 import exception.BestandNichtAusreichendException;
 import exception.NotFoundException;
 import model.Artikel;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class ArtikelVerwaltung  {
@@ -13,33 +17,43 @@ public class ArtikelVerwaltung  {
     /**
      * Arraylist für Artikel
      */
-    private ArrayList<Artikel> artikelList ;
-    HashMap<String,Integer> buchstaben;
-    private SaveRepo saveRepo;
-    public ArtikelVerwaltung(){
-        buchstaben=new HashMap<>();
-        setBoc(buchstaben);
-        artikelList=new ArrayList<>();
-        artikelList.add(new Artikel(2,"Apfhel",7,2.5));
-        artikelList.add(new Artikel(3,"Zizrone",6,2.5));
-        artikelList.add(new Artikel(1,"Banana",4,2.5));
-        artikelList.add(new Artikel(4,"Orang",5,2.5));
-        saveRepo= new SaveService();
+
+    private List<Artikel> artikelList ;
+    SaveRepo saveRepo=new SaveFile();
+    final String filename="Artikel.txt";
+    public ArtikelVerwaltung()  {
+        saveRepo.creatFile(filename);
+        saveRepo.openForRead(filename);
+        artikelList=saveRepo.loadListloadArtikels();
+        saveRepo.closRead();
 
     }
 
     /**
      * Methode um eine Artikel an zu legen und in der Arraylist zu speichern.
-     * @param artikelNr
      * @param artikelBestand
      * @param artikelBezeichnung
      */
 
-    public void artikelAnlegen(int artikelNr, int artikelBestand, String artikelBezeichnung) throws Exception { //Artikelerschaffen
-        Artikel artikel = new Artikel(artikelNr, artikelBezeichnung, artikelBestand,2.4);
-        artikelList.add(artikel);
-        saveRepo.openForReading(SaveService.nameFIleArtikel);
-        saveRepo.saveArtikel(new Artikel(1,"dsa",2,2.5));
+
+    public void artikelAnlegen( int artikelBestand, String artikelBezeichnung,double preis) throws IOException { //Artikelerschaffen
+        Artikel artikel = new Artikel(artikelBezeichnung, artikelBestand,preis);
+
+           checkArikel(artikelBezeichnung,artikelBestand);
+
+          saveAtrikel( artikelList);
+
+    }
+
+    private void saveAtrikel(List<Artikel> artikelList) {
+        try {
+            saveRepo.openForWrite(filename);
+            saveRepo.saveArtikel(artikelList);
+            saveRepo.closeWrite();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -95,18 +109,18 @@ public class ArtikelVerwaltung  {
      * @param artikelNr
      * @param artikelBestand
      */
-    public void artikelBestandErhohen(int artikelNr, int artikelBestand) {
+ /*   public void artikelBestandErhohen(int artikelNr, int artikelBestand) {
         for (Artikel artikel : artikelList) {
             if (artikel.getArtikelNr() == artikelNr)
                 artikel.setArtikelBestand(artikelBestand);
         }
-    }
+    }*/
 
     /**
      * Die ArrayList wird wieder zurückgegeben.
      * @return
      */
-    public ArrayList<Artikel> getArtikelList() {
+    public List<Artikel> getArtikelList() {
         return artikelList;
     }
 
@@ -130,30 +144,7 @@ public class ArtikelVerwaltung  {
         }
          return sortertlist;
     }
-    private void setBoc(HashMap<String,Integer> boc){
-        boc.put("A",1);
-        boc.put("B",2);
-        boc.put("C",3);
-        boc.put("D",4);
-        boc.put("E",5);
-        boc.put("F",6);
-        boc.put("G",7);
-        boc.put("H",8);
-        boc.put("I",9);
-        boc.put("J",10);
-        boc.put("K",11);
-        boc.put("L",12);
-        boc.put("M",13);
-        boc.put("N",14);
-        boc.put("O",15);
-        boc.put("P",16);
-        boc.put("Q",17);
-        boc.put("R",18);
-        boc.put("S",19);
-        boc.put("T",20);
-        boc.put("Y",21);
-        boc.put("Z",22);
-    }
+
 
     public void artikelBestandReduzieren(Artikel artikel, int anzahl) throws BestandNichtAusreichendException {
         // TODO Bestand prüfen und - wenn genug - reduzieren (sonst Exception werfen)
@@ -164,5 +155,22 @@ public class ArtikelVerwaltung  {
             }
         }
         throw new BestandNichtAusreichendException(artikel);
+    }
+    private void checkArikel(String name,int anzahl){
+        Artikel artikel = null;
+        for (Artikel a:artikelList) {
+            if (a.getArtikelBezeichnung().equals(name)){
+                 artikel=a;
+
+            }
+        }
+        if(artikel!=null){
+            artikelList.remove(artikel);
+            artikel.setArtikelBestand(artikel.getArtikelBestand()+anzahl);
+            artikelList.add(artikel);
+            System.out.println("add");
+        }
+
+
     }
 }

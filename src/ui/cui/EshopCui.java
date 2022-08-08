@@ -1,3 +1,4 @@
+
 package ui.cui;
 
 import Domain.*;
@@ -7,7 +8,6 @@ import exception.*;
 import model.*;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +33,8 @@ public class EshopCui {
     public void kundeRegistrieren() {
         System.out.println("Geben Sie Ihr Vorname ein: ");
         String name = IO.inputString();
+        System.out.println("Geben Sie Ihr email ein: ");
+        String email = IO.inputString();
         System.out.println("Geben Sie Ihr Nachname ein: ");
         String nachname = IO.inputString();
         System.out.println("Geben Sie der Strassenname ein: ");
@@ -46,9 +48,11 @@ public class EshopCui {
         System.out.println("Geben Sie Ihr Passwort ein: ");
         String passwort = IO.inputString();
         try {
-            eshopVerwaltung.kundenRegistrieren(new Kunde(1, name, nachname, new Adresse(hausnummer, plz, stadt, strasse), passwort));
+            eshopVerwaltung.kundenRegistrieren(new Kunde(name, nachname, new Adresse(hausnummer, plz, stadt, strasse), passwort,email));
         } catch (RegisitierungException e) {
             System.out.println(e.getMessage());
+        }catch (INcorrectEmailException e){
+            System.out.println(  e.getMessage());
         }
 
 
@@ -59,13 +63,9 @@ public class EshopCui {
      *
      * @return
      */
-    public KundeEinlogen kundenEinloggen() {
-        System.out.println("Geben Sie Ihr Vorname ein: ");
-        String name = IO.inputString();
-        System.out.println("Geben Sie Ihr Passwort: ");
-        String passwort = IO.inputString();
+    public KundeEinlogen kundenEinloggen(String email,String pass) {
         try {
-            return eshopVerwaltung.kundenEinloggen(name, passwort);
+            return eshopVerwaltung.kundenEinloggen(email, pass);
         } catch (LoginFailedException ex) {
             System.out.println(ex.getMessage());
         }
@@ -79,17 +79,16 @@ public class EshopCui {
      * @return
      * @throws CustomIoException
      */
-    public boolean mitarbeiterEinloggen() throws IOException {
-        System.out.println("Geben Sie Ihr Name ein: ");
-        String name = IO.inputString();
-        System.out.println("Geben Sie Ihr Passwort ein: ");
-        String pass = IO.inputString();
-        for (Mitarbeiter mitarbeiter : persistentMitarbeiter.ladeMitarbeiter()) {
-            if (name.equals(mitarbeiter.getVorName()) && pass.equals(mitarbeiter.getPasswort())) {
-                return true;
-            }
+    public boolean mitarbeiterEinloggen(String email,String pass) throws IOException {
+        MItarbeiterEilogen mItarbeiterEilogen=new MItarbeiterEilogen(null,false);
+        try {
+            mItarbeiterEilogen=eshopVerwaltung.mitarbeiterEinloggen(email,pass);
+            person=mItarbeiterEilogen.mitarbeiter;
+            return mItarbeiterEilogen.gefunden;
+        } catch (LoginFailedException e) {
+            System.out.println( e.getMessage());
         }
-        return false;
+        return mItarbeiterEilogen.gefunden;
     }
 
     public void warenEinlegen() {
@@ -109,7 +108,7 @@ public class EshopCui {
             }
             System.out.println("wollen sie weiter einlegen n/j");
         } while (!IO.inputString().equals("n"));
-        eshopVerwaltung.speicherEreignisVonKund(new Ereignis(person, Instant.now(), Ereignis.STATUS.Einlagerung, artikels));
+
     }
 
     public void kundEreignis() {
@@ -117,23 +116,25 @@ public class EshopCui {
     }
 
     public void einlagerung() {// Mitarbeiter einlagarung
-        List<Artikel> artikels = new ArrayList<>();
+//        List<Artikel> artikels = new ArrayList<>();
         do {
             System.out.println("Name des Artikels :");
-            String na = IO.inputString();
+            String name = IO.inputString();
             System.out.println("Bestand des Artikels :");
-            int be = IO.inputInt();
+            int bestand = IO.inputInt();
             System.out.println("Der Preis ist: ");
-            double pr = IO.inputdoubel();
-            System.out.println("wollen sie weiter einlegen n/j");
-            artikels.add(new Artikel(2, na, be, pr));
+            double preis = IO.inputdoubel();
+//            artikels.add(new Artikel(2, na, be, pr));
             try {
-                eshopVerwaltung.artikelAnlegen(new Artikel(2, na, be, pr));
-            } catch (Exception e) {
-                e.getMessage();
+                eshopVerwaltung.artikelAnlegen((Mitarbeiter) person, new Artikel( name, bestand, preis));
+            }catch (IOException e){
+                System.out.println(e.getMessage());
             }
+
+            System.out.println("wollen sie weiter einlegen n/j");
+
+
         } while (!IO.inputString().equals("n"));
-        eshopVerwaltung.speicherEreignisVonMitarbeiter(new Ereignis(person, Instant.now(), Ereignis.STATUS.Einlagerung, artikels));
         System.out.println("sie haben jetzt");
         zeigeArtikel();
 
@@ -145,12 +146,17 @@ public class EshopCui {
         String name = IO.inputString();
         System.out.println("Geben Sie Ihr Nachname ein: ");
         String namchname = IO.inputString();
+        System.out.println("Geben Sie Ihr Email ein: ");
+        String email = IO.inputString();
         System.out.println("Geben Sie Ihr Passwort ein: ");
         String passwort = IO.inputString();
+
         try {
-            eshopVerwaltung.mitarbeiteranthorReg(name, namchname, passwort);
+            eshopVerwaltung.mitarbeiterAnthorRegiseren(name, namchname, passwort,email);
             System.out.println("Registrierung ist Erfolgreich Abgeschlossen");
         } catch (RegisitierungException e) {
+            System.out.println(e.getMessage());
+        }catch (INcorrectEmailException e){
             System.out.println(e.getMessage());
         }
 
@@ -166,7 +172,12 @@ public class EshopCui {
     }
 
     public void rechnung() {
-        System.out.println(eshopVerwaltung.getRec((Kunde) person, ((Kunde) person).getWarenKorp().get()));
+        try {
+            System.out.println(eshopVerwaltung.getRec((Kunde) person, ((Kunde) person).getWarenKorp().get()));
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void artikelSortieren(boolean artSort) {
@@ -178,7 +189,7 @@ public class EshopCui {
 
     public void run() throws IOException {
         do {
-            persistentMitarbeiter.ladeMitarbeiter();
+           // persistentMitarbeiter.ladeMitarbeiter();
             System.out.println("1- Als neue Kunde Registrieren \n2- Als Kunde Einlogen\n3- Als Mitarbeiter Einlogen ");
             int s = IO.inputInt();
             switch (s) {
@@ -186,14 +197,13 @@ public class EshopCui {
                     kundeRegistrieren();
                 }
                 case 2 -> {
-                    KundeEinlogen kundeEinlogen = kundenEinloggen();
+                    KundeEinlogen kundeEinlogen = kundenEinloggen("Aj@gmail.com","w");
                     if (kundeEinlogen.gefunden) {
                         person = kundeEinlogen.kunde;
                         System.out.println("Liegen Sie jetzt einen Artikel in dem WarenKorb: 1 oder Abmelden: 2");
                         if (IO.inputInt() == 2) {
                             run();
                         }
-
                         warenEinlegen();
 
                         System.out.println("Weiter zu Kasse ==> j/n");
@@ -211,7 +221,8 @@ public class EshopCui {
                     }
                 }
                 case 3 -> {
-                    if (mitarbeiterEinloggen()) {
+                    if (mitarbeiterEinloggen("","")) {
+
                         do {
                             System.out.println("Wollen Sie 1- Mitarbeiter Regestieren\n 2- Einlagerung\n3-Sortierten \n 4 - abmelden" + "\t" + "\n5-Einlagerung");
                             int input = IO.inputInt();
@@ -235,21 +246,7 @@ public class EshopCui {
                                     artsort = sort == 1 ? true : false;
                                     artikelSortieren(artsort);
                                 }
-                                case 5 -> {
-                                    System.out.println("Wollen Sie die Ereignisse Mitarbeiter angucken oder Kund? 1/2");
-                                    if (IO.inputString().equals("1")) {
-                                        System.out.println("Kkkk");
-                                        List<Ereignis> ereignis = eshopVerwaltung.mitarbeiterEreignisAusgeben();
-                                        for (Ereignis e : ereignis) {
-                                            System.out.println(e);
-                                        }
-                                    } else {
-                                        List<Ereignis> ereignis = eshopVerwaltung.kundenEreignisAusgeben();
-                                        for (Ereignis e : ereignis) {
-                                            System.out.println(e);
-                                        }
-                                    }
-                                }
+
                             }
                             System.out.println("Wollen Sie als Mitarbeiter benden n/j");
                         } while (IO.inputString().equals("n"));
