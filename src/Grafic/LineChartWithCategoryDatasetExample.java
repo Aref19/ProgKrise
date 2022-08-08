@@ -12,13 +12,16 @@ import java.awt.*;
 import java.util.Date;
 import java.util.List;
 
+
 public class LineChartWithCategoryDatasetExample extends JFrame {
-     private List<Ereignis> history;
-     private String nameArtikel;
-    public LineChartWithCategoryDatasetExample(List<Ereignis> history, String nameArtikel) {
+    private List<Ereignis> history;
+    private String name;
+
+
+    public LineChartWithCategoryDatasetExample(List<Ereignis> history, String name) {
         super("Line Chart Example with JFreechart");
-         this.history=history;
-         this.nameArtikel=nameArtikel;
+        this.history = history;
+        this.name = name;
         JPanel chartPanel = createChartPanel();
         add(chartPanel, BorderLayout.CENTER);
 
@@ -27,16 +30,7 @@ public class LineChartWithCategoryDatasetExample extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public LineChartWithCategoryDatasetExample() {
-        super("Line Chart Example with JFreechart");
 
-        JPanel chartPanel = createChartPanel();
-        add(chartPanel, BorderLayout.CENTER);
-
-        setSize(640, 480);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-    }
 
     private JPanel createChartPanel() {
         String chartTitle = "Artikel History";
@@ -53,20 +47,15 @@ public class LineChartWithCategoryDatasetExample extends JFrame {
 
     private CategoryDataset createDataset() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        String series1 = this.nameArtikel;
-        for (Ereignis ereignis:history){
-            dataset.addValue(ereignis.getArtikel().getArtikelBestand(), series1, (Date.from(ereignis.getDatum())));
+        String series1 = name;
+        for (Ereignis ereignis : history) {
+            if (ereignis.getArtikel().getArtikelBezeichnung().equals(name)) {
+                dataset.addValue(ereignis.getArtikel().getArtikelBestand(), series1, (Date.from(ereignis.getDatum())));
+            }
+
         }
         return dataset;
     }
 
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new LineChartWithCategoryDatasetExample().setVisible(true);
-            }
-        });
-    }
 }

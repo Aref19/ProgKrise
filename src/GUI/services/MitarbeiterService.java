@@ -1,6 +1,7 @@
 package GUI.services;
 
 import Domain.EshopVerwaltung;
+import Grafic.LineChartWithCategoryDatasetExample;
 import exception.EmailExisted;
 import exception.INcorrectEmailException;
 import exception.LoginFailedException;
@@ -17,6 +18,8 @@ public class MitarbeiterService {
     EshopVerwaltung eschopverwaltung = new EshopVerwaltung();
     private DefaultTableModel defaultTableModel;
     Person mitarbeiter;
+
+    static List<Ereignis> listEreignise;
 
     public void anmelden(String email, String password) throws LoginFailedException {
         try {
@@ -113,5 +116,9 @@ public class MitarbeiterService {
             defaultTableModel.addColumn("Masse");
         }
         return defaultTableModel;
+    }
+
+    public void zeigDigramm(String name) {
+        new LineChartWithCategoryDatasetExample(eschopverwaltung.ereignissToSaveToEreigniss(),name).setVisible(true);
     }
 }

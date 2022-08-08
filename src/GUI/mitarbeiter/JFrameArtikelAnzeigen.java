@@ -19,6 +19,8 @@ public class JFrameArtikelAnzeigen extends JFrame {
     private JButton btnZurck;
     private JButton btnSchlieen;
 
+    private JButton buttonhistory;
+
     private DefaultTableModel defaultTableModel;
     private MitarbeiterService mitarbeiterService;
     
@@ -35,6 +37,14 @@ public class JFrameArtikelAnzeigen extends JFrame {
         btnSortieren.addActionListener(sortieren());
         btnZurck.addActionListener(back());
         btnSchlieen.addActionListener(close());
+        buttonhistory.addActionListener(artikelhistory());
+    }
+
+
+
+    public JFrameArtikelAnzeigen(){
+        this.setVisible(true);
+        initGUI();
     }
 
     private void initGUI() {
@@ -100,6 +110,14 @@ public class JFrameArtikelAnzeigen extends JFrame {
             btnSchlieen.setBounds(273, 275, 106, 21);
             contentPane.add(btnSchlieen);
         }
+        {
+            buttonhistory = new JButton("History");
+            buttonhistory.setFont(new Font("Andalus", Font.ITALIC, 12));
+            buttonhistory.setFocusable(false);
+            buttonhistory.setFocusPainted(false);
+            buttonhistory.setBounds(150, 275, 106, 21);
+            contentPane.add(buttonhistory);
+        }
     }
 
     private void putArtikel() throws ListeLeerException {
@@ -138,4 +156,13 @@ public class JFrameArtikelAnzeigen extends JFrame {
           this.dispose();
         };
    }
+    private ActionListener artikelhistory() {
+        return e->{
+
+          mitarbeiterService.zeigDigramm(  defaultTableModel.getValueAt(textArea.getSelectedRow(), 0).toString());
+        };
+    }
+    public static void main(String[] args) {
+        new JFrameArtikelAnzeigen();
+    }
 }
